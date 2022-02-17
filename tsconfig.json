@@ -1,22 +1,30 @@
 {
   "compilerOptions": {
-    "moduleResolution": "node",
-    "target": "es5",
-    "module":"es2015",
-    "lib": ["es2015", "es2016", "es2017", "dom"],
+    "target": "ES6",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM", "ES5", "ES2015.Promise"],
+    "moduleResolution": "Node",
     "strict": true,
     "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noEmit": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": false,
+    "allowJs": true,
     "declaration": true,
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "declarationDir": "dist/types",
-    "outDir": "dist/lib",
-    "typeRoots": [
-      "node_modules/@types"
-    ]
+    "declarationDir": "./types",
+    "outDir": "build",
+    "baseUrl":".",
+    "paths": {"@/*": ["src/*"]}
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.d.ts", "src/**/*.vue"],
+  "exclude": ["./src/core", "node_modules", "dist"],
+  "typedocOptions": {
+    "entryPoints": ["./src/adapter/index.ts", "./src/adapter/type.ts"],
+    "out": "docs/adapter"
+  }
 }

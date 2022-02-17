@@ -1,120 +1,74 @@
 {
   "name": "tstl",
-  "version": "0.0.0",
-  "description": "",
-  "keywords": [],
-  "main": "dist/tstl.umd.js",
-  "module": "dist/tstl.es5.js",
-  "typings": "dist/types/tstl.d.ts",
+  "version": "0.0.1",
   "files": [
-    "dist"
+    "dist",
+    "src",
+    "types"
   ],
-  "author": "hzheyuan <hzheyuan@corp.netease.com>",
-  "repository": {
-    "type": "git",
-    "url": ""
-  },
-  "license": "MIT",
-  "engines": {
-    "node": ">=6.0.0"
+  "main": "./dist/tstl.es.js",
+  "module": "./dist/tstl.umd.js",
+  "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/tstl.es.js",
+      "require": "./dist/tstl.umd.js"
+    }
   },
   "scripts": {
-    "lint": "tslint  --project tsconfig.json -t codeFrame 'src/**/*.ts' 'test/**/*.ts'",
-    "prebuild": "rimraf dist",
-    "build": "tsc --module commonjs && rollup -c rollup.config.ts && typedoc --out docs --target es6 --theme minimal --mode file src",
-    "start": "rollup -c rollup.config.ts -w",
-    "test": "jest --coverage",
-    "test:watch": "jest --coverage --watch",
-    "test:prod": "npm run lint && npm run test -- --no-cache",
-    "deploy-docs": "ts-node tools/gh-pages-publish",
-    "report-coverage": "cat ./coverage/lcov.info | coveralls",
-    "commit": "git-cz",
-    "semantic-release": "semantic-release",
-    "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
-    "precommit": "lint-staged",
-    "travis-deploy-once": "travis-deploy-once"
+    "dev": "vite --mode web",
+    "dev:mp": "vite --mode mp",
+    "serve": "vite preview",
+    "cz": "cz",
+    "release": "standard-version",
+    "lint:script": "tslint \"src/**/*.ts\" --fix",
+    "prettier": "prettier --write \"src/**/*.ts\" --loglevel warn",
+    "fix": "npm run prettier & npm run lint:script",
+    "test": "jest",
+    "build": "npm run fix & tsc --emitDeclarationOnly & vite build",
+    "build:mp": "npm run fix & tsc --emitDeclarationOnly & vite build --mode mp",
+    "build:demo": "npm run fix & tsc --emitDeclarationOnly & vite build --mode demo",
+    "build:doc": "npm run build & npm run doc",
+    "prepare": "husky install",
+    "doc:core": "typedoc --out docs/core src/core/doc.ts src/core/types.ts --cleanOutputDir true",
+    "doc:adapter": "typedoc --cleanOutputDir true",
+    "look:doc": "anywhere -d ./docs",
+    "look:doc:core": "anywhere -d ./docs/core",
+    "look:doc:adapter": "anywhere -d ./docs/adapter"
   },
-  "lint-staged": {
-    "{src,test}/**/*.ts": [
-      "prettier --write",
-      "git add"
-    ]
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@commitlint/cli": "^15.0.0",
+    "@commitlint/config-conventional": "^15.0.0",
+    "@johmun/vue-tags-input": "^2.1.0",
+    "@types/jest": "^27.0.2",
+    "@vitejs/plugin-vue": "^1.10.2",
+    "@vue/compiler-sfc": "^3.2.23",
+    "babel-jest": "^27.3.1",
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^7.0.0",
+    "jest": "^27.3.1",
+    "prettier": "^2.4.1",
+    "prettier-tslint": "^0.4.2",
+    "standard-version": "^9.3.2",
+    "ts-jest": "^27.0.7",
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.3.0",
+    "typedoc": "^0.22.9",
+    "typescript": "^4.4.4",
+    "vite": "^2.6.4",
+    "vite-jest": "^0.1.4"
   },
   "config": {
     "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
+      "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "jest": {
-    "transform": {
-      ".(ts|tsx)": "ts-jest"
-    },
-    "testEnvironment": "node",
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/test/"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 90,
-        "functions": 95,
-        "lines": 95,
-        "statements": 95
-      }
-    },
-    "collectCoverageFrom": [
-      "src/*.{js,ts}"
-    ]
-  },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^7.1.2",
-    "@commitlint/config-conventional": "^7.1.2",
-    "@types/jest": "^23.3.2",
-    "@types/node": "^10.11.0",
-    "colors": "^1.3.2",
-    "commitizen": "^3.0.0",
-    "coveralls": "^3.0.2",
-    "cross-env": "^5.2.0",
-    "cz-conventional-changelog": "^2.1.0",
-    "husky": "^1.0.1",
-    "jest": "^23.6.0",
-    "jest-config": "^23.6.0",
-    "lint-staged": "^8.0.0",
-    "lodash.camelcase": "^4.3.0",
-    "prettier": "^1.14.3",
-    "prompt": "^1.0.0",
-    "replace-in-file": "^3.4.2",
-    "rimraf": "^2.6.2",
-    "rollup": "^0.67.0",
-    "rollup-plugin-commonjs": "^9.1.8",
-    "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-node-resolve": "^3.4.0",
-    "rollup-plugin-sourcemaps": "^0.4.2",
-    "rollup-plugin-typescript2": "^0.18.0",
-    "semantic-release": "^15.9.16",
-    "shelljs": "^0.8.3",
-    "travis-deploy-once": "^5.0.9",
-    "ts-jest": "^23.10.2",
-    "ts-node": "^7.0.1",
-    "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.15.0",
-    "tslint-config-standard": "^8.0.1",
-    "typedoc": "^0.12.0",
-    "typescript": "^4.5.5"
+  "dependencies": {
+    "vue": "^3.2.23"
   }
 }

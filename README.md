@@ -1,2 +1,1 @@
-# tstl
-typescript stl
+# typescript stl

@@ -1,12 +1,12 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 14:10:10
- * @LastEditTime: 2022-02-16 16:18:07
+ * @LastEditTime: 2022-02-17 10:34:52
  * @LastEditors: hzheyuan
  * @Description: 关联容器基础数据结构红黑树的结点类
  * @FilePath: \tstl\src\container\tree\RBTNode.ts
  */
-enum Color {
+export enum Color {
   RED,
   BLACK
 }
@@ -20,7 +20,7 @@ export class RBTNode<K, V> {
   public _right: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
   public _color: Color = Color.BLACK
 
-  static readonly nilNode: RBTNode<unknown, unknown> = Object.freeze(
+  static readonly nilNode: RBTNode<any, any> = Object.freeze(
     new (class extends RBTNode<unknown, unknown> {
       constructor() {
         super('nil', 'nil')

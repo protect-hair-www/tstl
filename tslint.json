@@ -1,6 +1,16 @@
 {
-  "extends": [
-    "tslint-config-standard",
-    "tslint-config-prettier"
-  ]
+  "extends": ["tslint:latest", "tslint-config-prettier"],
+  "rulesDirectory": ["tslint-plugin-prettier"],
+  "rules": {
+    "prettier": true,
+    "no-console": false,
+    "no-any": false,
+    "no-unused-variable": false
+  },
+  "linterOptions": {
+    "exclude": [
+      "src/core/index.js",
+      "src/doc-core/"
+    ]
+  }
 }
