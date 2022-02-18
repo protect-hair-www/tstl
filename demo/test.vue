@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-02-18 16:06:57
+ * @LastEditTime: 2022-02-18 17:06:48
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\test.vue
@@ -31,26 +31,34 @@ export default {
   },
 
   mounted() {
-    const array = [1, 5, 7, 3, 2, 4, 8, 6];
+    // const array = [5, 7, 3, 2, 4, 8, 6, 1, 9];
+    const array = [5, 7, 2, 3];
     const tr = new Tree((a, b) => a - b);
     array.forEach((key) => {
       tr.insert(key)
     });
+    console.log(tr.root);
     tr.inorderWalk(tr.root);
 
     // 格式化显示
     function dfs(node) {
-      if(node === tr.nil) {
-        return {};
+      if (node === tr.nil) {
+        return { name: 'nil', itemStyle: {color: '#000'}, children: []};
       }
 
-      let data = {name: node.key, children: []};
-      if(node.left) { 
+      let data = {
+        name: node.key, 
+        itemStyle: {
+            color: node.color === 0 ? '#f00' : '#000'
+        }, 
+        children: []
+      };
+      if (node.left) {
         let ld = dfs(node.left);
         data.children.push(ld);
       }
 
-      if(node.right) {
+      if (node.right) {
         let rd = dfs(node.right);
         data.children.push(rd);
       }
@@ -59,6 +67,7 @@ export default {
     }
 
     const data = dfs(tr.root);
+    console.log(data);
 
     const chartDom = document.getElementById('main');
     const myChart = echarts.init(chartDom);
@@ -66,10 +75,6 @@ export default {
     let option;
     myChart.setOption(
       (option = {
-        tooltip: {
-          trigger: 'item',
-          triggerOn: 'mousemove'
-        },
         series: [
           {
             type: 'tree',
@@ -78,7 +83,7 @@ export default {
             right: '2%',
             top: '8%',
             bottom: '20%',
-            symbolSize: 30,
+            symbolSize: 32,
             symbol: 'circle',
             orient: 'vertical',
             initialTreeDepth: -1,
@@ -87,6 +92,9 @@ export default {
               verticalAlign: 'middle',
               align: 'middle',
               fontSize: 14
+            },
+            lineStyle: {
+              curveness: 0
             },
             animationDurationUpdate: 750
           }

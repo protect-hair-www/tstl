@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:33:05
- * @LastEditTime: 2022-02-18 14:42:22
+ * @LastEditTime: 2022-02-18 17:08:50
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * @FilePath: \tstl\src\container\tree\Tree.ts
@@ -141,13 +141,12 @@ export class Tree<K, V> {
     z.left = this.nil
     z.right = this.nil
     z.color = Color.RED
-
-    // this.insertFixup(z)
+    this.insertFixup(z)
   }
 
   private insertFixup(z: RBTNode<K, V>) {
-    while (z !== this.root && z.parent.color === Color.RED) {
-      if (z.parent === z.parent.parent.left) {
+    while (z.parent.color === Color.RED) {
+      if (z.parent !== this.nil && z.parent === z.parent.parent.left) {
         const y = z.parent.parent.right
         if (y.color === Color.RED) {
           z.parent.color = Color.BLACK
