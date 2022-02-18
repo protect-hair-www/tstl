@@ -1,18 +1,27 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:33:05
- * @LastEditTime: 2022-02-17 16:35:24
+ * @LastEditTime: 2022-02-18 14:42:22
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * @FilePath: \tstl\src\container\tree\Tree.ts
  */
 import { RBTNode, Color } from './RBTNode'
 
+type ComparatorFn = (a, b) => boolean;
+
 export class Tree<K, V> {
-  private _root: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
   readonly nil = RBTNode.nilNode
 
-  constructor() { }
+  private _root: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
+  private size: number = 0;
+
+  // 比较器Comparator
+  // private key_comp: (a: K, b: K) => boolean = (a: K, b: K) => (a - b) > 0;
+
+  constructor(comparator?: (a: K, b: K) => boolean) {
+    // if(comparator) this.key_comp = comparator;
+  }
 
   get root() {
     return this._root
@@ -133,7 +142,7 @@ export class Tree<K, V> {
     z.right = this.nil
     z.color = Color.RED
 
-    this.insertFixup(z)
+    // this.insertFixup(z)
   }
 
   private insertFixup(z: RBTNode<K, V>) {
@@ -172,7 +181,8 @@ export class Tree<K, V> {
   }
 
   public insert(v: V) {
-
+    let key: unknown = v
+    this._insert(key as K, v)
   }
 
   /**
@@ -331,4 +341,14 @@ export class Tree<K, V> {
       return this.findByRoot(root.left, key)
     }
   }
+
+  inorderWalk(x: RBTNode<K, V>) {
+    if(x === this.nil) {
+      return;
+    }
+    if(x.left) this.inorderWalk(x.left)
+    console.log(x.key);
+    if(x.right) this.inorderWalk(x.right);
+  }  
+
 }

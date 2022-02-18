@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 14:10:10
- * @LastEditTime: 2022-02-17 10:34:52
+ * @LastEditTime: 2022-02-17 17:46:01
  * @LastEditors: hzheyuan
  * @Description: 关联容器基础数据结构红黑树的结点类
  * @FilePath: \tstl\src\container\tree\RBTNode.ts
@@ -14,6 +14,7 @@ export enum Color {
 export class RBTNode<K, V> {
   readonly _key: K
   _data: V
+  _size: number
 
   public _parent: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
   public _left: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
@@ -33,6 +34,7 @@ export class RBTNode<K, V> {
   constructor(key: K, v: V) {
     this._key = key
     this._data = v
+    this._size = 0
   }
 
   get data() {
@@ -59,6 +61,10 @@ export class RBTNode<K, V> {
     return this._color
   }
 
+  get size() {
+    return this._size
+  }
+
   set left(node) {
     this._left = node
   }
@@ -73,5 +79,9 @@ export class RBTNode<K, V> {
 
   set color(color) {
     this._color = color
+  }
+
+  set size(sz) {
+    this._size = sz;
   }
 }
