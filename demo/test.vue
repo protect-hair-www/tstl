@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-02-20 14:02:12
+ * @LastEditTime: 2022-02-20 15:00:21
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/demo/test.vue
@@ -16,6 +16,14 @@
       <div>
         <label for="delete">delete</label>
         <input type="number" @keyup.enter="onDelete">
+      </div>
+      <div>
+        <label for="rotate">rotateLeft</label>
+        <input type="number" @keyup.enter="onRotateLeft">
+      </div>
+      <div>
+        <label for="rotate">rotateRight</label>
+        <input type="number" @keyup.enter="onRotateRight">
       </div>
     </div>
     <div id="main" style="width: 600px;height:400px;"></div>
@@ -40,7 +48,8 @@ export default {
   },
 
   methods: {
-    updateChart(data) {
+    updateChart() {
+      const data = this.getChartData(this.tr.root);
       let op = this.chart.getOption();
       op.series[0].data[0] = data;
       // this.chart.clear()
@@ -116,17 +125,27 @@ export default {
     onEnter(e) {
       const v = Number(e.target.value)
       this.tr.insert(v); 
-      const data = this.getChartData(this.tr.root);
-      // this.tr.inorderWalk(this.tr.root);
-      this.updateChart(data);
+      this.updateChart();
     },
 
     onDelete(e) {
       const v = Number(e.target.value)
       this.tr.delete(v); 
-      const data = this.getChartData(this.tr.root);
-      // this.tr.inorderWalk(this.tr.root);
-      this.updateChart(data);
+      this.updateChart();
+    },
+
+    onRotateLeft(e) {
+      const v = Number(e.target.value)
+      const n = this.tr.find(v);
+      this.tr.leftRotate(n);
+      this.updateChart();
+    },
+
+    onRotateRight(e) {
+      const v = Number(e.target.value)
+      const n = this.tr.find(v);
+      this.tr.rightRotate(n);
+      this.updateChart();
     }
   },
 
@@ -135,7 +154,8 @@ export default {
     const chartDom = document.getElementById('main');
     this.chart = echarts.init(chartDom);
 
-    const array = [11, 2, 14, 1, 7, 15, 5, 8, 4, 3]
+    const array = [11, 2, 14, 1, 7, 15, 5, 8]
+    // const array = [11, 2, 14, 1, 7, 15, 5, 8, 4, 9, 12, 17, 10, 20, 22]
     this.tr = new Tree((a, b) => a - b);
     array.forEach((key) => {
       this.tr.insert(key)
@@ -143,7 +163,6 @@ export default {
     // this.tr.inorderWalk(this.tr.root);
 
     const data = this.getChartData(this.tr.root);
-    console.log(data);
     this.drawChart(data);
   }
 }

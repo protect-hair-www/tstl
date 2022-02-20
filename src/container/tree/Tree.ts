@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:33:05
- * @LastEditTime: 2022-02-20 13:58:34
+ * @LastEditTime: 2022-02-20 14:55:25
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * @FilePath: /tstl/src/container/tree/Tree.ts
@@ -47,11 +47,11 @@ export class Tree<K, V> {
    */
   leftRotate(x: RBTNode<K, V>) {
     // 记录y
-    const y = x.right
+    let y = x.right
 
     // 更新b与y的关系
     x.right = y.left
-    if (y.left != this.nil) {
+    if (y.left !== this.nil) {
       y.left.parent = x
     }
 
@@ -72,7 +72,7 @@ export class Tree<K, V> {
 
   /**
    * @description: 右旋
-   * @param {RBTNode} x
+   * @param {RBTNode} y
    * @return {*}
    *     p             p
    *     |             |
@@ -82,29 +82,29 @@ export class Tree<K, V> {
    *  / \               / \
    * a  b              b   r
    */
-  rightRotate(x: RBTNode<K, V>) {
+  rightRotate(y: RBTNode<K, V>) {
     // 记录y
-    const y = x.left
+    let x = y.left
 
     // 更新b与y的关系
-    x.left = y.right
-    if (y.right != this.nil) {
-      y.right.parent = x
+    y.left = x.right
+    if (x.right !== this.nil) {
+      x.right.parent = y
     }
 
     // 更新p与x的关系
-    y.parent = x.parent
-    if (x.parent === RBTNode.nilNode) {
-      this.root = y
-    } else if (x === x.parent.left) {
-      x.parent.right = y
+    x.parent = y.parent
+    if (y.parent === this.nil) {
+      this.root = x
+    } else if (y === y.parent.right) {
+      y.parent.right = x
     } else {
-      x.parent.left = y
+      y.parent.left = x
     }
 
     // 更新x与y的关系
-    y.right = x
-    x.parent = y
+    x.right = y
+    y.parent = x
   }
 
   /**
@@ -351,9 +351,9 @@ export class Tree<K, V> {
       return root
     }
     if (key < root.key) {
-      return this.findByRoot(root.right, key)
-    } else {
       return this.findByRoot(root.left, key)
+    } else {
+      return this.findByRoot(root.right, key)
     }
   }
 
