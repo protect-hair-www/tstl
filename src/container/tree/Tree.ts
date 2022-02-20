@@ -1,14 +1,12 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:33:05
- * @LastEditTime: 2022-02-18 17:08:50
+ * @LastEditTime: 2022-02-20 13:58:34
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
- * @FilePath: \tstl\src\container\tree\Tree.ts
+ * @FilePath: /tstl/src/container/tree/Tree.ts
  */
 import { RBTNode, Color } from './RBTNode'
-
-type ComparatorFn = (a, b) => boolean;
 
 export class Tree<K, V> {
   readonly nil = RBTNode.nilNode
@@ -18,7 +16,6 @@ export class Tree<K, V> {
 
   // 比较器Comparator
   // private key_comp: (a: K, b: K) => boolean = (a: K, b: K) => (a - b) > 0;
-
   constructor(comparator?: (a: K, b: K) => boolean) {
     // if(comparator) this.key_comp = comparator;
   }
@@ -117,7 +114,7 @@ export class Tree<K, V> {
    */
   private _insert(key: K, value: V) {
     let z = this.createRBTNode(key, value)
-    let y = this.nil as RBTNode<K, V>
+    let y = this.nil
     let x = this.root
 
     while (x !== this.nil) {
@@ -144,41 +141,61 @@ export class Tree<K, V> {
     this.insertFixup(z)
   }
 
+  /**
+   * @description: 插入之后维护红黑性质
+   * @param {RBTNode} z
+   * @param {*} V
+   * @return {*}
+   */  
   private insertFixup(z: RBTNode<K, V>) {
-    while (z.parent.color === Color.RED) {
-      if (z.parent !== this.nil && z.parent === z.parent.parent.left) {
-        const y = z.parent.parent.right
-        if (y.color === Color.RED) {
+    while (z.parent !== this.nil && z.parent.color === Color.RED) {
+      let y;
+      if (z.parent === z.parent.parent.left) {
+        // 插入结点的叔叔结点
+        y = z.parent.parent.right
+        // case 1: 插入结点z的叔叔结点y是红色的
+        if (y !== this.nil && y.color === Color.RED) {
           z.parent.color = Color.BLACK
           y.color = Color.BLACK
           z.parent.parent.color = Color.RED
           z = z.parent.parent
-        } else if (z === z.parent.right) {
+          continue;
+        }
+        // case 2: 插入的结点z的叔叔结点y是黑色的，并且z是一个右孩子 
+        if (z === z.parent.right) {
           z = z.parent
           this.leftRotate(z)
         }
+        // case 3: 插入的结点z的叔叔结点y是黑色的，并且z是一个左孩子 
         z.parent.color = Color.BLACK
         z.parent.parent.color = Color.RED
         this.rightRotate(z.parent.parent)
       } else {
-        const y = z.parent.parent.left
-        if (y.color === Color.RED) {
+        y = z.parent.parent.left
+        if (y !== this.nil && y.color === Color.RED) {
           z.parent.color = Color.BLACK
           y.color = Color.BLACK
           z.parent.parent.color = Color.RED
           z = z.parent.parent
-        } else if (z === z.parent.left) {
+          continue;
+        }
+        if (z === z.parent.left) {
           z = z.parent
-          this.leftRotate(z)
+          this.rightRotate(z)
         }
         z.parent.color = Color.BLACK
         z.parent.parent.color = Color.RED
-        this.rightRotate(z.parent.parent)
+        this.leftRotate(z.parent.parent)
       }
     }
     this.root.color = Color.BLACK
   }
 
+  /**
+   * @description: 对外提供的插入接口
+   * @param {V} v
+   * @return {*}
+   */  
   public insert(v: V) {
     let key: unknown = v
     this._insert(key as K, v)
@@ -203,8 +220,7 @@ export class Tree<K, V> {
   }
 
   private transparent(u: RBTNode<K, V>, v: RBTNode<K, V>) {
-    const nil = RBTNode.nilNode
-    if (u.parent === nil) {
+    if (u.parent === this.nil) {
       this.root = v
     } else if (u === u.parent.left) {
       u.parent.left = v
