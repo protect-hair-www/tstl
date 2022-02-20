@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-02-20 15:00:21
+ * @LastEditTime: 2022-02-20 16:37:32
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/demo/test.vue
@@ -11,27 +11,28 @@
     <div class="op">
       <div>
         <label for="insert">insert</label>
-        <input type="number" @keyup.enter="onEnter">
+        <input type="number" @keyup.enter="onEnter" />
       </div>
       <div>
         <label for="delete">delete</label>
-        <input type="number" @keyup.enter="onDelete">
+        <input type="number" @keyup.enter="onDelete" />
       </div>
       <div>
         <label for="rotate">rotateLeft</label>
-        <input type="number" @keyup.enter="onRotateLeft">
+        <input type="number" @keyup.enter="onRotateLeft" />
       </div>
       <div>
         <label for="rotate">rotateRight</label>
-        <input type="number" @keyup.enter="onRotateRight">
+        <input type="number" @keyup.enter="onRotateRight" />
       </div>
     </div>
-    <div id="main" style="width: 600px;height:400px;"></div>
+    <div id="main" style="width: 100vw;height:100vh;"></div>
   </dev>
 </template>
 
 <script>
 import { Tree } from '../src/container/tree/Tree'
+import { randomNum } from './util';
 
 export default {
   components: {
@@ -53,7 +54,7 @@ export default {
       let op = this.chart.getOption();
       op.series[0].data[0] = data;
       // this.chart.clear()
-      this.chart.setOption(op, {notMerge: true});
+      this.chart.setOption(op, { notMerge: true });
     },
     drawChart(data) {
       let option;
@@ -124,13 +125,13 @@ export default {
 
     onEnter(e) {
       const v = Number(e.target.value)
-      this.tr.insert(v); 
+      this.tr.insert(v);
       this.updateChart();
     },
 
     onDelete(e) {
       const v = Number(e.target.value)
-      this.tr.delete(v); 
+      this.tr.delete(v);
       this.updateChart();
     },
 
@@ -146,6 +147,16 @@ export default {
       const n = this.tr.find(v);
       this.tr.rightRotate(n);
       this.updateChart();
+    },
+
+    getRanddomTestData(num) {
+      let c = num;
+      const test = new Set();
+      while (c >= 0) {
+        test.add(randomNum(1, 1001));
+        --c;
+      }
+      return Array.from(test);
     }
   },
 
@@ -153,9 +164,8 @@ export default {
     // 格式化显示
     const chartDom = document.getElementById('main');
     this.chart = echarts.init(chartDom);
-
-    const array = [11, 2, 14, 1, 7, 15, 5, 8]
-    // const array = [11, 2, 14, 1, 7, 15, 5, 8, 4, 9, 12, 17, 10, 20, 22]
+    // const array = [11, 2, 14, 1, 7, 15, 5, 8, 6, 3, 3.2]
+    const array = [11, 2, 14, 1, 7, 15, 5, 8, 4, 9, 12, 17, 10, 20, 22]
     this.tr = new Tree((a, b) => a - b);
     array.forEach((key) => {
       this.tr.insert(key)
@@ -170,7 +180,7 @@ export default {
 <style lang="css" scoped>
 .op {
   display: flex;
-  flex-direction: row; 
+  flex-direction: row;
 }
 
 .op > div {

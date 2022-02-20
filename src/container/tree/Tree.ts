@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
- * @Date: 2022-02-16 11:33:05
- * @LastEditTime: 2022-02-20 14:55:25
+ * @Date: 2021-08-16 11:33:05
+ * @LastEditTime: 2022-02-20 17:10:16
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * @FilePath: /tstl/src/container/tree/Tree.ts
@@ -12,6 +12,7 @@ export class Tree<K, V> {
   readonly nil = RBTNode.nilNode
 
   private _root: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
+  // TODO
   private size: number = 0;
 
   // 比较器Comparator
@@ -28,6 +29,12 @@ export class Tree<K, V> {
     this._root = node
   }
 
+  /**
+   * @description: 创建一个红黑树结点
+   * @param {K} key
+   * @param {V} value
+   * @return {*}
+   */  
   private createRBTNode(key: K, value: V) {
     const node = new RBTNode<K, V>(key, value)
     return node;
@@ -219,6 +226,12 @@ export class Tree<K, V> {
 
   }
 
+  /**
+   * @description: 替换过程：用一颗子树v替换另一棵子树u，并且将v作为u孩子的双亲结点
+   * @param {RBTNode} u
+   * @param {RBTNode} v
+   * @return {*}
+   */  
   private transparent(u: RBTNode<K, V>, v: RBTNode<K, V>) {
     if (u.parent === this.nil) {
       this.root = v
@@ -227,17 +240,25 @@ export class Tree<K, V> {
     } else {
       u.parent.right = v
     }
-    v.parent = u.parent
+    if(v !== this.nil) v.parent = u.parent
   }
 
-  delete(z: RBTNode<K, V>) {
+  /**
+   * @description: 删除结点
+   * @param {RBTNode} z
+   * @return {*}
+   */  
+  private _delete(z: RBTNode<K, V>) {
+    if(z === this.nil) return;
     let y = z
     let x
     let yOriginColor = y.color
     if (z.left === this.nil) {
+      // case 1：删除结点z，没有左孩子
       x = z.right
       this.transparent(z, z.right)
     } else if (z.right === this.nil) {
+      // case 1：删除结点z，只有一个左孩子
       x = z.left
       this.transparent(z, z.left)
     } else {
@@ -245,8 +266,10 @@ export class Tree<K, V> {
       yOriginColor = y.color
       x = y.right
       if (y.parent === z) {
-        x.parent = y
+        // case 3：删除结点z，既有左孩子又有右孩子，而且右孩子为z的后继
+        if(x !== this.nil) x.parent = y
       } else {
+        // case 4：删除结点z，既有左孩子又有右孩子，右孩子不是z的后继
         this.transparent(y, y.right)
         y.right = z.right
         y.right.parent = y
@@ -261,42 +284,55 @@ export class Tree<K, V> {
     }
   }
 
-  private minimum(x: RBTNode<K, V>) {
-    while (x.left !== this.nil) x = x.left
-    return x
+  /**
+   * @description: 删除结点，对外接口
+   * @param {K} x
+   * @return {*}
+   */  
+  public delete(x: K) {
+    let z = this.find(x);
+    this._delete(z);
   }
 
-  private maximum(x: RBTNode<K, V>) {
-    while (x.right !== this.nil) x = x.right
-    return x
-  }
-
+  /**
+   * @description: 删除之后，维护红黑性质
+   * @param {RBTNode} x
+   * @param {*} V
+   * @return {*}
+   */  
   private deleteFixup(x: RBTNode<K, V>) {
+    if(x === this.nil) return;
     while (x !== this.root && x.color === Color.BLACK) {
+      let w; 
       if (x === x.parent.left) {
-        let w = x.parent.right
+        w = x.parent.right;
         if (w.color === Color.RED) {
+          // case 1: x的兄弟结点w是红色的
           w.color = Color.BLACK
           w.parent.color = Color.RED
           this.leftRotate(x.parent)
           w = x.parent.right
         }
         if (w.left.color === Color.BLACK && w.right.color === Color.BLACK) {
+          // case 2: x的兄弟结点w是黑色的， 并且w的两个子结点都是黑色的
           w.color = Color.RED
           x = x.parent
         } else if (w.right.color === Color.BLACK) {
+          // case 3: x的兄弟结点w是黑色的， w的左孩子是红色的，w的右孩子是黑色的
           w.left.color = Color.BLACK
           w.color = Color.RED
           this.rightRotate(w)
           w = x.parent.right
         }
+        // case 4: x的兄弟结点w是黑色的， 并且w的孩子是红色的
         w.color = x.parent.color
         w.parent.color = Color.BLACK
         w.right.color = Color.BLACK
         this.leftRotate(x.parent)
         x = this.root
       } else {
-        let w = x.parent.left
+        // 对称情况
+        w = x.parent.left
         if (w.color === Color.RED) {
           w.color = Color.BLACK
           w.parent.color = Color.RED
@@ -322,6 +358,34 @@ export class Tree<K, V> {
     x.color = Color.BLACK
   }
 
+  /**
+   * @description: 子树中关键字最小的元素
+   * @param {RBTNode} x
+   * @param {*} V
+   * @return {*}
+   */  
+  private minimum(x: RBTNode<K, V>) {
+    while (x.left !== this.nil) x = x.left
+    return x
+  }
+
+  /**
+   * @description: 子树中关键字最大的元素
+   * @param {RBTNode} x
+   * @param {*} V
+   * @return {*}
+   */  
+  private maximum(x: RBTNode<K, V>) {
+    while (x.right !== this.nil) x = x.right
+    return x
+  }
+
+  /**
+   * @description: 结点前驱
+   * @param {RBTNode} x
+   * @param {*} V
+   * @return {*}
+   */  
   preSuccessor(x: RBTNode<K, V>) {
     if (x.left != this.nil) return this.maximum(x.left)
     let y = x.parent
@@ -332,6 +396,12 @@ export class Tree<K, V> {
     return y
   }
 
+  /**
+   * @description: 结点后继
+   * @param {RBTNode} x
+   * @param {*} V
+   * @return {*}
+   */  
   successor(x: RBTNode<K, V>) {
     if (x.right != this.nil) return this.minimum(x.right)
     let y = x.parent
@@ -342,21 +412,37 @@ export class Tree<K, V> {
     return y
   }
 
-  find(key: K): RBTNode<K, V> {
-    return this.findByRoot(this.root, key)
+  /**
+   * @description: 查找某个关键字元素，对外接口
+   * @param {K} key
+   * @return {*}
+   */  
+  public find(key: K): RBTNode<K, V> {
+    return this._find(this.root, key)
   }
 
-  findByRoot(root: RBTNode<K, V>, key: K): RBTNode<K, V> {
+  /**
+   * @description: 查找某个关键字元素
+   * @param {K} key
+   * @return {*}
+   */  
+  private _find(root: RBTNode<K, V>, key: K): RBTNode<K, V> {
     if (root === this.nil || root.key === key) {
       return root
     }
     if (key < root.key) {
-      return this.findByRoot(root.left, key)
+      return this._find(root.left, key)
     } else {
-      return this.findByRoot(root.right, key)
+      return this._find(root.right, key)
     }
   }
 
+  /**
+   * @description: 测试用，中序遍历
+   * @param {RBTNode} x
+   * @param {*} V
+   * @return {*}
+   */  
   inorderWalk(x: RBTNode<K, V>) {
     if(x === this.nil) {
       return;
@@ -365,5 +451,4 @@ export class Tree<K, V> {
     console.log(x.key);
     if(x.right) this.inorderWalk(x.right);
   }  
-
 }
