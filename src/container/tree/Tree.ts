@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-02-20 17:10:16
+ * @LastEditTime: 2022-02-21 15:44:57
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
- * @FilePath: /tstl/src/container/tree/Tree.ts
+ * @FilePath: \tstl\src\container\tree\Tree.ts
  */
 import { RBTNode, Color } from './RBTNode'
 
@@ -75,6 +75,9 @@ export class Tree<K, V> {
     // 更新x与y的关系
     y.left = x
     x.parent = y
+
+    y.size = x.size
+    x.size = x.left.size + x.right.size + 1
   }
 
   /**
@@ -112,6 +115,9 @@ export class Tree<K, V> {
     // 更新x与y的关系
     x.right = y
     y.parent = x
+
+    x.size = y.size
+    y.size = y.left.size + y.right.size + 1
   }
 
   /**
@@ -126,6 +132,7 @@ export class Tree<K, V> {
 
     while (x !== this.nil) {
       y = x
+      y.size++
       if (z.key < x.key) {
         x = x.left
       } else {
@@ -240,7 +247,8 @@ export class Tree<K, V> {
     } else {
       u.parent.right = v
     }
-    if(v !== this.nil) v.parent = u.parent
+    
+    v.parent = u.parent
   }
 
   /**
@@ -250,15 +258,25 @@ export class Tree<K, V> {
    */  
   private _delete(z: RBTNode<K, V>) {
     if(z === this.nil) return;
+    
+    // 从z到根的简单路径上，维护size属性 
+    let p = z;
+    while(p !== this.nil) {
+      p.size--;
+      p = p.parent;
+    }
+
     let y = z
     let x
     let yOriginColor = y.color
     if (z.left === this.nil) {
       // case 1：删除结点z，没有左孩子
+      // console.log('case 1', z, z.right);
       x = z.right
       this.transparent(z, z.right)
     } else if (z.right === this.nil) {
       // case 1：删除结点z，只有一个左孩子
+      // console.log('case 2', z, z.left);
       x = z.left
       this.transparent(z, z.left)
     } else {
@@ -267,7 +285,8 @@ export class Tree<K, V> {
       x = y.right
       if (y.parent === z) {
         // case 3：删除结点z，既有左孩子又有右孩子，而且右孩子为z的后继
-        if(x !== this.nil) x.parent = y
+        // console.log('case 3', z, z.left);
+        x.parent = y
       } else {
         // case 4：删除结点z，既有左孩子又有右孩子，右孩子不是z的后继
         this.transparent(y, y.right)
@@ -279,6 +298,7 @@ export class Tree<K, V> {
       y.left.parent = y
       y.color = z.color
     }
+
     if (yOriginColor === Color.BLACK) {
       this.deleteFixup(x)
     }
@@ -301,11 +321,10 @@ export class Tree<K, V> {
    * @return {*}
    */  
   private deleteFixup(x: RBTNode<K, V>) {
-    if(x === this.nil) return;
+    // if(x === this.nil) return;
     while (x !== this.root && x.color === Color.BLACK) {
-      let w; 
       if (x === x.parent.left) {
-        w = x.parent.right;
+        let w = x.parent.right;
         if (w.color === Color.RED) {
           // case 1: x的兄弟结点w是红色的
           w.color = Color.BLACK
@@ -332,7 +351,7 @@ export class Tree<K, V> {
         x = this.root
       } else {
         // 对称情况
-        w = x.parent.left
+        let w = x.parent.left
         if (w.color === Color.RED) {
           w.color = Color.BLACK
           w.parent.color = Color.RED
@@ -438,17 +457,84 @@ export class Tree<K, V> {
   }
 
   /**
-   * @description: 测试用，中序遍历
+   * @description: 内部方法，查找具有给定秩的元素
+   * @param {RBTNode} x
+   * @param {number} i
+   * @return {*}
+   */  
+  private _select(x: RBTNode<K, V>, i: number) {
+    if(i <= 0) return this.nil;
+    let r = x.left.size + 1
+    if(i === r) {
+      return x;
+    } else if(i < r) {
+      return this._select(x.left, i)
+    } else {
+      return this._select(x.right, i - r)
+    }
+  }
+
+  /**
+   * @description: 查找具有给定秩的元素，对外方法
+   * @param {number} i
+   * @return {*}
+   */  
+  public select(i: number) {
+    return this._select(this.root, i)
+  }
+
+  /**
+   * @description: 查询一个元素的秩
+   * @param {RBTNode} T
+   * @param {K} k
+   * @return {*}
+   */  
+  private _rank(T: RBTNode<K, V>, k: K) {
+    let x = this.find(k)
+    if(x === this.nil) return 0
+    let r = x.left.size + 1
+    let y = x
+    while(y !== T) {
+      if(y === y.parent.right) {
+        r = r + y.parent.left.size + 1
+      }
+      y = y.parent
+    }
+    return r
+  }
+
+  /**
+   * @description: 查询一个元素的秩
+   * @param {K} k
+   * @return {*}
+   */  
+  public rank(k: K) {
+    return this._rank(this.root, k);
+  }
+
+  /**
+   * @description: 内部中序遍历实际实现
    * @param {RBTNode} x
    * @param {*} V
    * @return {*}
    */  
-  inorderWalk(x: RBTNode<K, V>) {
-    if(x === this.nil) {
-      return;
-    }
-    if(x.left) this.inorderWalk(x.left)
-    console.log(x.key);
-    if(x.right) this.inorderWalk(x.right);
+  _inorderWalk(x: RBTNode<K, V>, cb?: (node) => unknown) {
+    if(x === this.nil) return;
+    if(x.left) this._inorderWalk(x.left, cb)
+    if(cb) cb(x);
+    if(x.right) this._inorderWalk(x.right, cb)
   }  
+
+  /**
+   * @description: 对外提供中序遍历接口
+   * @param {function} fn
+   * @param {K} z
+   * @return {*}
+   */  
+  inorderWalk(fn?: (node) => unknown, z?: K) {
+    let x
+    if(z) x = this.find(z)
+    if(x === this.nil || !x) x = this.root
+    this._inorderWalk(x, fn);
+  } 
 }

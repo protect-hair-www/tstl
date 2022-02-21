@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-02-20 16:37:32
+ * @LastEditTime: 2022-02-21 15:45:36
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: /tstl/demo/test.vue
+ * @FilePath: \tstl\demo\test.vue
 -->
 <template>
   <dev class="test">
@@ -103,7 +103,7 @@ export default {
         }
 
         let data = {
-          name: node.key,
+          name: `${node.key}:${node.size}`,
           itemStyle: {
             color: node.color === 0 ? '#f00' : '#000'
           },
@@ -170,10 +170,16 @@ export default {
     array.forEach((key) => {
       this.tr.insert(key)
     });
-    // this.tr.inorderWalk(this.tr.root);
-
+    // console.log(this.tr)
+    // this.tr.inorderWalk(node => console.log(node.key), 14);
     const data = this.getChartData(this.tr.root);
     this.drawChart(data);
+
+    const third = this.tr.select(3);
+    console.log(third);
+
+    const rk = this.tr.rank(22);
+    console.log(rk);
   }
 }
 </script>
