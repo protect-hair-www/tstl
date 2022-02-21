@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-02-21 15:44:57
+ * @LastEditTime: 2022-02-21 17:48:11
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * @FilePath: \tstl\src\container\tree\Tree.ts
@@ -34,7 +34,7 @@ export class Tree<K, V> {
    * @param {K} key
    * @param {V} value
    * @return {*}
-   */  
+   */
   private createRBTNode(key: K, value: V) {
     const node = new RBTNode<K, V>(key, value)
     return node;
@@ -55,6 +55,7 @@ export class Tree<K, V> {
   leftRotate(x: RBTNode<K, V>) {
     // 记录y
     let y = x.right
+    if (y === this.nil) return
 
     // 更新b与y的关系
     x.right = y.left
@@ -95,6 +96,7 @@ export class Tree<K, V> {
   rightRotate(y: RBTNode<K, V>) {
     // 记录y
     let x = y.left
+    if (x === this.nil) return
 
     // 更新b与y的关系
     y.left = x.right
@@ -160,46 +162,46 @@ export class Tree<K, V> {
    * @param {RBTNode} z
    * @param {*} V
    * @return {*}
-   */  
+   */
   private insertFixup(z: RBTNode<K, V>) {
-    while (z.parent !== this.nil && z.parent.color === Color.RED) {
+    while (z.parent.color === Color.RED) {
       let y;
       if (z.parent === z.parent.parent.left) {
         // 插入结点的叔叔结点
         y = z.parent.parent.right
         // case 1: 插入结点z的叔叔结点y是红色的
-        if (y !== this.nil && y.color === Color.RED) {
+        if (y.color === Color.RED) {
           z.parent.color = Color.BLACK
           y.color = Color.BLACK
           z.parent.parent.color = Color.RED
           z = z.parent.parent
-          continue;
+        } else {
+          // case 2: 插入的结点z的叔叔结点y是黑色的，并且z是一个右孩子 
+          if (z === z.parent.right) {
+            z = z.parent
+            this.leftRotate(z)
+          }
+          // case 3: 插入的结点z的叔叔结点y是黑色的，并且z是一个左孩子 
+          z.parent.color = Color.BLACK
+          z.parent.parent.color = Color.RED
+          this.rightRotate(z.parent.parent)
         }
-        // case 2: 插入的结点z的叔叔结点y是黑色的，并且z是一个右孩子 
-        if (z === z.parent.right) {
-          z = z.parent
-          this.leftRotate(z)
-        }
-        // case 3: 插入的结点z的叔叔结点y是黑色的，并且z是一个左孩子 
-        z.parent.color = Color.BLACK
-        z.parent.parent.color = Color.RED
-        this.rightRotate(z.parent.parent)
       } else {
         y = z.parent.parent.left
-        if (y !== this.nil && y.color === Color.RED) {
+        if (y.color === Color.RED) {
           z.parent.color = Color.BLACK
           y.color = Color.BLACK
           z.parent.parent.color = Color.RED
           z = z.parent.parent
-          continue;
+        } else {
+          if (z === z.parent.left) {
+            z = z.parent
+            this.rightRotate(z)
+          }
+          z.parent.color = Color.BLACK
+          z.parent.parent.color = Color.RED
+          this.leftRotate(z.parent.parent)
         }
-        if (z === z.parent.left) {
-          z = z.parent
-          this.rightRotate(z)
-        }
-        z.parent.color = Color.BLACK
-        z.parent.parent.color = Color.RED
-        this.leftRotate(z.parent.parent)
       }
     }
     this.root.color = Color.BLACK
@@ -209,7 +211,7 @@ export class Tree<K, V> {
    * @description: 对外提供的插入接口
    * @param {V} v
    * @return {*}
-   */  
+   */
   public insert(v: V) {
     let key: unknown = v
     this._insert(key as K, v)
@@ -219,7 +221,7 @@ export class Tree<K, V> {
    * @description: 插入节点的键值(key)在整颗树中必须独一无二（如果存在相同的键值，插入操作不会真正进行）
    * @param {*}
    * @return {*}
-   */  
+   */
   insert_unique() {
 
   }
@@ -228,7 +230,7 @@ export class Tree<K, V> {
    * @description: 可以插入有重复键值的结点，与insert_unique相反
    * @param {*}
    * @return {*}
-   */  
+   */
   insert_equal() {
 
   }
@@ -238,7 +240,7 @@ export class Tree<K, V> {
    * @param {RBTNode} u
    * @param {RBTNode} v
    * @return {*}
-   */  
+   */
   private transparent(u: RBTNode<K, V>, v: RBTNode<K, V>) {
     if (u.parent === this.nil) {
       this.root = v
@@ -247,7 +249,6 @@ export class Tree<K, V> {
     } else {
       u.parent.right = v
     }
-    
     v.parent = u.parent
   }
 
@@ -255,13 +256,13 @@ export class Tree<K, V> {
    * @description: 删除结点
    * @param {RBTNode} z
    * @return {*}
-   */  
+   */
   private _delete(z: RBTNode<K, V>) {
-    if(z === this.nil) return;
-    
+    if (z === this.nil) return;
+
     // 从z到根的简单路径上，维护size属性 
     let p = z;
-    while(p !== this.nil) {
+    while (p !== this.nil) {
       p.size--;
       p = p.parent;
     }
@@ -292,11 +293,22 @@ export class Tree<K, V> {
         this.transparent(y, y.right)
         y.right = z.right
         y.right.parent = y
+
+        // 维护size属性
+        let p = x.parent;
+        while (p !== y) {
+          p.size--;
+          p = p.parent;
+        }
+        y.size = y.left.size + 1
       }
       this.transparent(z, y)
       y.left = z.left
       y.left.parent = y
       y.color = z.color
+
+      // 维护size属性
+      y.size = y.left.size + y.right.size + 1;
     }
 
     if (yOriginColor === Color.BLACK) {
@@ -308,7 +320,7 @@ export class Tree<K, V> {
    * @description: 删除结点，对外接口
    * @param {K} x
    * @return {*}
-   */  
+   */
   public delete(x: K) {
     let z = this.find(x);
     this._delete(z);
@@ -319,12 +331,12 @@ export class Tree<K, V> {
    * @param {RBTNode} x
    * @param {*} V
    * @return {*}
-   */  
+   */
   private deleteFixup(x: RBTNode<K, V>) {
-    // if(x === this.nil) return;
+    let w;
     while (x !== this.root && x.color === Color.BLACK) {
       if (x === x.parent.left) {
-        let w = x.parent.right;
+        w = x.parent.right;
         if (w.color === Color.RED) {
           // case 1: x的兄弟结点w是红色的
           w.color = Color.BLACK
@@ -336,22 +348,24 @@ export class Tree<K, V> {
           // case 2: x的兄弟结点w是黑色的， 并且w的两个子结点都是黑色的
           w.color = Color.RED
           x = x.parent
-        } else if (w.right.color === Color.BLACK) {
-          // case 3: x的兄弟结点w是黑色的， w的左孩子是红色的，w的右孩子是黑色的
-          w.left.color = Color.BLACK
-          w.color = Color.RED
-          this.rightRotate(w)
-          w = x.parent.right
+        } else {
+          if (w.right.color === Color.BLACK) {
+            // case 3: x的兄弟结点w是黑色的， w的左孩子是红色的，w的右孩子是黑色的
+            w.left.color = Color.BLACK
+            w.color = Color.RED
+            this.rightRotate(w)
+            w = x.parent.right
+          }
+          // case 4: x的兄弟结点w是黑色的， 并且w的孩子是红色的
+          w.color = x.parent.color
+          w.parent.color = Color.BLACK
+          w.right.color = Color.BLACK
+          this.leftRotate(x.parent)
+          x = this.root
         }
-        // case 4: x的兄弟结点w是黑色的， 并且w的孩子是红色的
-        w.color = x.parent.color
-        w.parent.color = Color.BLACK
-        w.right.color = Color.BLACK
-        this.leftRotate(x.parent)
-        x = this.root
       } else {
         // 对称情况
-        let w = x.parent.left
+        w = x.parent.left
         if (w.color === Color.RED) {
           w.color = Color.BLACK
           w.parent.color = Color.RED
@@ -361,17 +375,19 @@ export class Tree<K, V> {
         if (w.right.color === Color.BLACK && w.left.color === Color.BLACK) {
           w.color = Color.RED
           x = x.parent
-        } else if (w.left.color === Color.BLACK) {
-          w.right.color = Color.BLACK
-          w.color = Color.RED
-          this.leftRotate(w)
-          w = x.parent.left
+        } else {
+          if (w.left.color === Color.BLACK) {
+            w.right.color = Color.BLACK
+            w.color = Color.RED
+            this.leftRotate(w)
+            w = x.parent.left
+          }
+          w.color = x.parent.color
+          w.parent.color = Color.BLACK
+          w.left.color = Color.BLACK
+          this.rightRotate(x.parent)
+          x = this.root
         }
-        w.color = x.parent.color
-        w.parent.color = Color.BLACK
-        w.left.color = Color.BLACK
-        this.rightRotate(x.parent)
-        x = this.root
       }
     }
     x.color = Color.BLACK
@@ -382,7 +398,7 @@ export class Tree<K, V> {
    * @param {RBTNode} x
    * @param {*} V
    * @return {*}
-   */  
+   */
   private minimum(x: RBTNode<K, V>) {
     while (x.left !== this.nil) x = x.left
     return x
@@ -393,7 +409,7 @@ export class Tree<K, V> {
    * @param {RBTNode} x
    * @param {*} V
    * @return {*}
-   */  
+   */
   private maximum(x: RBTNode<K, V>) {
     while (x.right !== this.nil) x = x.right
     return x
@@ -404,7 +420,7 @@ export class Tree<K, V> {
    * @param {RBTNode} x
    * @param {*} V
    * @return {*}
-   */  
+   */
   preSuccessor(x: RBTNode<K, V>) {
     if (x.left != this.nil) return this.maximum(x.left)
     let y = x.parent
@@ -420,7 +436,7 @@ export class Tree<K, V> {
    * @param {RBTNode} x
    * @param {*} V
    * @return {*}
-   */  
+   */
   successor(x: RBTNode<K, V>) {
     if (x.right != this.nil) return this.minimum(x.right)
     let y = x.parent
@@ -435,7 +451,7 @@ export class Tree<K, V> {
    * @description: 查找某个关键字元素，对外接口
    * @param {K} key
    * @return {*}
-   */  
+   */
   public find(key: K): RBTNode<K, V> {
     return this._find(this.root, key)
   }
@@ -444,7 +460,7 @@ export class Tree<K, V> {
    * @description: 查找某个关键字元素
    * @param {K} key
    * @return {*}
-   */  
+   */
   private _find(root: RBTNode<K, V>, key: K): RBTNode<K, V> {
     if (root === this.nil || root.key === key) {
       return root
@@ -461,13 +477,13 @@ export class Tree<K, V> {
    * @param {RBTNode} x
    * @param {number} i
    * @return {*}
-   */  
+   */
   private _select(x: RBTNode<K, V>, i: number) {
-    if(i <= 0) return this.nil;
+    if (i <= 0) return this.nil;
     let r = x.left.size + 1
-    if(i === r) {
+    if (i === r) {
       return x;
-    } else if(i < r) {
+    } else if (i < r) {
       return this._select(x.left, i)
     } else {
       return this._select(x.right, i - r)
@@ -478,7 +494,7 @@ export class Tree<K, V> {
    * @description: 查找具有给定秩的元素，对外方法
    * @param {number} i
    * @return {*}
-   */  
+   */
   public select(i: number) {
     return this._select(this.root, i)
   }
@@ -488,14 +504,14 @@ export class Tree<K, V> {
    * @param {RBTNode} T
    * @param {K} k
    * @return {*}
-   */  
+   */
   private _rank(T: RBTNode<K, V>, k: K) {
     let x = this.find(k)
-    if(x === this.nil) return 0
+    if (x === this.nil) return 0
     let r = x.left.size + 1
     let y = x
-    while(y !== T) {
-      if(y === y.parent.right) {
+    while (y !== T) {
+      if (y === y.parent.right) {
         r = r + y.parent.left.size + 1
       }
       y = y.parent
@@ -507,7 +523,7 @@ export class Tree<K, V> {
    * @description: 查询一个元素的秩
    * @param {K} k
    * @return {*}
-   */  
+   */
   public rank(k: K) {
     return this._rank(this.root, k);
   }
@@ -517,24 +533,24 @@ export class Tree<K, V> {
    * @param {RBTNode} x
    * @param {*} V
    * @return {*}
-   */  
+   */
   _inorderWalk(x: RBTNode<K, V>, cb?: (node) => unknown) {
-    if(x === this.nil) return;
-    if(x.left) this._inorderWalk(x.left, cb)
-    if(cb) cb(x);
-    if(x.right) this._inorderWalk(x.right, cb)
-  }  
+    if (x === this.nil) return;
+    if (x.left) this._inorderWalk(x.left, cb)
+    if (cb) cb(x);
+    if (x.right) this._inorderWalk(x.right, cb)
+  }
 
   /**
    * @description: 对外提供中序遍历接口
    * @param {function} fn
    * @param {K} z
    * @return {*}
-   */  
+   */
   inorderWalk(fn?: (node) => unknown, z?: K) {
     let x
-    if(z) x = this.find(z)
-    if(x === this.nil || !x) x = this.root
+    if (z) x = this.find(z)
+    if (x === this.nil || !x) x = this.root
     this._inorderWalk(x, fn);
-  } 
+  }
 }
