@@ -1,19 +1,18 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-02-21 17:48:11
+ * @LastEditTime: 2022-02-22 16:03:05
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * @FilePath: \tstl\src\container\tree\Tree.ts
  */
 import { RBTNode, Color } from './RBTNode'
+import { RBTIterator }  from './Iterator'
 
 export class Tree<K, V> {
   readonly nil = RBTNode.nilNode
-
   private _root: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
-  // TODO
-  private size: number = 0;
+  private _iterator;
 
   // 比较器Comparator
   // private key_comp: (a: K, b: K) => boolean = (a: K, b: K) => (a - b) > 0;
@@ -27,6 +26,26 @@ export class Tree<K, V> {
 
   set root(node) {
     this._root = node
+  }
+
+  /**
+   * @description: 容器存储结点大小
+   * @return {*}
+   */  
+  get size(): number {
+    return this.root.size
+  }
+
+  /**
+   * @description: 判空
+   * @return {*}
+   */  
+  get empty(): boolean {
+    return this.root.size == 0
+  }
+
+  public iterator() {
+    return this._iterator = new RBTIterator(this.root)
   }
 
   /**
@@ -422,6 +441,7 @@ export class Tree<K, V> {
    * @return {*}
    */
   preSuccessor(x: RBTNode<K, V>) {
+    if(x === this.nil) return;
     if (x.left != this.nil) return this.maximum(x.left)
     let y = x.parent
     while (y !== this.nil && x === y.left) {
@@ -438,6 +458,7 @@ export class Tree<K, V> {
    * @return {*}
    */
   successor(x: RBTNode<K, V>) {
+    if(x === this.nil) return;
     if (x.right != this.nil) return this.minimum(x.right)
     let y = x.parent
     while (y !== this.nil && x === y.right) {

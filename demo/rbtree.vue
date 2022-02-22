@@ -1,13 +1,13 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-02-21 15:45:36
+ * @LastEditTime: 2022-02-22 17:21:52
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\demo\test.vue
+ * @FilePath: \tstl\demo\rbtree.vue
 -->
 <template>
-  <dev class="test">
+  <dev class="red-black-tree">
     <div class="op">
       <div>
         <label for="insert">insert</label>
@@ -126,6 +126,9 @@ export default {
     onEnter(e) {
       const v = Number(e.target.value)
       this.tr.insert(v);
+      const it = this.tr.iterator();
+      it.next();
+      console.log(it.get());
       this.updateChart();
     },
 
@@ -176,10 +179,80 @@ export default {
     this.drawChart(data);
 
     const third = this.tr.select(3);
-    console.log(third);
+    console.log('kth: ', third);
 
     const rk = this.tr.rank(22);
-    console.log(rk);
+    console.log('rank: ', rk);
+
+    console.log('size: ', this.tr.size);
+    console.log('empty: ', this.tr.empty);
+
+    // let bitr = this.tr.begin;
+    // console.log(bitr);
+    // bitr++;
+    // console.log(bitr)
+    // // this.tr.begin++;
+
+    // 迭代器
+    let it = this.tr.iterator();
+    console.log('begin: ', it.begin);
+    console.log('end: ', it.end);
+
+    console.log('iterator: ', it);
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    it.next()
+    console.log(it.get())
+    // it.next()
+    // console.log(it.get())
+    // it.next()
+    // console.log(it.get())
+
+    it.prev();
+    console.log(it.get())
+    it.prev();
+    console.log(it.get())
+    it.prev();
+    console.log(it.get())
+
+    it.prev();
+    console.log(it.get())
+    it.prev();
+    console.log(it.get())
+    it.prev();
+    console.log(it.get())
+    it.prev();
+    console.log(it.get())
+
+
+    // this.tr.begin++;
+    // console.log(bitr)
+    // console.log(eitr);
+    // let eitr = this.tr.end;
   }
 }
 </script>

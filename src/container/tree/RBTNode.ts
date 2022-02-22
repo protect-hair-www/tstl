@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 14:10:10
- * @LastEditTime: 2022-02-21 11:30:52
+ * @LastEditTime: 2022-02-22 16:27:03
  * @LastEditors: hzheyuan
  * @Description: 关联容器基础数据结构红黑树的结点类
  * @FilePath: \tstl\src\container\tree\RBTNode.ts
@@ -24,7 +24,7 @@ export class RBTNode<K, V> {
   static readonly nilNode: RBTNode<any, any> =
     new (class extends RBTNode<unknown, unknown> {
       constructor() {
-        super('nil', 'nil')
+        super(Symbol.for('nil'), Symbol.for('nil'))
         this._left = this._right = this;
         (this._parent as any) = this 
         this._color = Color.BLACK
@@ -84,5 +84,9 @@ export class RBTNode<K, V> {
 
   set size(sz) {
     this._size = sz;
+  }
+
+  static isNil(node: RBTNode<unknown, unknown>): boolean {
+    return node.key === Symbol.for('nil')
   }
 }
