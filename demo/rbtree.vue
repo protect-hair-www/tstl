@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-02-22 17:21:52
+ * @LastEditTime: 2022-02-22 20:52:08
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\demo\rbtree.vue
+ * @FilePath: /tstl/demo/rbtree.vue
 -->
 <template>
   <dev class="red-black-tree">
@@ -227,18 +227,21 @@ export default {
     console.log(it.get())
     it.next()
     console.log(it.get())
-    // it.next()
-    // console.log(it.get())
-    // it.next()
-    // console.log(it.get())
-
-    it.prev();
+    it.next()
     console.log(it.get())
-    it.prev();
-    console.log(it.get())
-    it.prev();
+    it.next()
     console.log(it.get())
 
+    it.prev();
+    console.log(it.get())
+    it.prev();
+    console.log(it.get())
+    it.prev();
+    console.log(it.get())
+
+    let e = it.end;
+    // e.prev();
+    console.log(e.get(), 'zzzzzz');
     it.prev();
     console.log(it.get())
     it.prev();
