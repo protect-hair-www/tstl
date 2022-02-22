@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-02-22 17:18:44
+ * @LastEditTime: 2022-02-22 18:17:26
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\src\container\tree\Iterator.ts
@@ -12,7 +12,6 @@ const isNil = RBTNode.isNil;
 
 export class RBTIterator extends Iterator {
   _root;
-  _cur;
 
   constructor(root) {
     super();
@@ -25,14 +24,20 @@ export class RBTIterator extends Iterator {
   }
 
   get begin() {
-    if(isNil(this.root)) return
+    if(isNil(this.root)) return this.minmum()
+  }
+
+  get end() {
+    return RBTNode.nilNode;
+  }
+
+  get minmum() {
     let x = this.root
     while(!isNil(x.left)) x = x.left
     return x
   }
 
-  get end() {
-    if(isNil(this.root)) return
+  get maxmum() {
     let x = this.root
     while(!isNil(x.right)) x = x.right
     return x
@@ -78,7 +83,7 @@ export class RBTIterator extends Iterator {
   }
 
   /**
-   * @description: 迭代器向后移动
+   * @description: 红黑树迭代器后动具体实现
    * @param {*}
    * @return {*}
    */  
@@ -98,12 +103,12 @@ export class RBTIterator extends Iterator {
   }
 
   /**
-   * @description: 迭代器前移
+   * @description: 红黑树迭代器前移具体实现
    * @param {*}
    * @return {*}
    */  
   decrement(): void {
-    if(isNil(this.cur)) return
+    if(isNil(this.cur)) return this.maxmum()
     if(this.cur.color === Color.RED && this.cur.parent.parent === this.cur)
         this.cur = this.cur.right
     else if(!isNil(this.cur.left)) {
