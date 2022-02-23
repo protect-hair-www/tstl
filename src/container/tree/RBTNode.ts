@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 14:10:10
- * @LastEditTime: 2022-02-22 16:27:03
+ * @LastEditTime: 2022-02-23 14:26:57
  * @LastEditors: hzheyuan
  * @Description: 关联容器基础数据结构红黑树的结点类
  * @FilePath: \tstl\src\container\tree\RBTNode.ts
@@ -26,7 +26,7 @@ export class RBTNode<K, V> {
       constructor() {
         super(Symbol.for('nil'), Symbol.for('nil'))
         this._left = this._right = this;
-        (this._parent as any) = this 
+        (this._parent as any) = null 
         this._color = Color.BLACK
         this._size = 0;
       }

@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-02-22 20:52:08
+ * @LastEditTime: 2022-02-23 17:52:30
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: /tstl/demo/rbtree.vue
+ * @FilePath: \tstl\demo\rbtree.vue
 -->
 <template>
   <dev class="red-black-tree">
@@ -104,6 +104,7 @@ export default {
 
         let data = {
           name: `${node.key}:${node.size}`,
+          // name: `${node.key}`,
           itemStyle: {
             color: node.color === 0 ? '#f00' : '#000'
           },
@@ -169,11 +170,12 @@ export default {
     this.chart = echarts.init(chartDom);
     // const array = [11, 2, 14, 1, 7, 15, 5, 8, 6, 3, 3.2]
     const array = [11, 2, 14, 1, 7, 15, 5, 8, 4, 9, 12, 17, 10, 20, 22]
-    this.tr = new Tree((a, b) => a - b);
+    // const array = [10]
+    this.tr = new Tree();
     array.forEach((key) => {
       this.tr.insert(key)
     });
-    // console.log(this.tr)
+    console.log(this.tr)
     // this.tr.inorderWalk(node => console.log(node.key), 14);
     const data = this.getChartData(this.tr.root);
     this.drawChart(data);
@@ -239,9 +241,9 @@ export default {
     it.prev();
     console.log(it.get())
 
-    let e = it.end;
-    // e.prev();
-    console.log(e.get(), 'zzzzzz');
+    // let e = it.end;
+    // // e.prev();
+    // console.log(e.get(), 'zzzzzz');
     it.prev();
     console.log(it.get())
     it.prev();
@@ -250,7 +252,6 @@ export default {
     console.log(it.get())
     it.prev();
     console.log(it.get())
-
 
     // this.tr.begin++;
     // console.log(bitr)
