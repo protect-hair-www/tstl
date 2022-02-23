@@ -1,7 +1,8 @@
+import { Iterator } from '@/Iterator';
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-02-23 18:05:15
+ * @LastEditTime: 2022-02-23 22:48:02
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
@@ -11,11 +12,10 @@
  *    (3)每个叶节点（NULL）是黑色的.
  *    (4)如果一个节点是红色的，则它的两个孩子节点都是黑色的.
  *    (5)对每个节点，从该节点到其所有后代叶节点的简单路径上，均包含相同数目的黑色节点.
- * @FilePath: \tstl\src\container\tree\Tree.ts
+ * @FilePath: /tstl/src/container/tree/Tree.ts
  */
 import { RBTNode, Color } from './RBTNode'
 import { RBTIterator }  from './Iterator'
-import { Iterator } from '@/Iterator';
 const isNil = RBTNode.isNil;
 
 export class Tree<K, V> {
@@ -760,6 +760,70 @@ export class Tree<K, V> {
    */
   public rank(k: K) {
     return this._rank(this.root, k);
+  }
+
+  /**
+   * @description: lower bound
+   * @param {K} k
+   * @return {*}
+   */  
+  lower_bound(k: K) {
+    let y = this.header
+    let x = this.root
+
+    while(!isNil(x)) {
+      if(this.key_comp(x.key, k)) y = x, x = x.left
+      else x = x.right
+    }
+
+    return new RBTIterator(y)
+  }
+
+  /**
+   * @description: upper bound
+   * @param {K} k
+   * @return {*}
+   */
+  upper_bound(k: K) {
+    let y = this.header
+    let x = this.root
+
+    while(!isNil(x)) {
+      if(this.key_comp(k, x.key)) y = x, x = x.left
+      else x = x.right
+    }
+
+    return new RBTIterator(y)
+  }
+
+  /**
+   * @description: equal range
+   * @param {K} x
+   * @return {*}
+   */  
+  equal_range(x: K) {
+    return [this.lower_bound(x), this.upper_bound(x)]
+  }
+
+  /**
+   * @description: swap todo
+   * @param {*}
+   * @return {*}
+   */  
+  swap() {
+
+  }
+
+  /**
+   * @description: 清除
+   * @param {*}
+   * @return {*}
+   */  
+  clear() {
+    this._erase(this.root)
+    this.root = this.nil
+    this.leftMost = this.header
+    this.rightMost = this.header
   }
 
   /**
