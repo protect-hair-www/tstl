@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 14:10:10
- * @LastEditTime: 2022-02-23 14:26:57
+ * @LastEditTime: 2022-02-24 15:04:50
  * @LastEditors: hzheyuan
  * @Description: 关联容器基础数据结构红黑树的结点类
  * @FilePath: \tstl\src\container\tree\RBTNode.ts
@@ -19,18 +19,17 @@ export class RBTNode<K, V> {
   private _left: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
   private _right: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
   private _color: Color = Color.BLACK
-  private _size: number = 0;
+  private _size: number = 0
 
-  static readonly nilNode: RBTNode<any, any> =
-    new (class extends RBTNode<unknown, unknown> {
-      constructor() {
-        super(Symbol.for('nil'), Symbol.for('nil'))
-        this._left = this._right = this;
-        (this._parent as any) = null 
-        this._color = Color.BLACK
-        this._size = 0;
-      }
-    })()
+  static readonly nilNode: RBTNode<any, any> = new (class extends RBTNode<unknown, unknown> {
+    constructor() {
+      super(Symbol.for('nil'), Symbol.for('nil'))
+      this._left = this._right = this;
+      (this._parent as any) = null;
+      this._color = Color.BLACK
+      this._size = 0
+    }
+  })()
 
   constructor(key: K, v: V) {
     this._key = key
@@ -83,7 +82,7 @@ export class RBTNode<K, V> {
   }
 
   set size(sz) {
-    this._size = sz;
+    this._size = sz
   }
 
   static isNil(node: RBTNode<unknown, unknown>): boolean {

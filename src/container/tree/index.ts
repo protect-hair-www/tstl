@@ -7,6 +7,4 @@
  * @FilePath: \tstl\src\container\tree\index.ts
  */
 import { Tree } from './Tree'
-export {
-    Tree
-} 
+export { Tree }

@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2021-12-02 13:22:09
- * @LastEditTime: 2022-02-22 09:55:02
+ * @LastEditTime: 2022-02-24 17:19:18
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\App.vue
@@ -22,6 +22,7 @@ import Inter from './Iterator.vue'
 html body {
   padding: 0;
   margin: 0;
+  overflow: hidden;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

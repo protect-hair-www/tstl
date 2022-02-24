@@ -1,8 +1,7 @@
-import { Iterator } from '@/Iterator';
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-02-23 22:48:02
+ * @LastEditTime: 2022-02-24 18:18:04
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
@@ -12,11 +11,11 @@ import { Iterator } from '@/Iterator';
  *    (3)每个叶节点（NULL）是黑色的.
  *    (4)如果一个节点是红色的，则它的两个孩子节点都是黑色的.
  *    (5)对每个节点，从该节点到其所有后代叶节点的简单路径上，均包含相同数目的黑色节点.
- * @FilePath: /tstl/src/container/tree/Tree.ts
+ * @FilePath: \tstl\src\container\tree\Tree.ts
  */
 import { RBTNode, Color } from './RBTNode'
-import { RBTIterator }  from './Iterator'
-const isNil = RBTNode.isNil;
+import { RBTIterator } from './Iterator'
+const isNil = RBTNode.isNil
 
 export class Tree<K, V> {
   // stl实现的红黑树有一个新增的header结点(doing)
@@ -31,19 +30,15 @@ export class Tree<K, V> {
   //   leftMost rightMost
   // ==================================================================================
   private _header: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
-  // 红黑树根结点
+  // 红黑树根结点，通过header.parent获取
   private _root: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
   // 空结点(红黑树叶子结点)
   readonly nil = RBTNode.nilNode
-
-  // 迭代器
-  private _iterator
-
   // 比较器Comparator
-  private key_comp: (a: K, b: K) => boolean = (a, b) => ((a as any) - (b as any)) < 0;
+  private key_comp: (a: K, b: K) => boolean = (a, b) => (a as any) - (b as any) < 0
   constructor(comparator?: (a: K, b: K) => boolean) {
-    if(comparator) this.key_comp = comparator;
-    // this.createHeader()
+    if (comparator) this.key_comp = comparator
+    this.createHeader()
   }
 
   private get header() {
@@ -55,33 +50,65 @@ export class Tree<K, V> {
   }
 
   get root() {
-    // return this.header.parent
-    return this._root
+    return this.header.parent
+    // return this._root
   }
 
   set root(node) {
-    // this.header.parent = node
-    this._root = node
+    this.header.parent = node
+    // this._root = node
   }
 
+  // 树中结点数量
+  _size = 0
   /**
    * @description: 容器存储结点大小
    * @return {*}
-   */  
+   */
   get size(): number {
-    return this.root.size
+    return this._size
+  }
+
+  set size(n) {
+    this._size = n
+  }
+
+  get count() {
+    return this._size
   }
 
   /**
    * @description: 判空
    * @return {*}
-   */  
+   */
   get empty(): boolean {
-    return this.root.size == 0
+    return this.size === 0
   }
 
-  public iterator() {
-    return this._iterator = new RBTIterator(this.root)
+  /**
+   * @description: 迭代器
+   * @return {*} Iterator
+   */  
+  public iterator = (): RBTIterator<K, V> => {
+    return new RBTIterator(this.leftMost)
+  }
+
+  /**
+   * @description: begin迭代器
+   * @param {*} RBTIterator
+   * @return {*}
+   */  
+  public begin = (): RBTIterator<K, V> => {
+    return new RBTIterator(this.leftMost)
+  }
+
+  /**
+   * @description: end迭代器
+   * @param {*} RBTIterator
+   * @return {*}
+   */  
+  public end = (): RBTIterator<K, V> => {
+    return new RBTIterator(this.header)
   }
 
   /**
@@ -91,14 +118,14 @@ export class Tree<K, V> {
    * @return {*}
    */
   private createRBTNode(key: K, value: V) {
-    const node = new RBTNode<K, V>(key, value)
-    return node;
+    // const node =
+    return new RBTNode<K, V>(key, value)
   }
 
   /**
    * @description: 创建header结点
-   */  
-  private createHeader() {
+   */
+  private createHeader = () => {
     let key, v
     key = v = Symbol.for('header')
     this.header = this.createRBTNode(key, v) as RBTNode<K, V>
@@ -106,10 +133,9 @@ export class Tree<K, V> {
     this.root = RBTNode.nilNode
     this.header.color = Color.RED
 
-    // header几个指针的指向 
+    // header几个指针的指向
     this.leftMost = this.header
     this.rightMost = this.header
-
     // this.header.parent = this.root
   }
 
@@ -143,10 +169,10 @@ export class Tree<K, V> {
    *    / \        / \
    *   b   r      a  b
    */
-  leftRotate(x: RBTNode<K, V>) {
+  leftRotate = (x: RBTNode<K, V>) => {
     // 记录y
-    let y = x.right
-    if (isNil(y)) return
+    const y = x.right
+    // if (isNil(y)) return
 
     // 更新b与y的关系
     x.right = y.left
@@ -156,8 +182,10 @@ export class Tree<K, V> {
 
     // 更新p与x的关系
     y.parent = x.parent
-    // if (x === this.root) {
-    if (isNil(x.parent)) {
+    // if (isNil(x.parent)) {
+    //   this.root = y
+    // } 
+    if (x === this.root) {
       this.root = y
     } else if (x === x.parent.left) {
       x.parent.left = y
@@ -185,9 +213,9 @@ export class Tree<K, V> {
    *  / \               / \
    * a  b              b   r
    */
-  rightRotate(y: RBTNode<K, V>) {
+  rightRotate = (y: RBTNode<K, V>) => {
     // 记录y
-    let x = y.left
+    const x = y.left
     // if (x === this.nil) return
 
     // 更新b与y的关系
@@ -199,7 +227,10 @@ export class Tree<K, V> {
     // 更新p与x的关系
     x.parent = y.parent
     // if (y === this.root) {
-    if (isNil(y.parent)) {
+    // if (isNil(y.parent)) {
+    //   this.root = x
+    // } 
+    if (y === this.root) {
       this.root = x
     } else if (y === y.parent.right) {
       y.parent.right = x
@@ -220,8 +251,8 @@ export class Tree<K, V> {
    * @param {RBTNode} z
    * @return {*}
    */
-  private _insert(key: K, value: V) {
-    let z = this.createRBTNode(key, value)
+  private _insert_old(key: K, value: V) {
+    const z = this.createRBTNode(key, value)
     let y = this.nil
     let x = this.root
 
@@ -252,35 +283,35 @@ export class Tree<K, V> {
 
   /**
    * @description: 新版插入方法，和SGI保持一致
-   * @param {*} x_
-   * @param {*} y_
-   * @param {*} v
+   * @param {*} x_ 新插入结点
+   * @param {*} y_ 插入结点的父结点
+   * @param {*} v  插入值
    * @return {*}
-   */  
-  private _insertNew(x_, y_, v) {
-    let x = x_
-    let y = y_
+   */
+  private _insert = (x_, y_, v) => {
+    const x = x_
+    const y = y_
     let z
-    if (y === this.header || isNil(x) || v < y.key) {
+    if (y === this.header || !isNil(x) || this.key_comp(v, y.key)) {
       z = this.createRBTNode(v, v)
       y.left = z
-      if(y === this.header) {
+      if (y === this.header) {
         this.root = z
-        // console.log(this.root, z, this.root, this.root == z, 'zzzzzzzzz');
         this.rightMost = z
-      } else if(y === this.leftMost) {
+      } else if (y === this.leftMost) {
         this.leftMost = z
       }
     } else {
       z = this.createRBTNode(v, v)
       y.right = z
-      if(y === this.rightMost) this.rightMost = z
+      if (y === this.rightMost) this.rightMost = z
     }
     z.parent = y
     z.left = this.nil
     z.right = this.nil
     z.color = Color.RED
     this.insertFixup(z)
+    this.size++
   }
 
   /**
@@ -289,10 +320,10 @@ export class Tree<K, V> {
    * @param {*} V
    * @return {*}
    */
-  private insertFixup(z: RBTNode<K, V>) {
-    // while (z !== this.root && z.parent.color === Color.RED) {
-    while (z.parent.color === Color.RED) {
-      let y;
+  private insertFixup = (z: RBTNode<K, V>) => {
+    while (z !== this.root && z.parent.color === Color.RED) {
+      // while (z.parent.color === Color.RED) {
+      let y
       if (z.parent === z.parent.parent.left) {
         // 插入结点的叔叔结点
         y = z.parent.parent.right
@@ -303,12 +334,12 @@ export class Tree<K, V> {
           z.parent.parent.color = Color.RED
           z = z.parent.parent
         } else {
-          // case 2: 插入的结点z的叔叔结点y是黑色的，并且z是一个右孩子 
+          // case 2: 插入的结点z的叔叔结点y是黑色的，并且z是一个右孩子
           if (z === z.parent.right) {
             z = z.parent
             this.leftRotate(z)
           }
-          // case 3: 插入的结点z的叔叔结点y是黑色的，并且z是一个左孩子 
+          // case 3: 插入的结点z的叔叔结点y是黑色的，并且z是一个左孩子
           z.parent.color = Color.BLACK
           z.parent.parent.color = Color.RED
           this.rightRotate(z.parent.parent)
@@ -335,13 +366,13 @@ export class Tree<K, V> {
   }
 
   /**
-   * @description: 对外提供的插入接口
+   * @description: 对外提供的插入接口(老版本)
    * @param {V} v
    * @return {*}
    */
-  public insert(v: V) {
-    let key: unknown = v
-    this._insert(key as K, v)
+  public insert_old(v: V) {
+    const key: unknown = v
+    this._insert_old(key as K, v)
   }
 
   /**
@@ -349,15 +380,15 @@ export class Tree<K, V> {
    * @param {*}
    * @return {*}
    */
-  insert_equal(v: K) {
+  insert_equal = (v: K) => {
     let y = this.header
     let x = this.root
-    while(!isNil(x)) {
+    while (!isNil(x)) {
       y = x
       // console.log(v, x.key, v < x.key)
       x = this.key_comp(v, x.key) ? x.left : x.right
     }
-    return this._insertNew(x, y, v)
+    return this._insert(x, y, v)
   }
 
   /**
@@ -369,23 +400,23 @@ export class Tree<K, V> {
     let y = this.header
     let x = this.root
     let comp: boolean = true
-    while(!isNil(x)) {
+    while (!isNil(x)) {
       y = x
       comp = this.key_comp(v as any, x.key)
       x = comp ? x.left : x.right
     }
-    
-    let j = new RBTIterator(y)
-    if(comp) {
-      if(j === j.begin) {
-        this.insert(v)
-      } else {
-        j.prev()
-      }
-      let jn = j.get()
-      if(!isNil(jn)) {
-        if(this.key_comp(jn.key, v as any)) this.insert(v)
-      }
+
+    const j = new RBTIterator(y)
+    if (comp) {
+      // if (j === j.begin) {
+      //   this._insert(x, y, v)
+      // } else {
+      //   j.prev()
+      // }
+      // const jn = j.get()
+      // if (!isNil(jn)) {
+      //   if (this.key_comp(jn.key, v as any)) this._insert(x, y, v)
+      // }
     }
   }
 
@@ -407,18 +438,18 @@ export class Tree<K, V> {
   }
 
   /**
-   * @description: 删除结点（legacy状态）
+   * @description: 删除结点（legacy）
    * @param {RBTNode} z
    * @return {*}
    */
   private _delete(z: RBTNode<K, V>) {
-    if (isNil(z)) return;
+    if (isNil(z)) return
 
-    // 从z到根的简单路径上，维护size属性 
-    let p = z;
+    // 从z到根的简单路径上，维护size属性
+    let p = z
     while (!isNil(p)) {
-      p.size--;
-      p = p.parent;
+      p.size--
+      p = p.parent
     }
 
     let y = z
@@ -449,10 +480,10 @@ export class Tree<K, V> {
         y.right.parent = y
 
         // 维护size属性
-        let p = x.parent;
+        let p = x.parent
         while (p !== y) {
-          p.size--;
-          p = p.parent;
+          p.size--
+          p = p.parent
         }
         y.size = y.left.size + 1
       }
@@ -462,7 +493,7 @@ export class Tree<K, V> {
       y.color = z.color
 
       // 维护size属性
-      y.size = y.left.size + y.right.size + 1;
+      y.size = y.left.size + y.right.size + 1
     }
 
     if (yOriginColor === Color.BLACK) {
@@ -476,11 +507,11 @@ export class Tree<K, V> {
    * @param {*} V
    * @return {*}
    */
-  private deleteFixup(x: RBTNode<K, V>) {
-    let w;
-    while (x !== this.root && x.color === Color.BLACK) {
+  private deleteFixup = (x: RBTNode<K, V>) => {
+    let w
+    while (x !== this.root && (isNil(x) || x.color === Color.BLACK)) {
       if (x === x.parent.left) {
-        w = x.parent.right;
+        w = x.parent.right
         if (w.color === Color.RED) {
           // case 1: x的兄弟结点w是红色的
           w.color = Color.BLACK
@@ -488,7 +519,7 @@ export class Tree<K, V> {
           this.leftRotate(x.parent)
           w = x.parent.right
         }
-        if (w.left.color === Color.BLACK && w.right.color === Color.BLACK) {
+        if ((isNil(w.left) || w.left.color === Color.BLACK) && (isNil(w.right) || w.right.color === Color.BLACK)) {
           // case 2: x的兄弟结点w是黑色的， 并且w的两个子结点都是黑色的
           w.color = Color.RED
           x = x.parent
@@ -543,40 +574,41 @@ export class Tree<K, V> {
    * @return {*}
    */
   public delete(x: K) {
-    let z = this.find(x);
-    this._delete(z);
+    const z = this.find(x).get()
+    this._delete(z)
   }
 
   /**
-   * @description: 新版删除操作，保持和SGI的红黑树一致
+   * @description: 带有header属性版本的的删除操作
    * @param {RBTNode} z
    * @param {*} V
    * @return {*}
-   */  
-  private _erase(z: RBTNode<K, V>) {
+   */
+  private _erase = (z: RBTNode<K, V>) => {
     let y = z
     let x = this.nil
     let x_p = this.nil
 
-    if(isNil(y.left)) x = y.right // z最多只有一个非nil孩子
+    if (isNil(y.left)) x = y.right
+    // z最多只有一个非nil孩子
     else {
-      if(isNil(y.right)) x = y.left // z有一个非nil孩子
+      if (isNil(y.right)) x = y.left
+      // z有一个非nil孩子
       else {
         // y为x的后驱，x可能为nil
         y = y.right
-        while(!isNil(y.left))
-          y = y.right
+        while (!isNil(y.left)) y = y.left
         x = y.right
       }
     }
 
-    if(y !== z) {
+    if (y !== z) {
       z.left.parent = y
       y.left = z.left
 
-      if(y !== z.right) {
+      if (y !== z.right) {
         x_p = y.parent
-        if(!isNil(x)) x.parent = y.parent
+        if (!isNil(x)) x.parent = y.parent
         y.parent.left = x
         y.right = z.right
         z.right.parent = y
@@ -584,50 +616,111 @@ export class Tree<K, V> {
         x_p = y
       }
 
-      if(this.root == z) this.root = y
-      else if(z.parent.left === z) z.parent.left = y
+      if (this.root == z) this.root = y
+      else if (z.parent.left === z) z.parent.left = y
       else z.parent.right = y
 
       y.parent = z.parent
       // swap y 和 z的color
-      let ct = y.color
+      const ct = y.color
       y.color = z.color
       z.color = ct
 
       y = z
     } else {
       x_p = y.parent
-      if(!isNil(x)) x.parent = y.parent
-      if(this.root === z) this.root = z
+      if (!isNil(x)) x.parent = y.parent
+      if (this.root === z) this.root = x
       else {
-        if(z.parent.left === z) z.parent.left = x
+        if (z.parent.left === z) z.parent.left = x
         else z.parent.right = x
       }
 
-      if(this.leftMost === z) {
-        if(isNil(z.right)) this.leftMost = z.parent
+      if (this.leftMost === z) {
+        if (isNil(z.right)) this.leftMost = z.parent
         else this.leftMost = this.minimum(x)
       }
 
-      if(this.rightMost === z) {
-        if(isNil(z.left)) this.rightMost = z.parent
+      if (this.rightMost === z) {
+        if (isNil(z.left)) this.rightMost = z.parent
         else this.rightMost = this.maximum(x)
       }
     }
 
-    if(y.color !== Color.RED) {
-      this.deleteFixup(x)
+    if (y.color !== Color.RED) {
+      while (x !== this.root && (isNil(x) || x.color === Color.BLACK)) {
+        if (x === x_p.left) {
+          let w = x_p.right
+          if (w.color === Color.RED) {
+            // case 1: x的兄弟结点w是红色的
+            w.color = Color.BLACK
+            x_p.color = Color.RED
+            this.leftRotate(x_p)
+            w = x_p.right
+          }
+          if ((isNil(w.left) || w.left.color === Color.BLACK) && (isNil(w.right) || w.right.color === Color.BLACK)) {
+            // case 2: x的兄弟结点w是黑色的， 并且w的两个子结点都是黑色的
+            w.color = Color.RED
+            x = x_p
+            x_p = x_p.parent
+          } else {
+            if (isNil(w.right) || w.right.color === Color.BLACK) {
+              if(!isNil(w.left)) w.left.color = Color.BLACK
+              // case 3: x的兄弟结点w是黑色的， w的左孩子是红色的，w的右孩子是黑色的
+              // w.left.color = Color.BLACK
+              w.color = Color.RED
+              this.rightRotate(w)
+              w = x_p.right
+            }
+            // case 4: x的兄弟结点w是黑色的， 并且w的孩子是红色的
+            w.color = x_p.color
+            w.parent.color = Color.BLACK
+            if(!isNil(w.right)) w.right.color = Color.BLACK
+            this.leftRotate(x_p)
+            break;
+            // x = this.root
+          }
+        } else {
+          // 对称情况
+          let w = x_p.left
+          if (w.color === Color.RED) {
+            w.color = Color.BLACK
+            w.parent.color = Color.RED
+            this.rightRotate(x_p)
+            w = x_p.left
+          }
+          if ((isNil(w.right) || w.right.color === Color.BLACK) && (isNil(w.left) || w.left.color === Color.BLACK)) {
+            w.color = Color.RED
+            x = x_p
+            x_p = x_p.parent
+          } else {
+            if (isNil(w.left) || w.left.color === Color.BLACK) {
+              if(!isNil(w.right)) w.right.color = Color.BLACK
+              w.color = Color.RED
+              this.leftRotate(w)
+              w = x_p.left
+            }
+            w.color = x_p.color
+            w.parent.color = Color.BLACK
+            if(!isNil(w.left)) w.left.color = Color.BLACK
+            this.rightRotate(x_p)
+            break
+          }
+        }
+      }
+      if(!isNil(x)) x.color = Color.BLACK
     }
+    return y
   }
 
   /**
    * @description: 新版对外提供的删除接口
    * @param {K} x
    * @return {*}
-   */  
-  public erase(x: K) {
-    let z = this.find(x);
-    this._erase(z);
+   */
+  public erase = (x: K): RBTNode<K, V> | undefined => {
+    const z = this.find(x).get()
+    if(!isNil(z)) return this._erase(z)
   }
 
   /**
@@ -659,7 +752,7 @@ export class Tree<K, V> {
    * @return {*}
    */
   preSuccessor(x: RBTNode<K, V>) {
-    if(isNil(x)) return;
+    if (isNil(x)) return
     if (!isNil(x.left)) return this.maximum(x.left)
     let y = x.parent
     while (!isNil(y) && x === y.left) {
@@ -676,7 +769,7 @@ export class Tree<K, V> {
    * @return {*}
    */
   successor(x: RBTNode<K, V>) {
-    if(isNil(x)) return;
+    if (isNil(x)) return
     if (!isNil(x.right)) return this.minimum(x.right)
     let y = x.parent
     while (!isNil(y) && x === y.right) {
@@ -691,19 +784,35 @@ export class Tree<K, V> {
    * @param {K} key
    * @return {*}
    */
-  public find(key: K): RBTNode<K, V> {
-    return this._find(this.root, key)
+  public find = (key: K): RBTIterator<K, V> => {
+    return this._find(key)
   }
 
   /**
-   * @description: 查找某个关键字元素
+   * @description: 查询结点，迭代版本
+   * @param {K} k
+   * @return {*}
+   */  
+  private _find = (k: K): RBTIterator<K, V> => {
+    let y = this.nil
+    let x = this.root
+    while(!isNil(x)) {
+      if(!this.key_comp(x.key, k)) y = x, x = x.left
+      else x = x.right
+    }
+    let j = new RBTIterator<K, V>(y);
+    return (j === this.end() || this.key_comp(k, (j.get() as RBTNode<K, V>).key)) ? this.end() : j
+  }
+
+  /**
+   * @description: 查找某个关键字元素，递归版本(lagc)
    * @param {K} key
    * @return {*}
    */
-  private _find(root: RBTNode<K, V>, key: K): RBTNode<K, V> {
+  private _find_c = (root: RBTNode<K, V>, key: K): RBTNode<K, V> => {
     if (isNil(root) || root.key === key) return root
-    if (key < root.key) return this._find(root.left, key)
-    else return this._find(root.right, key)
+    if (key < root.key) return this._find_c(root.left, key)
+    else return this._find_c(root.right, key)
   }
 
   /**
@@ -713,10 +822,10 @@ export class Tree<K, V> {
    * @return {*}
    */
   private _select(x: RBTNode<K, V>, i: number) {
-    if (i <= 0) return this.nil;
-    let r = x.left.size + 1
+    if (i <= 0) return this.nil
+    const r = x.left.size + 1
     if (i === r) {
-      return x;
+      return x
     } else if (i < r) {
       return this._select(x.left, i)
     } else {
@@ -739,12 +848,12 @@ export class Tree<K, V> {
    * @param {K} k
    * @return {*}
    */
-  private _rank(T: RBTNode<K, V>, k: K) {
-    let x = this.find(k)
+  private _rank = (T: RBTNode<K, V>, k: K) => {
+    const x = this.find(k).get()
     if (isNil(x)) return 0
     let r = x.left.size + 1
     let y = x
-    while (y !== T) {
+    while (y !== this.root) {
       if (y === y.parent.right) {
         r = r + y.parent.left.size + 1
       }
@@ -759,20 +868,20 @@ export class Tree<K, V> {
    * @return {*}
    */
   public rank(k: K) {
-    return this._rank(this.root, k);
+    return this._rank(this.root, k)
   }
 
   /**
    * @description: lower bound
    * @param {K} k
    * @return {*}
-   */  
+   */
   lower_bound(k: K) {
     let y = this.header
     let x = this.root
 
-    while(!isNil(x)) {
-      if(this.key_comp(x.key, k)) y = x, x = x.left
+    while (!isNil(x)) {
+      if (this.key_comp(x.key, k)) (y = x), (x = x.left)
       else x = x.right
     }
 
@@ -788,8 +897,8 @@ export class Tree<K, V> {
     let y = this.header
     let x = this.root
 
-    while(!isNil(x)) {
-      if(this.key_comp(k, x.key)) y = x, x = x.left
+    while (!isNil(x)) {
+      if (this.key_comp(k, x.key)) (y = x), (x = x.left)
       else x = x.right
     }
 
@@ -800,7 +909,7 @@ export class Tree<K, V> {
    * @description: equal range
    * @param {K} x
    * @return {*}
-   */  
+   */
   equal_range(x: K) {
     return [this.lower_bound(x), this.upper_bound(x)]
   }
@@ -809,16 +918,14 @@ export class Tree<K, V> {
    * @description: swap todo
    * @param {*}
    * @return {*}
-   */  
-  swap() {
-
-  }
+   */
+  swap() { }
 
   /**
    * @description: 清除
    * @param {*}
    * @return {*}
-   */  
+   */
   clear() {
     this._erase(this.root)
     this.root = this.nil
@@ -833,9 +940,9 @@ export class Tree<K, V> {
    * @return {*}
    */
   _inorderWalk(x: RBTNode<K, V>, cb?: (node) => unknown) {
-    if (isNil(x)) return;
+    if (isNil(x)) return
     if (x.left) this._inorderWalk(x.left, cb)
-    if (cb) cb(x);
+    if (cb) cb(x)
     if (x.right) this._inorderWalk(x.right, cb)
   }
 
@@ -849,6 +956,6 @@ export class Tree<K, V> {
     let x
     if (z) x = this.find(z)
     if (isNil(x) || !x) x = this.root
-    this._inorderWalk(x, fn);
+    this._inorderWalk(x, fn)
   }
 }

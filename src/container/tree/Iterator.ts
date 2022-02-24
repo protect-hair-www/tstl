@@ -1,34 +1,21 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-02-22 21:25:17
+ * @LastEditTime: 2022-02-24 18:18:44
  * @LastEditors: hzheyuan
- * @Description: 
- * @FilePath: /tstl/src/container/tree/Iterator.ts
+ * @Description:
+ * @FilePath: \tstl\src\container\tree\Iterator.ts
  */
 import { Iterator } from '../../Iterator/index'
 import { RBTNode, Color } from './RBTNode'
-const isNil = RBTNode.isNil;
+const isNil = RBTNode.isNil
 
-export class RBTIterator extends Iterator {
-  _root;
+export class RBTIterator<K, V> extends Iterator {
+  _cur: RBTNode<K, V>;
 
-  constructor(root) {
-    super();
-    this._root = root;
-    this._cur = this.begin;
-  }
-
-  get root() {
-    return this._root;
-  }
-
-  get begin() {
-    if (!isNil(this.root)) return this.minmum()
-  }
-
-  get end() {
-    return RBTNode.nilNode;
+  constructor(c) {
+    super()
+    this._cur = c
   }
 
   private get cur() {
@@ -36,23 +23,15 @@ export class RBTIterator extends Iterator {
   }
 
   private set cur(val) {
-    this._cur = val;
+    this._cur = val
   }
 
   hasNext(): boolean {
     return false
   }
 
-  minmum() {
-    let x = this.root
-    while (!isNil(x.left)) x = x.left
-    return x
-  }
-
-  maxmum() {
-    let x = this.root
-    while (!isNil(x.right)) x = x.right
-    return x
+  done(): boolean {
+    return false
   }
 
   /**
@@ -62,6 +41,7 @@ export class RBTIterator extends Iterator {
    */
   prev() {
     this.decrement()
+    return this;
   }
 
   /**
@@ -71,6 +51,7 @@ export class RBTIterator extends Iterator {
    */
   next() {
     this.increment()
+    return this;
   }
 
   /**
@@ -78,26 +59,28 @@ export class RBTIterator extends Iterator {
    * @param {*}
    * @return {*}
    */
-  get() {
+  get(): RBTNode<K, V> {
     return this.cur
   }
 
   /**
-   * @description: 红黑树迭代器后动具体实现
+   * @description: 红黑树迭代器后移，具体实现
    * @param {*}
    * @return {*}
    */
   increment(): void {
-    if (isNil(this.cur)) return
     if (!isNil(this.cur.right)) {
+      // 如果有右孩子，向右走一步，然后一直往左走
       this.cur = this.cur.right
       while (!isNil(this.cur.left)) this.cur = this.cur.left
     } else {
+      // 如果没有右孩子，找出父结点，向上查找，直到 “不为右孩子” 为止
       let p = this.cur.parent
       while (this.cur === p.right) {
         this.cur = p
         p = p.parent
       }
+      // 此时右孩子不等于此时父结点，父结点为要找到的结点
       if (this.cur !== p) this.cur = p
     }
   }
@@ -108,10 +91,10 @@ export class RBTIterator extends Iterator {
    * @return {*}
    */
   decrement(): void {
-    if (isNil(this.cur)) return this.cur = this.maxmum()
-    if (this.cur.color === Color.RED && this.cur.parent.parent === this.cur)
+    if (this.cur.color === Color.RED && this.cur.parent.parent === this.cur) {
+      // header情况
       this.cur = this.cur.right
-    else if (!isNil(this.cur.left)) {
+    } else if (!isNil(this.cur.left)) {
       let y = this.cur.left
       while (!isNil(y.right)) {
         y = y.right
@@ -127,8 +110,5 @@ export class RBTIterator extends Iterator {
     }
   }
 
-  remove() {
-
-  }
+  remove() {}
 }
-

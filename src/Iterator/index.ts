@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-02-22 17:34:56
+ * @LastEditTime: 2022-02-24 17:57:45
  * @LastEditors: hzheyuan
  * @Description:
  * 迭代器接口
@@ -10,24 +10,16 @@
  * @FilePath: \tstl\src\Iterator\index.ts
  */
 export abstract class Iterator {
-    // 内部属性，stl相关的几个迭代器
-    _begin
-    _end
-    _cur
+  // 内部属性，stl相关的几个迭代器
+  _cur
 
-    // begin与end指针，按stl标准为前闭后开区间，即：[begin, end)
-    abstract get begin();
-    abstract get end();
+  // 迭代器指针操作
+  abstract prev()             // 迭代器前移
+  abstract next()             // 迭代器后移
+  abstract done(): boolean    // 是否结束
+  abstract hasNext(): boolean // 同上done
 
-    abstract set begin(x);
-    abstract set end(x);
-
-    // 迭代器指针操作
-    abstract prev()
-    abstract next()                 // next方法实现，js迭代协议
-    abstract hasNext(): boolean
-
-    // 迭代器成员访问方法
-    abstract get();
-    abstract remove()
+  // 迭代器成员访问方法
+  abstract get()
+  abstract remove()
 }

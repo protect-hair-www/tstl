@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-02-23 17:52:30
+ * @LastEditTime: 2022-02-24 18:18:11
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\rbtree.vue
@@ -126,7 +126,7 @@ export default {
 
     onEnter(e) {
       const v = Number(e.target.value)
-      this.tr.insert(v);
+      this.tr.insert_equal(v);
       const it = this.tr.iterator();
       it.next();
       console.log(it.get());
@@ -135,7 +135,7 @@ export default {
 
     onDelete(e) {
       const v = Number(e.target.value)
-      this.tr.delete(v);
+      this.tr.erase(v);
       this.updateChart();
     },
 
@@ -168,95 +168,32 @@ export default {
     // 格式化显示
     const chartDom = document.getElementById('main');
     this.chart = echarts.init(chartDom);
-    // const array = [11, 2, 14, 1, 7, 15, 5, 8, 6, 3, 3.2]
     const array = [11, 2, 14, 1, 7, 15, 5, 8, 4, 9, 12, 17, 10, 20, 22]
-    // const array = [10]
+    // const array = [10, 7, 8, 15, 5, 6, 11, 13, 12]
     this.tr = new Tree();
-    array.forEach((key) => {
-      this.tr.insert(key)
-    });
-    console.log(this.tr)
-    // this.tr.inorderWalk(node => console.log(node.key), 14);
+    array.forEach((key) => this.tr.insert_equal(key));
+    // 可视化整颗树
     const data = this.getChartData(this.tr.root);
     this.drawChart(data);
+    // this.tr.inorderWalk(node => console.log(node.key), 14);
 
-    const third = this.tr.select(3);
-    console.log('kth: ', third);
 
-    const rk = this.tr.rank(22);
-    console.log('rank: ', rk);
+    console.log('red black tree instance: ', this.tr)
+    console.log('size', this.tr.size);
+    console.log('empty', this.tr.empty);
 
-    console.log('size: ', this.tr.size);
-    console.log('empty: ', this.tr.empty);
+    // find方法，返回一个迭代器
+    let n14 = this.tr.find(22);
+    console.log('find iterator', n14);
+    console.log('find next', n14.next(), this.tr.end())
 
-    // let bitr = this.tr.begin;
-    // console.log(bitr);
-    // bitr++;
-    // console.log(bitr)
-    // // this.tr.begin++;
+    // begin迭代器
+    let beginItr = this.tr.begin();
+    console.log('begin iterator', beginItr);
 
-    // 迭代器
-    let it = this.tr.iterator();
-    console.log('begin: ', it.begin);
-    console.log('end: ', it.end);
-
-    console.log('iterator: ', it);
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-    it.next()
-    console.log(it.get())
-
-    it.prev();
-    console.log(it.get())
-    it.prev();
-    console.log(it.get())
-    it.prev();
-    console.log(it.get())
-
-    // let e = it.end;
-    // // e.prev();
-    // console.log(e.get(), 'zzzzzz');
-    it.prev();
-    console.log(it.get())
-    it.prev();
-    console.log(it.get())
-    it.prev();
-    console.log(it.get())
-    it.prev();
-    console.log(it.get())
-
-    // this.tr.begin++;
-    // console.log(bitr)
-    // console.log(eitr);
-    // let eitr = this.tr.end;
+    // end迭代器
+    let endItr = this.tr.end();
+    console.log('begin iterator', endItr.next().get());
   }
 }
 </script>
