@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-02-24 18:18:11
+ * @LastEditTime: 2022-02-24 22:50:44
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\demo\rbtree.vue
+ * @FilePath: /tstl/demo/rbtree.vue
 -->
 <template>
   <dev class="red-black-tree">
@@ -103,8 +103,8 @@ export default {
         }
 
         let data = {
-          name: `${node.key}:${node.size}`,
-          // name: `${node.key}`,
+          // name: `${node.key}:${node.size}`,
+          name: `${node.key}`,
           itemStyle: {
             color: node.color === 0 ? '#f00' : '#000'
           },
@@ -127,9 +127,7 @@ export default {
     onEnter(e) {
       const v = Number(e.target.value)
       this.tr.insert_equal(v);
-      const it = this.tr.iterator();
-      it.next();
-      console.log(it.get());
+      console.log(this.tr.root);
       this.updateChart();
     },
 
@@ -168,8 +166,8 @@ export default {
     // 格式化显示
     const chartDom = document.getElementById('main');
     this.chart = echarts.init(chartDom);
+    // const array = this.getRanddomTestData(100)
     const array = [11, 2, 14, 1, 7, 15, 5, 8, 4, 9, 12, 17, 10, 20, 22]
-    // const array = [10, 7, 8, 15, 5, 6, 11, 13, 12]
     this.tr = new Tree();
     array.forEach((key) => this.tr.insert_equal(key));
     // 可视化整颗树
@@ -177,6 +175,7 @@ export default {
     this.drawChart(data);
     // this.tr.inorderWalk(node => console.log(node.key), 14);
 
+    console.log('tree', this.tr)
 
     console.log('red black tree instance: ', this.tr)
     console.log('size', this.tr.size);
@@ -185,7 +184,7 @@ export default {
     // find方法，返回一个迭代器
     let n14 = this.tr.find(22);
     console.log('find iterator', n14);
-    console.log('find next', n14.next(), this.tr.end())
+    // console.log('find next', n14.next(), this.tr.end())
 
     // begin迭代器
     let beginItr = this.tr.begin();

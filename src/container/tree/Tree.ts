@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-02-24 18:18:04
+ * @LastEditTime: 2022-02-24 22:46:57
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
@@ -11,7 +11,7 @@
  *    (3)每个叶节点（NULL）是黑色的.
  *    (4)如果一个节点是红色的，则它的两个孩子节点都是黑色的.
  *    (5)对每个节点，从该节点到其所有后代叶节点的简单路径上，均包含相同数目的黑色节点.
- * @FilePath: \tstl\src\container\tree\Tree.ts
+ * @FilePath: /tstl/src/container/tree/Tree.ts
  */
 import { RBTNode, Color } from './RBTNode'
 import { RBTIterator } from './Iterator'
@@ -170,6 +170,7 @@ export class Tree<K, V> {
    *   b   r      a  b
    */
   leftRotate = (x: RBTNode<K, V>) => {
+    // console.log('left rotate')
     // 记录y
     const y = x.right
     // if (isNil(y)) return
@@ -197,8 +198,8 @@ export class Tree<K, V> {
     y.left = x
     x.parent = y
 
-    y.size = x.size
-    x.size = x.left.size + x.right.size + 1
+    // y.size = x.size
+    // x.size = x.left.size + x.right.size + 1
   }
 
   /**
@@ -214,6 +215,7 @@ export class Tree<K, V> {
    * a  b              b   r
    */
   rightRotate = (y: RBTNode<K, V>) => {
+    // console.log('right rotate')
     // 记录y
     const x = y.left
     // if (x === this.nil) return
@@ -242,8 +244,8 @@ export class Tree<K, V> {
     x.right = y
     y.parent = x
 
-    x.size = y.size
-    y.size = y.left.size + y.right.size + 1
+    // x.size = y.size
+    // y.size = y.left.size + y.right.size + 1
   }
 
   /**
@@ -323,10 +325,9 @@ export class Tree<K, V> {
   private insertFixup = (z: RBTNode<K, V>) => {
     while (z !== this.root && z.parent.color === Color.RED) {
       // while (z.parent.color === Color.RED) {
-      let y
       if (z.parent === z.parent.parent.left) {
         // 插入结点的叔叔结点
-        y = z.parent.parent.right
+        let y = z.parent.parent.right
         // case 1: 插入结点z的叔叔结点y是红色的
         if (!isNil(y) && y.color === Color.RED) {
           z.parent.color = Color.BLACK
@@ -345,7 +346,7 @@ export class Tree<K, V> {
           this.rightRotate(z.parent.parent)
         }
       } else {
-        y = z.parent.parent.left
+        let y = z.parent.parent.left
         if (!isNil(y) && y.color === Color.RED) {
           z.parent.color = Color.BLACK
           y.color = Color.BLACK
@@ -720,7 +721,7 @@ export class Tree<K, V> {
    */
   public erase = (x: K): RBTNode<K, V> | undefined => {
     const z = this.find(x).get()
-    if(!isNil(z)) return this._erase(z)
+    if(z !== this.end().get()) return this._erase(z)
   }
 
   /**
@@ -794,14 +795,14 @@ export class Tree<K, V> {
    * @return {*}
    */  
   private _find = (k: K): RBTIterator<K, V> => {
-    let y = this.nil
+    let y = this.header
     let x = this.root
     while(!isNil(x)) {
       if(!this.key_comp(x.key, k)) y = x, x = x.left
       else x = x.right
     }
     let j = new RBTIterator<K, V>(y);
-    return (j === this.end() || this.key_comp(k, (j.get() as RBTNode<K, V>).key)) ? this.end() : j
+    return (j.get() === this.end().get() || this.key_comp(k, (j.get() as RBTNode<K, V>).key)) ? this.end() : j
   }
 
   /**

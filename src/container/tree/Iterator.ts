@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-02-24 18:18:44
+ * @LastEditTime: 2022-02-24 22:40:59
  * @LastEditors: hzheyuan
  * @Description:
- * @FilePath: \tstl\src\container\tree\Iterator.ts
+ * @FilePath: /tstl/src/container/tree/Iterator.ts
  */
 import { Iterator } from '../../Iterator/index'
 import { RBTNode, Color } from './RBTNode'
@@ -26,12 +26,18 @@ export class RBTIterator<K, V> extends Iterator {
     this._cur = val
   }
 
+  /**
+   * @description: 同下done方法
+   */  
   hasNext(): boolean {
-    return false
+    return this._cur === RBTNode.nilNode
   }
 
+  /**
+   * @description: 迭代结束条件
+   */  
   done(): boolean {
-    return false
+    return this._cur === RBTNode.nilNode
   }
 
   /**
