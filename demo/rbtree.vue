@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-02-24 22:50:44
+ * @LastEditTime: 2022-02-25 17:55:47
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: /tstl/demo/rbtree.vue
+ * @FilePath: \tstl\demo\rbtree.vue
 -->
 <template>
   <dev class="red-black-tree">
@@ -174,25 +174,36 @@ export default {
     const data = this.getChartData(this.tr.root);
     this.drawChart(data);
     // this.tr.inorderWalk(node => console.log(node.key), 14);
-
     console.log('tree', this.tr)
 
     console.log('red black tree instance: ', this.tr)
     console.log('size', this.tr.size);
     console.log('empty', this.tr.empty);
 
-    // find方法，返回一个迭代器
-    let n14 = this.tr.find(22);
-    console.log('find iterator', n14);
-    // console.log('find next', n14.next(), this.tr.end())
-
     // begin迭代器
     let beginItr = this.tr.begin();
     console.log('begin iterator', beginItr);
 
+    let bstr = ''
+    for(let item of beginItr) {
+      bstr += ` ${item}`
+    }
+    console.log('begin loop', bstr)
+
+
     // end迭代器
     let endItr = this.tr.end();
-    console.log('begin iterator', endItr.next().get());
+    console.log('end iterator', endItr);
+
+    // find方法，返回一个迭代器
+    let findItr = this.tr.find(7);
+    console.log('find iterator', findItr);
+
+    let fstr = ''
+    for(let item of findItr) {
+      fstr += ` ${item}`
+    }
+    console.log('find loop', fstr)
   }
 }
 </script>

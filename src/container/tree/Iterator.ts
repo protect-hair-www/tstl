@@ -1,17 +1,17 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-02-24 22:40:59
+ * @LastEditTime: 2022-02-25 17:56:16
  * @LastEditors: hzheyuan
- * @Description:
- * @FilePath: /tstl/src/container/tree/Iterator.ts
+ * @Description: 红黑树对应的迭代器
+ * @FilePath: \tstl\src\container\tree\Iterator.ts
  */
 import { Iterator } from '../../Iterator/index'
 import { RBTNode, Color } from './RBTNode'
 const isNil = RBTNode.isNil
 
 export class RBTIterator<K, V> extends Iterator {
-  _cur: RBTNode<K, V>;
+  _cur: RBTNode<K, V>
 
   constructor(c) {
     super()
@@ -27,17 +27,17 @@ export class RBTIterator<K, V> extends Iterator {
   }
 
   /**
-   * @description: 同下done方法
-   */  
+   * @description: 同下done方法，jdk方法
+   */
   hasNext(): boolean {
-    return this._cur === RBTNode.nilNode
+    return (this.cur.key as any) !== Symbol.for('header')
   }
 
   /**
    * @description: 迭代结束条件
-   */  
+   */
   done(): boolean {
-    return this._cur === RBTNode.nilNode
+    return (this.cur.key as any) !== Symbol.for('header')
   }
 
   /**
@@ -47,17 +47,36 @@ export class RBTIterator<K, V> extends Iterator {
    */
   prev() {
     this.decrement()
-    return this;
+    return this.cur
   }
 
   /**
-   * @description: 迭代协议next接口
+   * @description: 测试next方法
    * @param {*}
    * @return {*}
    */
-  next() {
+  private _next() {
     this.increment()
-    return this;
+    return this.cur
+  }
+
+  /**
+   * @description: js迭代协议规定的next方法
+   * @param {*}
+   * @return {*}
+   */  
+  public next() {
+    if (this.hasNext()) {
+      let node = { done: false, value: this.cur.data }
+      this.increment()
+      return node
+    } else {
+      return { done: true }
+    }
+  }
+
+  [Symbol.iterator]() {
+    return this
   }
 
   /**
@@ -74,7 +93,7 @@ export class RBTIterator<K, V> extends Iterator {
    * @param {*}
    * @return {*}
    */
-  increment(): void {
+  private increment(): void {
     if (!isNil(this.cur.right)) {
       // 如果有右孩子，向右走一步，然后一直往左走
       this.cur = this.cur.right
@@ -96,7 +115,7 @@ export class RBTIterator<K, V> extends Iterator {
    * @param {*}
    * @return {*}
    */
-  decrement(): void {
+  private decrement(): void {
     if (this.cur.color === Color.RED && this.cur.parent.parent === this.cur) {
       // header情况
       this.cur = this.cur.right
@@ -116,5 +135,93 @@ export class RBTIterator<K, V> extends Iterator {
     }
   }
 
-  remove() {}
+  remove() { }
+}
+
+// 测试方法
+export const createRBTItr = (first) => {
+  return {
+    cur: first,
+
+    [Symbol.iterator]() {
+      return this;
+    },
+
+    next() {
+      this.increment()
+      if (this.hasNext()) {
+        return { done: false, value: this.cur.key }
+      } else {
+        return { done: true }
+      }
+    },
+
+    hasNext() {
+      return this.cur.key !== Symbol.for('header')
+    },
+
+    keys() {
+      let that = this
+      return {
+        [Symbol.iterator]() {
+          return this;
+        },
+        next() {
+          that.increment()
+          if (that.hasNext()) {
+            return { done: false, value: that.cur.key }
+          } else {
+            return { done: true }
+          }
+        }
+      }
+    },
+
+    /**
+     * @description: 红黑树迭代器后移，具体实现
+     * @param {*}
+     * @return {*}
+     */
+    increment(): void {
+      if (!isNil(this.cur.right)) {
+        // 如果有右孩子，向右走一步，然后一直往左走
+        this.cur = this.cur.right
+        while (!isNil(this.cur.left)) this.cur = this.cur.left
+      } else {
+        // 如果没有右孩子，找出父结点，向上查找，直到 “不为右孩子” 为止
+        let p = this.cur.parent
+        while (this.cur === p.right) {
+          this.cur = p
+          p = p.parent
+        }
+        // 此时右孩子不等于此时父结点，父结点为要找到的结点
+        if (this.cur !== p) this.cur = p
+      }
+    },
+
+    /**
+     * @description: 红黑树迭代器前移具体实现
+     * @param {*}
+     * @return {*}
+     */
+    decrement(): void {
+      if (this.cur.color === Color.RED && this.cur.parent.parent === this.cur) {
+        // header情况
+        this.cur = this.cur.right
+      } else if (!isNil(this.cur.left)) {
+        let y = this.cur.left
+        while (!isNil(y.right)) {
+          y = y.right
+        }
+        this.cur = y
+      } else {
+        let y = this.cur.parent
+        while (this.cur === y.left) {
+          this.cur = y
+          y = y.parent
+        }
+        this.cur = y
+      }
+    },
+  }
 }

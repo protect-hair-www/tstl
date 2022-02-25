@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-02-24 22:46:57
+ * @LastEditTime: 2022-02-25 16:30:12
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
@@ -11,10 +11,10 @@
  *    (3)每个叶节点（NULL）是黑色的.
  *    (4)如果一个节点是红色的，则它的两个孩子节点都是黑色的.
  *    (5)对每个节点，从该节点到其所有后代叶节点的简单路径上，均包含相同数目的黑色节点.
- * @FilePath: /tstl/src/container/tree/Tree.ts
+ * @FilePath: \tstl\src\container\tree\Tree.ts
  */
 import { RBTNode, Color } from './RBTNode'
-import { RBTIterator } from './Iterator'
+import { RBTIterator, createRBTItr } from './Iterator'
 const isNil = RBTNode.isNil
 
 export class Tree<K, V> {
@@ -118,7 +118,6 @@ export class Tree<K, V> {
    * @return {*}
    */
   private createRBTNode(key: K, value: V) {
-    // const node =
     return new RBTNode<K, V>(key, value)
   }
 
@@ -801,6 +800,8 @@ export class Tree<K, V> {
       if(!this.key_comp(x.key, k)) y = x, x = x.left
       else x = x.right
     }
+    // let j = createRBTItr(y)
+    // return j
     let j = new RBTIterator<K, V>(y);
     return (j.get() === this.end().get() || this.key_comp(k, (j.get() as RBTNode<K, V>).key)) ? this.end() : j
   }
