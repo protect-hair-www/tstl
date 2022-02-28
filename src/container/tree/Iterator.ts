@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-02-25 17:56:16
+ * @LastEditTime: 2022-02-28 19:30:14
  * @LastEditors: hzheyuan
  * @Description: 红黑树对应的迭代器
  * @FilePath: \tstl\src\container\tree\Iterator.ts
@@ -27,17 +27,33 @@ export class RBTIterator<K, V> extends Iterator {
   }
 
   /**
+   * @description: 获取迭代器指向成员
+   * @return {*}
+   */
+  get = (): RBTNode<K, V> => {
+    return this.cur
+  }
+
+  /**
+   * @description: 迭代器是否位于end位置
+   * @return {*}
+   */  
+  private isEnd() {
+    return (this.cur.key as any) === Symbol.for('header')
+  }
+
+  /**
    * @description: 同下done方法，jdk方法
    */
   hasNext(): boolean {
-    return (this.cur.key as any) !== Symbol.for('header')
+    return !this.isEnd()
   }
 
   /**
    * @description: 迭代结束条件
    */
   done(): boolean {
-    return (this.cur.key as any) !== Symbol.for('header')
+    return !this.isEnd()
   }
 
   /**
@@ -47,7 +63,7 @@ export class RBTIterator<K, V> extends Iterator {
    */
   prev() {
     this.decrement()
-    return this.cur
+    return this
   }
 
   /**
@@ -57,7 +73,7 @@ export class RBTIterator<K, V> extends Iterator {
    */
   private _next() {
     this.increment()
-    return this.cur
+    return this
   }
 
   /**
@@ -66,6 +82,7 @@ export class RBTIterator<K, V> extends Iterator {
    * @return {*}
    */  
   public next() {
+    this.increment()
     if (this.hasNext()) {
       let node = { done: false, value: this.cur.data }
       this.increment()
@@ -75,17 +92,60 @@ export class RBTIterator<K, V> extends Iterator {
     }
   }
 
+  /**
+   * @description: 迭代器
+   * @param {*}
+   * @return {*}
+   */  
   [Symbol.iterator]() {
     return this
   }
 
+  *_nodes() {
+    while(this.hasNext()) {
+      let entry = this.cur
+      this.increment()
+      yield entry
+    }
+  }
+
   /**
-   * @description: 获取迭代器指向成员
+   * @description: entries迭代器
    * @param {*}
    * @return {*}
-   */
-  get(): RBTNode<K, V> {
-    return this.cur
+   */  
+  *entries() {
+    while(this.hasNext()) {
+      let entry = { key: this.cur.key, value: this.cur.data }
+      this.increment()
+      yield entry
+    }
+  }
+
+  /**
+   * @description: keys迭代器
+   * @param {*}
+   * @return {*}
+   */  
+  *keys() {
+    while(this.hasNext()) {
+      let key = this.cur.key
+      this.increment()
+      yield key
+    }
+  }
+
+  /**
+   * @description: values迭代器
+   * @param {*}
+   * @return {*}
+   */  
+  *values() {
+    while(this.hasNext()) {
+      let value = this.cur.data
+      this.increment()
+      yield value
+    }
   }
 
   /**
@@ -100,13 +160,13 @@ export class RBTIterator<K, V> extends Iterator {
       while (!isNil(this.cur.left)) this.cur = this.cur.left
     } else {
       // 如果没有右孩子，找出父结点，向上查找，直到 “不为右孩子” 为止
-      let p = this.cur.parent
-      while (this.cur === p.right) {
-        this.cur = p
-        p = p.parent
+      let y = this.cur.parent
+      while (this.cur === y.right) {
+        this.cur = y
+        y = y.parent
       }
       // 此时右孩子不等于此时父结点，父结点为要找到的结点
-      if (this.cur !== p) this.cur = p
+      if (this.cur.right !== y) this.cur = y
     }
   }
 
@@ -127,7 +187,7 @@ export class RBTIterator<K, V> extends Iterator {
       this.cur = y
     } else {
       let y = this.cur.parent
-      while (this.cur === y.left) {
+      while(this.cur === y.left) {
         this.cur = y
         y = y.parent
       }

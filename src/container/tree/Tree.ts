@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-02-28 14:32:21
+ * @LastEditTime: 2022-02-28 19:30:57
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
@@ -30,8 +30,6 @@ export class Tree<K, V> {
   //   leftMost rightMost
   // ==================================================================================
   private _header: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
-  // 红黑树根结点，通过header.parent获取
-  private _root: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
   // 空结点(红黑树叶子结点)
   readonly nil = RBTNode.nilNode
   // 比较器Comparator
@@ -41,6 +39,7 @@ export class Tree<K, V> {
     this.createHeader()
   }
 
+  // header结点
   private get header() {
     return this._header
   }
@@ -49,14 +48,13 @@ export class Tree<K, V> {
     this._header = x
   }
 
+  // 红黑树根结点，通过header.parent获取
   get root() {
     return this.header.parent
-    // return this._root
   }
 
   set root(node) {
     this.header.parent = node
-    // this._root = node
   }
 
   // 树中结点数量
@@ -307,12 +305,14 @@ export class Tree<K, V> {
       y.right = z
       if (y === this.rightMost) this.rightMost = z
     }
+
     z.parent = y
     z.left = this.nil
     z.right = this.nil
     z.color = Color.RED
     this.insertFixup(z)
     this.size++
+    return new RBTIterator(z)
   }
 
   /**
@@ -393,10 +393,10 @@ export class Tree<K, V> {
 
   /**
    * @description: 插入节点的键值(key)在整颗树中必须独一无二（如果存在相同的键值，插入操作不会真正进行）
-   * @param {*}
-   * @return {*}
+   * @param {v V}
+   * @return {iterator: RBTIterator, success: boolean} 返回一个对象,对象的iterator元素为迭代器，指向新增结点，success代表插入是否成功
    */
-  insert_unique(v: V) {
+  insert_unique = (v: V) => {
     let y = this.header
     let x = this.root
     let comp: boolean = true
@@ -406,17 +406,20 @@ export class Tree<K, V> {
       x = comp ? x.left : x.right
     }
 
-    const j = new RBTIterator(y)
+    let jItr = new RBTIterator(y)
     if (comp) {
-      // if (j === j.begin) {
-      //   this._insert(x, y, v)
-      // } else {
-      //   j.prev()
-      // }
-      // const jn = j.get()
-      // if (!isNil(jn)) {
-      //   if (this.key_comp(jn.key, v as any)) this._insert(x, y, v)
-      // }
+      if (jItr.get() === this.begin().get()) {
+        return {iterator: this._insert(x, y, v), success: true}
+      } else {
+        jItr = jItr.prev()
+      }
+    } 
+    const j = jItr.get()
+    if (!isNil(j)) {
+      if (this.key_comp((j as RBTNode<K, V>).key, v as any)) {
+        return {iterator: this._insert(x, y, v), success: true}
+      }
+       return {iterator: j, success: false}
     }
   }
 
@@ -879,11 +882,11 @@ export class Tree<K, V> {
    * @return {*}
    */
   lower_bound(k: K) {
-    let y = this.header
-    let x = this.root
+    let y = this.header // last node which is less than k
+    let x = this.root   // current node
 
     while (!isNil(x)) {
-      if (this.key_comp(x.key, k)) (y = x), (x = x.left)
+      if (!this.key_comp(x.key, k)) (y = x), (x = x.left)
       else x = x.right
     }
 
@@ -896,8 +899,8 @@ export class Tree<K, V> {
    * @return {*}
    */
   upper_bound(k: K) {
-    let y = this.header
-    let x = this.root
+    let y = this.header // last node which is greater than k
+    let x = this.root   // current node
 
     while (!isNil(x)) {
       if (this.key_comp(k, x.key)) (y = x), (x = x.left)
@@ -922,6 +925,47 @@ export class Tree<K, V> {
    * @return {*}
    */
   swap() { }
+
+  /**
+   * @description: 以x为根结点的子树黑结点数量（用来判断是否是一颗红黑树）
+   * @param {RBTNode} x
+   * @param {*} V
+   * @return {*}
+   */  
+  private _black_size = (x, root): number => {
+    if(isNil(x)) return 0
+    else {
+      let bs = x.color === Color.BLACK ? 1 : 0
+      if(x === root) return bs
+      else return bs + this._black_size(x.parent, root)
+    }
+  }
+
+  /**
+   * @description: 检查是否为红黑树（内部调试使用）
+   * @param {*}
+   * @return {boolean}
+   */  
+  _verify = (): boolean => {
+    if(this.size === 0 || this.begin().get() === this.end().get()) {
+      return this.size === 0 && this.begin().get() === this.end().get() && this.header.left === this.header && this.header.right === this.header
+    }
+    let len = this._black_size(this.leftMost, this.root)
+    let beginItr = this.begin();
+    for(let it of beginItr._nodes()) {
+      let x = it, l = x.left, r = x.right
+      if(x.color === Color.RED) {
+        if((!isNil(l) && l.color === Color.RED) || (!isNil(r) && r.color === Color.RED)) return false
+      }
+      if(!isNil(l) && this.key_comp(x.key, l.key)) return false
+      if(!isNil(r) && this.key_comp(r.key, x.key)) return false
+      if(isNil(l) && isNil(r) && this._black_size(x, this.root) !== len) return false
+    }
+
+    if(this.leftMost !== this.minimum(this.root)) return false
+    if(this.rightMost !== this.maximum(this.root)) return false
+    return true
+  }
 
   /**
    * @description: 清除
