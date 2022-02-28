@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-02-25 17:55:47
+ * @LastEditTime: 2022-02-28 14:33:01
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\rbtree.vue
@@ -139,14 +139,15 @@ export default {
 
     onRotateLeft(e) {
       const v = Number(e.target.value)
-      const n = this.tr.find(v);
+      const n = this.tr.find(v).get();
+      console.log(n)
       this.tr.leftRotate(n);
       this.updateChart();
     },
 
     onRotateRight(e) {
       const v = Number(e.target.value)
-      const n = this.tr.find(v);
+      const n = this.tr.find(v).get();
       this.tr.rightRotate(n);
       this.updateChart();
     },
@@ -168,15 +169,14 @@ export default {
     this.chart = echarts.init(chartDom);
     // const array = this.getRanddomTestData(100)
     const array = [11, 2, 14, 1, 7, 15, 5, 8, 4, 9, 12, 17, 10, 20, 22]
+    // const array = []
     this.tr = new Tree();
     array.forEach((key) => this.tr.insert_equal(key));
     // 可视化整颗树
     const data = this.getChartData(this.tr.root);
     this.drawChart(data);
     // this.tr.inorderWalk(node => console.log(node.key), 14);
-    console.log('tree', this.tr)
-
-    console.log('red black tree instance: ', this.tr)
+    console.log('tree instance: ', this.tr)
     console.log('size', this.tr.size);
     console.log('empty', this.tr.empty);
 
@@ -188,12 +188,12 @@ export default {
     for(let item of beginItr) {
       bstr += ` ${item}`
     }
-    console.log('begin loop', bstr)
-
+    console.log('begin loop')
 
     // end迭代器
     let endItr = this.tr.end();
     console.log('end iterator', endItr);
+    console.log('iter equal', beginItr.get() === endItr.get())
 
     // find方法，返回一个迭代器
     let findItr = this.tr.find(7);

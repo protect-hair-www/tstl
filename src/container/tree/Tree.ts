@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-02-25 16:30:12
+ * @LastEditTime: 2022-02-28 14:32:21
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
@@ -169,14 +169,13 @@ export class Tree<K, V> {
    *   b   r      a  b
    */
   leftRotate = (x: RBTNode<K, V>) => {
-    // console.log('left rotate')
     // 记录y
     const y = x.right
     // if (isNil(y)) return
 
     // 更新b与y的关系
     x.right = y.left
-    if (!isNil(y)) {
+    if (!isNil(y.left)) {
       y.left.parent = x
     }
 
@@ -214,10 +213,9 @@ export class Tree<K, V> {
    * a  b              b   r
    */
   rightRotate = (y: RBTNode<K, V>) => {
-    // console.log('right rotate')
     // 记录y
     const x = y.left
-    // if (x === this.nil) return
+    // if (isNil(x.right)) return
 
     // 更新b与y的关系
     y.left = x.right
@@ -226,6 +224,7 @@ export class Tree<K, V> {
     }
 
     // 更新p与x的关系
+    // console.log('right rotate', isNil(y.parent))
     x.parent = y.parent
     // if (y === this.root) {
     // if (isNil(y.parent)) {
@@ -242,6 +241,7 @@ export class Tree<K, V> {
     // 更新x与y的关系
     x.right = y
     y.parent = x
+    // console.log('right rotate', isNil(y.parent))
 
     // x.size = y.size
     // y.size = y.left.size + y.right.size + 1
