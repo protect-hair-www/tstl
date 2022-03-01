@@ -17,7 +17,6 @@
   },
   "scripts": {
     "dev": "vite --mode web",
-    "dev:mp": "vite --mode mp",
     "serve": "vite preview",
     "cz": "cz",
     "release": "standard-version",
@@ -26,7 +25,6 @@
     "fix": "npm run prettier & npm run lint:script",
     "test": "jest",
     "build": "npm run fix & tsc --emitDeclarationOnly & vite build",
-    "build:mp": "npm run fix & tsc --emitDeclarationOnly & vite build --mode mp",
     "build:demo": "npm run fix & tsc --emitDeclarationOnly & vite build --mode demo",
     "build:doc": "npm run build & npm run doc",
     "prepare": "husky install",
@@ -61,7 +59,8 @@
     "typedoc": "^0.22.9",
     "typescript": "^4.5.5",
     "vite": "^2.6.4",
-    "vite-jest": "^0.1.4"
+    "vite-jest": "^0.1.4",
+    "vue-tsc": "^0.32.0"
   },
   "config": {
     "commitizen": {

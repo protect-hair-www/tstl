@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-02-25 17:17:17
+ * @LastEditTime: 2022-03-01 15:23:40
  * @LastEditors: hzheyuan
  * @Description:
  * 迭代器接口
@@ -21,5 +21,6 @@ export abstract class Iterator {
 
   // 迭代器成员访问方法
   abstract get()
+  abstract getNode()
   abstract remove()
 }

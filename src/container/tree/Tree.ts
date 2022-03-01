@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-02-28 19:30:57
+ * @LastEditTime: 2022-03-01 16:35:19
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
@@ -33,7 +33,7 @@ export class Tree<K, V> {
   // 空结点(红黑树叶子结点)
   readonly nil = RBTNode.nilNode
   // 比较器Comparator
-  private key_comp: (a: K, b: K) => boolean = (a, b) => (a as any) - (b as any) < 0
+  private key_comp: (a: K, b: K) => boolean = (a, b) => a < b
   constructor(comparator?: (a: K, b: K) => boolean) {
     if (comparator) this.key_comp = comparator
     this.createHeader()
@@ -408,13 +408,13 @@ export class Tree<K, V> {
 
     let jItr = new RBTIterator(y)
     if (comp) {
-      if (jItr.get() === this.begin().get()) {
+      if (jItr.getNode() === this.begin().getNode()) {
         return {iterator: this._insert(x, y, v), success: true}
       } else {
         jItr = jItr.prev()
       }
     } 
-    const j = jItr.get()
+    const j = jItr.getNode()
     if (!isNil(j)) {
       if (this.key_comp((j as RBTNode<K, V>).key, v as any)) {
         return {iterator: this._insert(x, y, v), success: true}
@@ -577,7 +577,7 @@ export class Tree<K, V> {
    * @return {*}
    */
   public delete(x: K) {
-    const z = this.find(x).get()
+    const z = this.find(x).getNode()
     this._delete(z)
   }
 
@@ -721,9 +721,10 @@ export class Tree<K, V> {
    * @param {K} x
    * @return {*}
    */
-  public erase = (x: K): RBTNode<K, V> | undefined => {
-    const z = this.find(x).get()
-    if(z !== this.end().get()) return this._erase(z)
+  public erase = (x: K): RBTIterator<K, V> => {
+    const z = this.find(x).getNode()
+    if(z !== this.end().getNode()) return new RBTIterator(this._erase(z))
+    else return this.end() 
   }
 
   /**
@@ -806,7 +807,7 @@ export class Tree<K, V> {
     // let j = createRBTItr(y)
     // return j
     let j = new RBTIterator<K, V>(y);
-    return (j.get() === this.end().get() || this.key_comp(k, (j.get() as RBTNode<K, V>).key)) ? this.end() : j
+    return (j.getNode() === this.end().getNode() || this.key_comp(k, (j.getNode() as RBTNode<K, V>).key)) ? this.end() : j
   }
 
   /**
@@ -854,7 +855,7 @@ export class Tree<K, V> {
    * @return {*}
    */
   private _rank = (T: RBTNode<K, V>, k: K) => {
-    const x = this.find(k).get()
+    const x = this.find(k).getNode()
     if (isNil(x)) return 0
     let r = x.left.size + 1
     let y = x
@@ -947,8 +948,8 @@ export class Tree<K, V> {
    * @return {boolean}
    */  
   _verify = (): boolean => {
-    if(this.size === 0 || this.begin().get() === this.end().get()) {
-      return this.size === 0 && this.begin().get() === this.end().get() && this.header.left === this.header && this.header.right === this.header
+    if(this.size === 0 || this.begin().getNode() === this.end().getNode()) {
+      return this.size === 0 && this.begin().getNode() === this.end().getNode() && this.header.left === this.header && this.header.right === this.header
     }
     let len = this._black_size(this.leftMost, this.root)
     let beginItr = this.begin();

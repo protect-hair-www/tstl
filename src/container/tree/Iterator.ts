@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-02-28 19:30:14
+ * @LastEditTime: 2022-03-01 15:57:11
  * @LastEditors: hzheyuan
  * @Description: 红黑树对应的迭代器
  * @FilePath: \tstl\src\container\tree\Iterator.ts
@@ -27,17 +27,26 @@ export class RBTIterator<K, V> extends Iterator {
   }
 
   /**
-   * @description: 获取迭代器指向成员
+   * @description: 内部使用方法，返回红黑树结点
+   * @param {*} RBTNode
    * @return {*}
    */
-  get = (): RBTNode<K, V> => {
+  getNode = (): RBTNode<K, V> => {
     return this.cur
+  }
+
+  /**
+   * @description: 获取迭代器指向成员，对外接口，返回结点值
+   * @return {*}
+   */
+  get = (): V | boolean=> {
+    return this.isEnd() ? false : this.cur._data
   }
 
   /**
    * @description: 迭代器是否位于end位置
    * @return {*}
-   */  
+   */
   private isEnd() {
     return (this.cur.key as any) === Symbol.for('header')
   }
@@ -80,15 +89,14 @@ export class RBTIterator<K, V> extends Iterator {
    * @description: js迭代协议规定的next方法
    * @param {*}
    * @return {*}
-   */  
+   */
   public next() {
-    this.increment()
     if (this.hasNext()) {
       let node = { done: false, value: this.cur.data }
       this.increment()
       return node
     } else {
-      return { done: true }
+      return { done: true, value: null }
     }
   }
 
@@ -96,16 +104,20 @@ export class RBTIterator<K, V> extends Iterator {
    * @description: 迭代器
    * @param {*}
    * @return {*}
-   */  
+   */
   [Symbol.iterator]() {
     return this
   }
 
   *_nodes() {
-    while(this.hasNext()) {
-      let entry = this.cur
-      this.increment()
-      yield entry
+    while (this.hasNext()) {
+      try {
+        let entry = this.cur
+        this.increment()
+        yield entry
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 
@@ -113,12 +125,16 @@ export class RBTIterator<K, V> extends Iterator {
    * @description: entries迭代器
    * @param {*}
    * @return {*}
-   */  
+   */
   *entries() {
-    while(this.hasNext()) {
-      let entry = { key: this.cur.key, value: this.cur.data }
-      this.increment()
-      yield entry
+    while (this.hasNext()) {
+      try {
+        let entry = { key: this.cur.key, value: this.cur.data }
+        this.increment()
+        yield entry
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 
@@ -126,12 +142,16 @@ export class RBTIterator<K, V> extends Iterator {
    * @description: keys迭代器
    * @param {*}
    * @return {*}
-   */  
+   */
   *keys() {
-    while(this.hasNext()) {
-      let key = this.cur.key
-      this.increment()
-      yield key
+    while (this.hasNext()) {
+      try {
+        let key = this.cur.key
+        this.increment()
+        yield key
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 
@@ -139,9 +159,9 @@ export class RBTIterator<K, V> extends Iterator {
    * @description: values迭代器
    * @param {*}
    * @return {*}
-   */  
+   */
   *values() {
-    while(this.hasNext()) {
+    while (this.hasNext()) {
       let value = this.cur.data
       this.increment()
       yield value
@@ -187,7 +207,7 @@ export class RBTIterator<K, V> extends Iterator {
       this.cur = y
     } else {
       let y = this.cur.parent
-      while(this.cur === y.left) {
+      while (this.cur === y.left) {
         this.cur = y
         y = y.parent
       }
