@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-03-01 16:35:19
+ * @LastEditTime: 2022-03-01 18:27:23
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
@@ -313,6 +313,34 @@ export class Tree<K, V> {
     this.insertFixup(z)
     this.size++
     return new RBTIterator(z)
+  }
+
+  /**
+   * @description: 在某个元素上插入值
+   * @param {RBTIterator} p
+   * @param {V} v
+   * @return {*}
+   */  
+  inset_uniqual_with_position = (p: RBTIterator<K, V>, v: V) =>{
+    let pn = p.getNode()
+    if(pn === this.header.left) {
+      if(this.size > 0 && this.key_comp((v as any), pn.key))
+        return this._insert(pn, pn, v)
+      else this.insert_unique(v)
+    } else if(pn === this.header) {
+      if(this.key_comp(this.rightMost.key, (v as any)))
+        return this._insert(this.nil, this.rightMost, v)
+      else this.insert_unique(v)
+    } else {
+      let before = p.prev()
+      let bn = before.getNode()
+      if(this.key_comp(bn.key, pn.key) && this.key_comp((v as any), pn.key)) {
+        if(!isNil(bn.right)) return this._insert(this.nil, bn, v)
+        else this._insert(pn, pn, v)
+      } else {
+        return this.insert_unique(v)
+      }
+    }
   }
 
   /**
