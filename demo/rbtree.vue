@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-03-01 15:21:45
+ * @LastEditTime: 2022-03-02 17:05:10
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\rbtree.vue
@@ -153,7 +153,6 @@ const getRanddomTestData = (num) => {
 const createChart = () => {
   // 格式化显示
   const chartDom = document.getElementById('main');
-  console.log(chartDom)
   chart = ((window as any).echarts).init(chartDom);
   // const array = getRanddomTestData(100)
   const array = [11, 2, 14, 1, 7, 15, 5, 8, 4, 9, 12, 17, 10, 20, 22]
@@ -175,13 +174,13 @@ const createChart = () => {
   console.log('upper_bound', tr.upper_bound(5).get())
 
   // begin迭代器
-  let beginItr = tr.begin();
-  console.log('begin iterator', beginItr.get());
-  let bstr = ''
-  for (let item of beginItr) {
-    bstr += ` ${item}`
-  }
-  console.log('begin loop', bstr)
+  // let beginItr = tr.begin();
+  // console.log('begin iterator', beginItr.get());
+  // let bstr = ''
+  // for (let item of beginItr) {
+  //   bstr += ` ${item}`
+  // }
+  // console.log('begin loop', bstr)
 
   // entries
   // let entriesItr = this.tr.begin();
@@ -200,15 +199,15 @@ const createChart = () => {
   // }
 
   // end迭代器
-  let endItr = tr.end();
-  console.log('end iterator', endItr);
-  console.log('iter equal', beginItr.get() === endItr.get())
+  // let endItr = tr.end();
+  // console.log('end iterator', endItr);
+  // console.log('iter equal', beginItr.get() === endItr.get())
 
   // find方法，返回一个迭代器
-  let findItr = tr.find(10);
-  console.log('find iterator', findItr);
+  // let findItr = tr.find(10);
+  // console.log('find iterator', findItr);
 
-  console.log(findItr.get());
+  // console.log(findItr.get());
   // console.log(this.tr._black_size(findItr.get()))
 
   // let fstr = ''

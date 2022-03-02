@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-03-01 18:27:23
+ * @LastEditTime: 2022-03-02 10:44:23
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
@@ -906,7 +906,8 @@ export class Tree<K, V> {
   }
 
   /**
-   * @description: lower bound
+   * @description: lower bound: 找到第一个可以插入 “V” 而不改变原来有序数组的排序位置
+   * find the fisrt position in which K could inserted without change the ordering
    * @param {K} k
    * @return {*}
    */
@@ -923,7 +924,8 @@ export class Tree<K, V> {
   }
 
   /**
-   * @description: upper bound
+   * @description: upper bound: 最后一个可以插入 “V” 而不改变原来有序数组的排序位置
+   * find the last position in which K could inserted without change the ordering
    * @param {K} k
    * @return {*}
    */

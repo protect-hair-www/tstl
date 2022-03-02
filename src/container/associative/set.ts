@@ -1,9 +1,9 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:17
- * @LastEditTime: 2022-03-01 16:36:11
+ * @LastEditTime: 2022-03-02 10:18:23
  * @LastEditors: hzheyuan
- * @Description: 关联式容器Set，基础为一颗红黑树
+ * @Description: sorted associative container map
  * @FilePath: \tstl\src\container\associative\set.ts
  */
 import { Tree } from '../tree/index'

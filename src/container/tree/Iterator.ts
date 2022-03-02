@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-03-01 15:57:11
+ * @LastEditTime: 2022-03-02 17:03:57
  * @LastEditors: hzheyuan
  * @Description: 红黑树对应的迭代器
  * @FilePath: \tstl\src\container\tree\Iterator.ts
@@ -40,7 +40,7 @@ export class RBTIterator<K, V> extends Iterator {
    * @return {*}
    */
   get = (): V | boolean=> {
-    return this.isEnd() ? false : this.cur._data
+    return this.isEnd() ? false : this.cur.getValue()
   }
 
   /**
@@ -92,7 +92,7 @@ export class RBTIterator<K, V> extends Iterator {
    */
   public next() {
     if (this.hasNext()) {
-      let node = { done: false, value: this.cur.data }
+      let node = { done: false, value: this.cur.getValue() }
       this.increment()
       return node
     } else {
@@ -129,7 +129,7 @@ export class RBTIterator<K, V> extends Iterator {
   *entries() {
     while (this.hasNext()) {
       try {
-        let entry = { key: this.cur.key, value: this.cur.data }
+        let entry = { key: this.cur.key, value: this.cur.getValue() }
         this.increment()
         yield entry
       } catch (error) {
@@ -162,7 +162,7 @@ export class RBTIterator<K, V> extends Iterator {
    */
   *values() {
     while (this.hasNext()) {
-      let value = this.cur.data
+      let value = this.cur.getValue()
       this.increment()
       yield value
     }
@@ -230,7 +230,7 @@ export const createRBTItr = (first) => {
     next() {
       this.increment()
       if (this.hasNext()) {
-        return { done: false, value: this.cur.key }
+        return { done: false, value: this.cur.getKey() }
       } else {
         return { done: true }
       }
@@ -249,7 +249,7 @@ export const createRBTItr = (first) => {
         next() {
           that.increment()
           if (that.hasNext()) {
-            return { done: false, value: that.cur.key }
+            return { done: false, value: that.cur.getKey() }
           } else {
             return { done: true }
           }
