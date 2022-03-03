@@ -1,105 +1,79 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-02 10:53:35
- * @LastEditTime: 2022-03-02 15:48:11
+ * @LastEditTime: 2022-03-03 15:45:00
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\Map.vue
 -->
 <template>
-  <dev class="Set-test"></dev>
+  <dev class="Set-test">
+    <div id="map-box" style="width: 100vw;height:100vh;"></div>
+  </dev>
 </template>
 
 <script setup lang="ts">
-import { convertToObject } from 'typescript';
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Map } from '../src/container/associative/map'
+import { Tree } from '../src/container/tree/Tree'
+import { Chart } from './chart'
+
+let chart: any = ref(null)
+let tr: Tree<number, string> = ref<any>(null)
 
 const testSet = () => {
   const m = new Map<string, number>(); 
   console.log(m.empty())
 
-//   m.insert('aa')
-//   m.insert('cc')
-//   m.insert('xx')
-//   m.insert('yy')
-//   m.insert('zz')
-//   m.insert('dd')
-//   m.insert('bb')
-//   m.insert('dd')
+  m.insert('a', 1)
+  m.insert('b', 5)
+  m.insert('c', 2)
+  m.insert('d', 9)
+  m.insert('x', 3)
+  m.insert('y', 4)
+  m.insert('z', 7)
+  m['x'] = 11
+  m['k'] = 4
 
-//   m.insert(2)
-//   m.insert(4)
-//   m.insert(5)
-//   m.insert(7)
-//   m.insert(1)
-//   m.insert(3)
-//   m.insert(9)
-//   m.insert(8)
-//   console.log(m[1])
-//   m[2] = 10;
+  // console.log(m)
+  // 可视化整颗树
+  chart = new Chart('map-box')
+  chart.drawTree(m._t)
 
-  m['xx'] = 'test'
-  m['kk'] = 'as'
+  console.log('===keys====')
+  let keys = m.begin().keys();
+  for(let k of keys) {
+    console.log(k)
+  }
 
-//   console.log(m.empty())
-//   console.log(m.size())
+  console.log('===values====')
+  let values = m.begin().values();
+  for (let item of values) {
+    console.log(item)
+  }
 
-//   let beginItr = m.begin();
-//   while(beginItr.hasNext()) {
-//     console.log(beginItr.get())
-//     beginItr.next()
-//   }
+  console.log('===entries====')
+  let entries = m.begin().entries();
+  for (let item of entries) {
+    console.log(item)
+  }
 
-//   let values = m.begin().values();
-//   console.log('begin iterator', beginItr);
-//   for (let item of values) {
-//     console.log(item)
-//   }
+  // 删除
+  console.log('erase', m.erase('c'))
+  console.log('erase', m.erase('kkkk'))
 
-//   // 删除
-//   console.log('erase', m.erase('cc'))
-//   console.log('erase', m.erase('kkkk'))
+  console.log('find', m.find('a'), m.find('a').get())
+  console.log('find', m.find('g').get())
+  chart.updateChart(m._t)
 
-//   values = m.begin().values();
-//   console.log('begin iterator', values);
-//   for (let item of values) {
-//     console.log(item)
-//   }
+  console.log('count', m.count('a'))
+  console.log('count', m.count('c'))
 
-//   console.log('find', m.find('eeee').get())
-//   console.log('find', m.find('cc').get())
-//   console.log('find', m.find('xx').get())
-
-//   console.log('count', m.count('cc'))
-//   console.log('count', m.count('xx'))
-
-//   console.log('lower_bound', m.lower_bound('xx').get())
-//   console.log('upper_bound', m.upper_bound('xx').get())
-//   console.log('equal_range', m.equal_range('yy'))
-
-//   m.clear()
-//   // test set of object
-//   type Ty = {
-//     key: number,
-//     value: object
-//   }
-//   const s2 = new Map<string, Ty>((a, b) => a.key < b.key);
-//   // s2.insert('x')
-//   s2.insert({ key: 1, value: { name: '1' } })
-//   s2.insert({ key: 3, value: { name: '2' } })
-//   s2.insert({ key: 7, value: { name: '3' } })
-//   s2.insert({ key: 2, value: { name: '4' } })
-//   s2.insert({ key: 5, value: { name: '5' } })
-//   s2.insert({ key: 8, value: { name: '6' } })
-//   console.log('find s2', s2.find({ key: 7, value: { name: '3' } }).get())
-
-  // entries = s2.begin().entries()
-  // console.log(entries)
-  // for(let item of entries) {
-  //   console.log(item)
-  // }
+  console.log('lower_bound', m.lower_bound('c').key())
+  console.log('upper_bound', m.upper_bound('d').get())
+  console.log('equal_range', m.equal_range('d'))
 }
+
 onMounted(testSet)
 
 </script>

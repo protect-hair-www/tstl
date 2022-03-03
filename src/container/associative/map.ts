@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:17
- * @LastEditTime: 2022-03-02 16:03:40
+ * @LastEditTime: 2022-03-03 15:39:06
  * @LastEditors: hzheyuan
  * @Description: sorted associative container map
  * map is a sorted associative container that contains key-value pairs with unique keys. 
@@ -19,30 +19,28 @@ export class Map<K, V> {
   private key_comp: (a: K, b: K) => boolean = (a, b) => a < b
   constructor(comparator?: (a: K, b: K) => boolean) {
     if (comparator) this.key_comp = comparator
-    this._t = new Tree<K, V>(this.key_comp)
+    this._t = new Tree<K, V>()
 
+    // 代理当前对象，实现map['propKey'] = 'value'写法
     return new Proxy(this, {
       get: function (target, prop, receiver) {
-        // console.log(target, prop, receiver, 'get xxx');
-        // console.log(Reflect.has(target, prop), 'has')
-        // console.log(`get: `, target, prop, Reflect.has(target, prop));
+        // console.log('get', target, prop, Reflect.has(target, prop), receiver);
         if (Reflect.has(target, prop)) return Reflect.get(target, prop, receiver)
         return target.find(prop).get()
       },
       set: function (target, prop, value, receiver) {
-        console.log(`set: `, target, prop, value, Reflect.has(target, prop));
+        // console.log(`set: `, target, prop, value, Reflect.has(target, prop));
         if(Reflect.has(target, prop)) Reflect.set(target, prop, receiver);
         else {
-          const lb = target.lower_bound(prop)
-          const lbn = lb.getNode();
-          console.log(lb.getNode(), lb.getNode() === target.end().getNode())
-
-          if(lbn === target.end().getNode() || target.key_comp(prop, lbn.getKey())) {
-            target.insert_position(lb, value)
+          const propKey: unknown | K = prop
+          const lb = target.lower_bound((propKey as K)), n = lb.getNode();
+          // 如果不存在就新插入一个结点
+          if(n === target.end().getNode() || target.key_comp((propKey as K), n.getKey())) {
+            target.insert_position(lb, prop, value)
           } else {
+            // 否则修改结点的value属性即可
             lb.getNode().setValue(value)
           }
-          console.log(lb.getNode(), lb.getNode().getValue(), target.key_comp(prop, lb.getNode().getKey()))
           return true
         }
         return false
@@ -75,7 +73,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: set中元素数量
+   * @description: map中元素数量
    * @return {*}
    */
   public size() {
@@ -83,7 +81,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: set中元素为x的数量，返回0或1
+   * @description: map中元素为x的数量，返回0或1
    * @param {K} x
    * @return {*}
    */
@@ -96,12 +94,12 @@ export class Map<K, V> {
    * @param {*} x
    * @return {*}
    */
-  public insert(x) {
-    return this._t.insert_unique(x)
+  public insert(k: K, v: V) {
+    return this._t.insert_unique(k, v)
   }
 
-  public insert_position(i, x) {
-    return this._t.inset_uniqual_with_position(i, x)
+  public insert_position(i, k, v) {
+    return this._t.inset_uniqual_at_position(i, k, v)
   }
 
   /**

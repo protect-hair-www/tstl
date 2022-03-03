@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-03-02 10:44:23
+ * @LastEditTime: 2022-03-03 15:38:31
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
@@ -16,6 +16,11 @@
 import { RBTNode, Color } from './RBTNode'
 import { RBTIterator, createRBTItr } from './Iterator'
 const isNil = RBTNode.isNil
+
+export type RBTOptions<K, V> =  {
+  getKey?: () => K
+  comparator?: (a: K, b: K) => boolean
+}
 
 export class Tree<K, V> {
   // stl实现的红黑树有一个新增的header结点(doing)
@@ -32,10 +37,16 @@ export class Tree<K, V> {
   private _header: RBTNode<K, V> = RBTNode.nilNode as RBTNode<K, V>
   // 空结点(红黑树叶子结点)
   readonly nil = RBTNode.nilNode
+  // 获取key函数
+  private getKey?: (v: any) => K
   // 比较器Comparator
   private key_comp: (a: K, b: K) => boolean = (a, b) => a < b
-  constructor(comparator?: (a: K, b: K) => boolean) {
-    if (comparator) this.key_comp = comparator
+
+  constructor(options?: RBTOptions<K, V>) {
+    if(options) {
+      if (options.comparator) this.key_comp = options.comparator
+      if(options.getKey)  this.getKey
+    }
     this.createHeader()
   }
 
@@ -287,12 +298,12 @@ export class Tree<K, V> {
    * @param {*} v  插入值
    * @return {*}
    */
-  private _insert = (x_, y_, v) => {
+  private _insert = (x_, y_, k, v): RBTIterator<K, V> => {
     const x = x_
     const y = y_
     let z
-    if (y === this.header || !isNil(x) || this.key_comp(v, y.key)) {
-      z = this.createRBTNode(v, v)
+    if (y === this.header || !isNil(x) || this.key_comp(k, y.key)) {
+      z = this.createRBTNode(k, v)
       y.left = z
       if (y === this.header) {
         this.root = z
@@ -301,7 +312,7 @@ export class Tree<K, V> {
         this.leftMost = z
       }
     } else {
-      z = this.createRBTNode(v, v)
+      z = this.createRBTNode(k, v)
       y.right = z
       if (y === this.rightMost) this.rightMost = z
     }
@@ -317,28 +328,34 @@ export class Tree<K, V> {
 
   /**
    * @description: 在某个元素上插入值
-   * @param {RBTIterator} p
+   * @param {RBTIterator} pos
    * @param {V} v
    * @return {*}
    */  
-  inset_uniqual_with_position = (p: RBTIterator<K, V>, v: V) =>{
-    let pn = p.getNode()
-    if(pn === this.header.left) {
-      if(this.size > 0 && this.key_comp((v as any), pn.key))
-        return this._insert(pn, pn, v)
-      else this.insert_unique(v)
-    } else if(pn === this.header) {
-      if(this.key_comp(this.rightMost.key, (v as any)))
-        return this._insert(this.nil, this.rightMost, v)
-      else this.insert_unique(v)
-    } else {
-      let before = p.prev()
-      let bn = before.getNode()
-      if(this.key_comp(bn.key, pn.key) && this.key_comp((v as any), pn.key)) {
-        if(!isNil(bn.right)) return this._insert(this.nil, bn, v)
-        else this._insert(pn, pn, v)
+  inset_uniqual_at_position = (pos: RBTIterator<K, V>, k: K, v: V): RBTIterator<K, V> =>{
+    const n = pos.getNode()
+    if(n === this.header.left) {
+      if(this.size > 0 && this.key_comp(k, n.key)) {
+        return this._insert(n, n, k, v)
       } else {
-        return this.insert_unique(v)
+        return this.insert_unique(k, v).iterator
+      }
+    } else if(n === this.header) {
+      if(this.key_comp(this.rightMost.key, k)) {
+        return this._insert(this.nil, this.rightMost, k, v)
+      } else {
+        return this.insert_unique(k, v).iterator
+      }
+    } else {
+      let before = pos.prev(), bn = before.getNode()
+      if(this.key_comp(bn.key, k) && this.key_comp(k, n.key)) {
+        if(isNil(bn)) { 
+          return this._insert(this.nil, bn, k, v)
+        } else {
+          return this._insert(n, n, k, v)
+        }
+      } else {
+        return this.insert_unique(k, v).iterator
       }
     }
   }
@@ -398,9 +415,8 @@ export class Tree<K, V> {
    * @param {V} v
    * @return {*}
    */
-  public insert_old(v: V) {
-    const key: unknown = v
-    this._insert_old(key as K, v)
+  public insert_old(k: K, v: V) {
+    this._insert_old(k, v)
   }
 
   /**
@@ -408,15 +424,15 @@ export class Tree<K, V> {
    * @param {*}
    * @return {*}
    */
-  insert_equal = (v: K) => {
+  insert_equal = (k: K, v: V) => {
     let y = this.header
     let x = this.root
     while (!isNil(x)) {
       y = x
       // console.log(v, x.key, v < x.key)
-      x = this.key_comp(v, x.key) ? x.left : x.right
+      x = this.key_comp(k, x.key) ? x.left : x.right
     }
-    return this._insert(x, y, v)
+    return this._insert(x, y, k, v)
   }
 
   /**
@@ -424,31 +440,30 @@ export class Tree<K, V> {
    * @param {v V}
    * @return {iterator: RBTIterator, success: boolean} 返回一个对象,对象的iterator元素为迭代器，指向新增结点，success代表插入是否成功
    */
-  insert_unique = (v: V) => {
+  insert_unique = (k: K, v: V): {iterator: RBTIterator<K, V>, success: boolean} => {
     let y = this.header
     let x = this.root
     let comp: boolean = true
     while (!isNil(x)) {
       y = x
-      comp = this.key_comp(v as any, x.key)
+      comp = this.key_comp(k, x.key)
       x = comp ? x.left : x.right
     }
-
-    let jItr = new RBTIterator(y)
+    let jItr = new RBTIterator<K, V>(y)
     if (comp) {
       if (jItr.getNode() === this.begin().getNode()) {
-        return {iterator: this._insert(x, y, v), success: true}
+        return {iterator: this._insert(x, y, k, v), success: true}
       } else {
         jItr = jItr.prev()
       }
     } 
     const j = jItr.getNode()
     if (!isNil(j)) {
-      if (this.key_comp((j as RBTNode<K, V>).key, v as any)) {
-        return {iterator: this._insert(x, y, v), success: true}
+      if (this.key_comp(j.getKey(), k)) {
+        return {iterator: this._insert(x, y, k, v), success: true}
       }
-       return {iterator: j, success: false}
     }
+    return {iterator: jItr, success: false}
   }
 
   /**
@@ -832,10 +847,8 @@ export class Tree<K, V> {
       if(!this.key_comp(x.key, k)) y = x, x = x.left
       else x = x.right
     }
-    // let j = createRBTItr(y)
-    // return j
     let j = new RBTIterator<K, V>(y);
-    return (j.getNode() === this.end().getNode() || this.key_comp(k, (j.getNode() as RBTNode<K, V>).key)) ? this.end() : j
+    return (j.getNode() === this.end().getNode() || this.key_comp(k, j.getNode().getKey())) ? this.end() : j
   }
 
   /**
@@ -911,7 +924,7 @@ export class Tree<K, V> {
    * @param {K} k
    * @return {*}
    */
-  lower_bound(k: K) {
+  lower_bound(k: K): RBTIterator<K, V> {
     let y = this.header // last node which is less than k
     let x = this.root   // current node
 
@@ -929,7 +942,7 @@ export class Tree<K, V> {
    * @param {K} k
    * @return {*}
    */
-  upper_bound(k: K) {
+  upper_bound(k: K): RBTIterator<K, V> {
     let y = this.header // last node which is greater than k
     let x = this.root   // current node
 

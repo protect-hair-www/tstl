@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:17
- * @LastEditTime: 2022-03-02 10:18:23
+ * @LastEditTime: 2022-03-03 11:35:51
  * @LastEditors: hzheyuan
  * @Description: sorted associative container map
  * @FilePath: \tstl\src\container\associative\set.ts
@@ -16,7 +16,7 @@ export class Set<K> {
   private key_comp: (a: K, b: K) => boolean = (a, b) => a < b
   constructor(comparator?: (a: K, b: K) => boolean) {
     if (comparator) this.key_comp = comparator
-    this._t = new Tree<K, K>(this.key_comp)
+    this._t = new Tree<K, K>({comparator: this.key_comp})
   }
 
   /**
@@ -66,7 +66,7 @@ export class Set<K> {
    * @return {*}
    */  
   public insert(x) {
-    return this._t.insert_unique(x)
+    return this._t.insert_unique(x, x)
   }
 
   /**

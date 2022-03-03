@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-03-02 17:03:57
+ * @LastEditTime: 2022-03-03 15:43:59
  * @LastEditors: hzheyuan
  * @Description: 红黑树对应的迭代器
  * @FilePath: \tstl\src\container\tree\Iterator.ts
@@ -39,8 +39,16 @@ export class RBTIterator<K, V> extends Iterator {
    * @description: 获取迭代器指向成员，对外接口，返回结点值
    * @return {*}
    */
-  get = (): V | boolean=> {
+  get = (): V | boolean => {
     return this.isEnd() ? false : this.cur.getValue()
+  }
+
+  /**
+   * @description 返回迭代器指针指向结点的key值 
+   * @return {*} 
+   */  
+  key = (): K | boolean => {
+    return this.isEnd() ? false : this.cur.getKey()
   }
 
   /**

@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-03-02 17:05:10
+ * @LastEditTime: 2022-03-03 14:55:41
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\rbtree.vue
@@ -33,111 +33,37 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Tree } from '../src/container/tree/Tree'
+import { Chart } from './chart'
 import { randomNum } from './util';
 
 let chart: any = ref(null)
-let tr: Tree<number, number> = ref<any>(null)
-
-const updateChart = () => {
-  const data = getChartData(tr.root);
-  let op = chart.getOption();
-  op.series[0].data[0] = data;
-  // this.chart.clear()
-  chart.setOption(op, { notMerge: true });
-}
-
-const drawChart = (data) => {
-  chart.setOption(
-    ({
-      series: [
-        {
-          type: 'tree',
-          data: [data],
-          left: '2%',
-          right: '2%',
-          top: '8%',
-          bottom: '20%',
-          symbolSize: 32,
-          symbol: 'circle',
-          orient: 'vertical',
-          initialTreeDepth: -1,
-          label: {
-            position: 'inside',
-            verticalAlign: 'middle',
-            align: 'middle',
-            fontSize: 14
-          },
-          lineStyle: {
-            curveness: 0
-          },
-          leaves: {
-            lineStyle: {
-              width: 0
-            },
-            itemStyle: {
-              opacity: 0
-            }
-          },
-          animationDurationUpdate: 750
-        }
-      ]
-    })
-  )
-}
-
-const getChartData = (root)=> {
-  const dfs = (node: any) => {
-    if (node === tr.nil) {
-      return { name: 'nil', itemStyle: { color: '#000' }, children: [] };
-    }
-
-    let data: any = {
-      // name: `${node.key}:${node.size}`,
-      name: `${node.key}`,
-      itemStyle: {
-        color: node.color === 0 ? '#f00' : '#000'
-      },
-      children: []
-    };
-    if (node.left) {
-      let ld: any = dfs(node.left);
-      data.children.push(ld);
-    }
-
-    if (node.right) {
-      let rd = dfs(node.right);
-      data.children.push(rd);
-    }
-    return data;
-  }
-  return dfs(root)
-}
+let tr: Tree<number, string> = ref<any>(null)
 
 const onEnter = (e) => {
-  const v = Number(e.target.value)
-  const n = tr.insert_unique(v);
+  const k = Number(e.target.value)
+  const n = tr.insert_unique(k, k.toString());
   console.log(n);
-  updateChart();
+  chart.updateChart(tr);
 }
 
 const onDelete = (e) => {
   const v = Number(e.target.value)
   tr.erase(v);
-  updateChart();
+  chart.updateChart(tr);
 }
 
 const onRotateLeft = (e) => {
   const v = Number(e.target.value)
   const n = tr.find(v).getNode();
   tr.leftRotate(n);
-  updateChart();
+  chart.updateChart(tr);
 }
 
 const onRotateRight = (e) => {
   const v = Number(e.target.value)
   const n = tr.find(v).getNode();
   tr.rightRotate(n);
-  updateChart();
+  chart.updateChart(tr);
 }
 
 const getRanddomTestData = (num) => {
@@ -151,21 +77,20 @@ const getRanddomTestData = (num) => {
 }
 
 const createChart = () => {
-  // 格式化显示
-  const chartDom = document.getElementById('main');
-  chart = ((window as any).echarts).init(chartDom);
   // const array = getRanddomTestData(100)
   const array = [11, 2, 14, 1, 7, 15, 5, 8, 4, 9, 12, 17, 10, 20, 22]
   // const array = []
-  tr = new Tree<number, number>();
+  tr = new Tree<number, string>();
   array.forEach((key: number) => {
-    tr.insert_unique(key)
+    tr.insert_unique(key, `${key}+a`)
     // console.log('verify', tr.verify())
   });
   console.log('verify', tr._verify())
+
   // 可视化整颗树
-  const data = getChartData(tr.root);
-  drawChart(data);
+  chart = new Chart('main')
+  chart.drawTree(tr)
+
   // this.tr.inorderWalk(node => console.log(node.key), 14);
   console.log('tree instance: ', tr)
   console.log('size', tr.size);
