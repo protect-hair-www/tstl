@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-03-03 15:38:31
+ * @LastEditTime: 2022-03-03 16:55:14
  * @LastEditors: hzheyuan
  * @Description: 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
@@ -80,10 +80,6 @@ export class Tree<K, V> {
 
   set size(n) {
     this._size = n
-  }
-
-  get count() {
-    return this._size
   }
 
   /**
@@ -768,6 +764,17 @@ export class Tree<K, V> {
     const z = this.find(x).getNode()
     if(z !== this.end().getNode()) return new RBTIterator(this._erase(z))
     else return this.end() 
+  }
+
+
+  /**
+   * @description: 键值为k的元素的数量
+   * @param {K} k
+   * @return {*}
+   */  
+  count(k: K) {
+    const [first, last] = this.equal_range(k)
+    return RBTIterator.distance(first, last)
   }
 
   /**

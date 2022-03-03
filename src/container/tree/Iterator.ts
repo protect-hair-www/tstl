@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-03-03 15:43:59
+ * @LastEditTime: 2022-03-03 16:55:55
  * @LastEditors: hzheyuan
  * @Description: 红黑树对应的迭代器
  * @FilePath: \tstl\src\container\tree\Iterator.ts
@@ -44,10 +44,34 @@ export class RBTIterator<K, V> extends Iterator {
   }
 
   /**
+   * @description: 获取迭代器指向成员，对外接口，返回结点值
+   * @return {*}
+   */
+  value = (): V | boolean => {
+    return this.isEnd() ? false : this.cur.getValue()
+  }
+
+  /**
+   * @description: 获取迭代器指向成员，对外接口，返回结点值
+   * @return {*}
+   */
+  getValue = (): V | boolean => {
+    return this.isEnd() ? false : this.cur.getValue()
+  }
+
+  /**
    * @description 返回迭代器指针指向结点的key值 
    * @return {*} 
    */  
   key = (): K | boolean => {
+    return this.isEnd() ? false : this.cur.getKey()
+  }
+
+  /**
+   * @description 返回迭代器指针指向结点的key值 
+   * @return {*} 
+   */  
+  getKey = (): K | boolean => {
     return this.isEnd() ? false : this.cur.getKey()
   }
 
@@ -221,6 +245,22 @@ export class RBTIterator<K, V> extends Iterator {
       }
       this.cur = y
     }
+  }
+
+  /**
+   * @description: 两个迭代器之间的距离
+   * @param {*} begin
+   * @param {*} end
+   * @return {*}
+   */  
+  static distance(begin, end) {
+    let n = 0;
+    let first = begin;
+    while(first.hasNext() && first.getNode() !== end.getNode()) {
+      first.next()
+      n++
+    }
+    return n
   }
 
   remove() { }

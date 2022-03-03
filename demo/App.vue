@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2021-12-02 13:22:09
- * @LastEditTime: 2022-03-03 14:57:35
+ * @LastEditTime: 2022-03-03 17:15:13
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\App.vue
@@ -11,7 +11,9 @@
     <!-- <RBTree /> -->
     <!-- <Iter /> -->
     <!-- <Set /> -->
-    <Map />
+    <!-- <MultiSet /> -->
+    <MultiMap />
+    <!-- <Map /> -->
   </div>
 </template>
 
@@ -19,7 +21,10 @@
 import RBTree from './rbtree.vue'
 import Iter from './Iterator.vue'
 import Set from './Set.vue'
+import MultiSet from './MultiSet.vue'
+import MultiMap from './MultiMap.vue'
 import Map from './Map.vue'
+
 </script>
 
 <style>

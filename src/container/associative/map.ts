@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:17
- * @LastEditTime: 2022-03-03 15:39:06
+ * @LastEditTime: 2022-03-03 17:18:12
  * @LastEditors: hzheyuan
  * @Description: sorted associative container map
  * map is a sorted associative container that contains key-value pairs with unique keys. 
@@ -73,7 +73,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: map中元素数量
+   * @description: 容器中元素数量
    * @return {*}
    */
   public size() {
@@ -81,7 +81,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: map中元素为x的数量，返回0或1
+   * @description: 容器中元素为x的数量，返回0或1
    * @param {K} x
    * @return {*}
    */
@@ -98,6 +98,13 @@ export class Map<K, V> {
     return this._t.insert_unique(k, v)
   }
 
+  /**
+   * @description: 在位置i处插入
+   * @param {*} i
+   * @param {*} k
+   * @param {*} v
+   * @return {*}
+   */  
   public insert_position(i, k, v) {
     return this._t.inset_uniqual_at_position(i, k, v)
   }
@@ -150,7 +157,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: 清除当前set
+   * @description: 清除当前容器
    * @param {*}
    * @return {*}
    */
