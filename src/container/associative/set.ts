@@ -1,9 +1,25 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:17
- * @LastEditTime: 2022-03-03 11:35:51
+ * @LastEditTime: 2022-03-04 14:40:18
  * @LastEditors: hzheyuan
- * @Description: sorted associative container map
+ * @Description: sorted associative container set
+ * 
+ * Sets are containers that store unique elements following a specific order.
+ * 
+ * In a set, the value of an element also identifies it(the value is itself the key, of type T),
+ * and each value must be unique. The vlaue of the elements in a set cannot modified once in container
+ * (the elements are always const). but they can be inserted or remvoved from the container
+ * 
+ * Internally, the elements in a set are always stroted following a specific strict weak ordering
+ * criterion indicated by its internal comparsion funciton
+ * 
+ * set containers are generally slower than unordred_set containers to access individual elements by their key
+ * but they allow direct iteration on subsets based on their order.
+ * 
+ * Search removal, and insertion operations have logarithmic complexity. 
+ * Sets are typically implemented as red black tree
+ * 
  * @FilePath: \tstl\src\container\associative\set.ts
  */
 import { Tree } from '../tree/index'

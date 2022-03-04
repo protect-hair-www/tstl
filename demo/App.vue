@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2021-12-02 13:22:09
- * @LastEditTime: 2022-03-03 17:15:13
+ * @LastEditTime: 2022-03-04 17:03:28
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\App.vue
@@ -12,8 +12,9 @@
     <!-- <Iter /> -->
     <!-- <Set /> -->
     <!-- <MultiSet /> -->
-    <MultiMap />
+    <!-- <MultiMap /> -->
     <!-- <Map /> -->
+    <List/>
   </div>
 </template>
 
@@ -24,7 +25,7 @@ import Set from './Set.vue'
 import MultiSet from './MultiSet.vue'
 import MultiMap from './MultiMap.vue'
 import Map from './Map.vue'
-
+import List from './List.vue'
 </script>
 
 <style>

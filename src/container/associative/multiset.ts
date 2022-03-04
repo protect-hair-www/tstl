@@ -1,9 +1,26 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:39
- * @LastEditTime: 2022-03-03 17:17:39
+ * @LastEditTime: 2022-03-04 14:39:29
  * @LastEditors: hzheyuan
- * @Description: 和set完全一致，只是允许键值重复
+ * @Description: associative containers multiset
+ * 
+ * Multisets are associative containers that store elements follow a specific order, 
+ * and where multiple elememts can have equivalent values.
+ * 
+ * In a multiset, the value of an element alos identifies(the value is itself the key, of type K).
+ * The value of elements in a multiset cannot be modified once in the container(the elements are always const)
+ * but they can be inserted or removed from the container
+ * 
+ * Interally, the elements in a multiset are always sorted following a specific strict weak ordering 
+ * criterion indicated by its internal comparation function
+ * 
+ * multiset containers are generally slower than unordred_multiset containers to access individual elements by their key
+ * but they allow direct iteration on subsets based on their order.
+ * 
+ * Search removal, and insertion operations have logarithmic complexity. 
+ * multisets are usually implemented as red-black trees
+ * 
  * @FilePath: \tstl\src\container\associative\multiset.ts
  */
 import { Tree } from '../tree/index'

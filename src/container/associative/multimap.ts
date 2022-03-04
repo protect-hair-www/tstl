@@ -1,10 +1,25 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:48
- * @LastEditTime: 2022-03-03 17:17:12
+ * @LastEditTime: 2022-03-04 14:39:50
  * @LastEditors: hzheyuan
- * @Description: 和map一致，只是可以插入键值相同的元素
- * 也因为有键值相同的元素，所以不提供"[]"的方式，操作进行插入。原因是不知道修改哪一个
+ * @Description: associative container multimap
+ * Multimaps are associative containers that store elements formed by a combination of a key value and a mapped value, 
+ * following a specific order, and where multiple elements can have equivalent keys.
+ * 
+ * In a multimap, the key values are generally used to sort an uniquely identify the elements, 
+ * while the mapped values store the content associated this key. the types of key and mapped
+ * value may differ.
+ * 
+ * Interally, the elements in a multimap are always sorted by its key following a specific strict 
+ * weak ordering criterion indicated by its internal comparation function
+ * 
+ * multimap containers are generally slower than unordred_multimap containers to access individual elements by their key
+ * but they allow direct iteration on subsets based on their order.
+ * 
+ * Search removal, and insertion operations have logarithmic complexity. 
+ * multimaps are usually implemented as red-black trees
+ * 
  * @FilePath: \tstl\src\container\associative\multimap.ts
  */
 import { Tree } from '../tree/index'

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-03 14:42:44
- * @LastEditTime: 2022-03-03 15:00:39
+ * @LastEditTime: 2022-03-04 17:18:43
  * @LastEditors: hzheyuan
  * @Description: 绘制数据结构，方便测试
  * @FilePath: \tstl\demo\chart.ts
@@ -19,7 +19,7 @@ export class Chart {
         this.chart = ((window as any).echarts).init(chartDom);
     }
 
-    getChartData = (tr) => {
+    getTreeData = (tr) => {
         const dfs = (node: any) => {
             if (node === tr.nil) {
                 return { name: 'nil', itemStyle: { color: '#000' }, children: [] };
@@ -48,7 +48,7 @@ export class Chart {
     }
 
     drawTree = (tr) => {
-        const data = this.getChartData(tr)
+        const data = this.getTreeData(tr)
         this.chart.setOption(
             ({
                 series: [
@@ -87,12 +87,81 @@ export class Chart {
         )
     }
 
+    getListData = (list) => {
+
+    }
+
+    drawList(header) {
+
+        this.chart.setOption(
+            {
+                title: {
+                    text: 'List 结构'
+                },
+                tooltip: {},
+                animationDurationUpdate: 1500,
+                animationEasingUpdate: 'quinticInOut',
+                series: [
+                    {
+                        type: 'graph',
+                        layout: 'circular',
+                        symbolSize: 50,
+                        roam: true,
+                        label: {
+                            show: true
+                        },
+                        edgeSymbol: ['circle', 'arrow'],
+                        edgeSymbolSize: [4, 10],
+                        edgeLabel: {
+                            fontSize: 20
+                        },
+                        data: [
+                            {
+                                name: 'Node 1',
+                            },
+                            {
+                                name: 'Node 2',
+                            },
+                            {
+                                name: 'Node 3',
+                            },
+                            {
+                                name: 'Node 4',
+                            }
+                        ],
+                        links: [
+                            {
+                                source: 0,
+                                target: 1,
+                                lineStyle: {
+                                    curveness: 0.05
+                                }
+                            },
+                            {
+                                source: 1,
+                                target: 0,
+                                lineStyle: {
+                                    curveness: -0.05
+                                }
+                            },
+                        ],
+                        lineStyle: {
+                            opacity: 0.9,
+                            width: 2,
+                            curveness: 0
+                        }
+                    }
+                ]
+            }
+        )
+    }
+
     updateChart = (tr) => {
-        const data = this.getChartData(tr);
+        const data = this.getTreeData(tr);
         let op = this.chart.getOption();
         op.series[0].data[0] = data;
         // this.chart.clear()
-       this.chart.setOption(op, { notMerge: true });
+        this.chart.setOption(op, { notMerge: true });
     }
 }
 
