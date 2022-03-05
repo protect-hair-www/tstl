@@ -1,15 +1,15 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-02 10:53:35
- * @LastEditTime: 2022-03-03 15:45:00
+ * @LastEditTime: 2022-03-05 10:50:20
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\demo\Map.vue
+ * @FilePath: /tstl/demo/Map.vue
 -->
 <template>
-  <dev class="Set-test">
+  <div class="Set-test">
     <div id="map-box" style="width: 100vw;height:100vh;"></div>
-  </dev>
+  </div>
 </template>
 
 <script setup lang="ts">

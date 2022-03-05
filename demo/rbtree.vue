@@ -1,13 +1,13 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-03-03 14:55:41
+ * @LastEditTime: 2022-03-05 15:17:34
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\demo\rbtree.vue
+ * @FilePath: /tstl/demo/rbtree.vue
 -->
 <template>
-  <dev class="red-black-tree">
+  <div class="red-black-tree">
     <div class="op">
       <div>
         <label for="insert">insert</label>
@@ -27,7 +27,7 @@
       </div>
     </div>
     <div id="main" style="width: 100vw;height:100vh;"></div>
-  </dev>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -147,12 +147,4 @@ onMounted(createChart)
 
 </script>
 <style lang="css" scoped>
-.op {
-  display: flex;
-  flex-direction: row;
-}
-
-.op > div {
-  margin-right: 10px;
-}
 </style>

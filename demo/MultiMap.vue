@@ -1,15 +1,15 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:50:15
- * @LastEditTime: 2022-03-03 17:14:56
+ * @LastEditTime: 2022-03-05 10:50:28
  * @LastEditors: hzheyuan
  * @Description: 迭代器测试
- * @FilePath: \tstl\demo\MultiMap.vue
+ * @FilePath: /tstl/demo/MultiMap.vue
 -->
 <template>
-  <dev class="Set-test">
+  <div class="Set-test">
     <div id="multimap-box" style="width: 100vw;height:100vh;"></div>
-  </dev>
+  </div>
 </template>
 
 <script setup lang="ts">

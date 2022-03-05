@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2021-12-02 13:22:09
- * @LastEditTime: 2022-03-04 17:03:28
+ * @LastEditTime: 2022-03-05 15:17:43
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\demo\App.vue
+ * @FilePath: /tstl/demo/App.vue
 -->
 <template>
   <div>
@@ -39,5 +39,14 @@ html body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin-top: 10px;
+}
+
+.op {
+  display: flex;
+  flex-direction: row;
+}
+
+.op > div {
+  margin-right: 10px;
 }
 </style>

@@ -1,11 +1,13 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-03 14:42:44
- * @LastEditTime: 2022-03-04 17:18:43
+ * @LastEditTime: 2022-03-05 17:46:02
  * @LastEditors: hzheyuan
  * @Description: 绘制数据结构，方便测试
- * @FilePath: \tstl\demo\chart.ts
+ * @FilePath: /tstl/demo/chart.ts
  */
+
+import { MarkedLinksPlugin } from "typedoc/dist/lib/output/plugins";
 
 export class Chart {
     chart: any
@@ -88,17 +90,60 @@ export class Chart {
     }
 
     getListData = (list) => {
-
+        const begin = list.begin();
+        const end = list.end();
+        let data = [], links = []
+        // 处理header部分
+        data.push({ name: 'header' })
+        links.push(
+            {
+                source: 'header',
+                target: begin.getValue(),
+                lineStyle: {
+                    curveness: -0.05
+                }
+            },
+            {
+                source: 'header',
+                target: end.prev().getValue(),
+                lineStyle: {
+                    curveness: 0.05
+                }
+            }
+        )
+        let cur = begin
+        while (cur.hasNext()) {
+            data.push({ name: cur.getValue() })
+            const prev = cur.prev()
+            const next = cur.next()
+            // console.log(cur.getValue(), prev.getValue(), next.getValue(), 'zzz')
+            links.push({
+                source: cur.getValue(),
+                target: prev.isEnd() ? 'header' : prev.getValue(),
+                lineStyle: {
+                    curveness: 0.05
+                }
+            })
+            links.push({
+                source: cur.getValue(),
+                target: next.isEnd() ? 'header' : next.getValue(),
+                lineStyle: {
+                    curveness: -0.05
+                }
+            })
+            cur = cur.next()
+        }
+        return { data, links }
     }
 
-    drawList(header) {
-
+    drawList(list) {
+        const { data, links } = this.getListData(list)
+        // console.log(data, links)
         this.chart.setOption(
             {
                 title: {
                     text: 'List 结构'
                 },
-                tooltip: {},
                 animationDurationUpdate: 1500,
                 animationEasingUpdate: 'quinticInOut',
                 series: [
@@ -115,36 +160,8 @@ export class Chart {
                         edgeLabel: {
                             fontSize: 20
                         },
-                        data: [
-                            {
-                                name: 'Node 1',
-                            },
-                            {
-                                name: 'Node 2',
-                            },
-                            {
-                                name: 'Node 3',
-                            },
-                            {
-                                name: 'Node 4',
-                            }
-                        ],
-                        links: [
-                            {
-                                source: 0,
-                                target: 1,
-                                lineStyle: {
-                                    curveness: 0.05
-                                }
-                            },
-                            {
-                                source: 1,
-                                target: 0,
-                                lineStyle: {
-                                    curveness: -0.05
-                                }
-                            },
-                        ],
+                        data: data,
+                        links: links,
                         lineStyle: {
                             opacity: 0.9,
                             width: 2,
@@ -156,11 +173,20 @@ export class Chart {
         )
     }
 
+    updateList(list) {
+        const { data, links } = this.getListData(list);
+        let op = this.chart.getOption();
+        op.series[0].data = data;
+        op.series[0].links = links;
+        // this.chart.clear()
+        this.chart.setOption(op);
+    }
+
     updateChart = (tr) => {
         const data = this.getTreeData(tr);
         let op = this.chart.getOption();
         op.series[0].data[0] = data;
-        // this.chart.clear()
+        op.series[0].data[0] = data;
         this.chart.setOption(op, { notMerge: true });
     }
 }

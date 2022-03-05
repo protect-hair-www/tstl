@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:58:00
- * @LastEditTime: 2022-03-04 18:23:25
+ * @LastEditTime: 2022-03-05 17:36:09
  * @LastEditors: hzheyuan
  * @Description: sequenece container list
  * 
@@ -22,6 +22,7 @@
  */
 import { ListNode }  from './ListNode'
 import { ListIterator } from './iterator'
+import { Iterator } from '@/Iterator/'
 
 export class List<T> {
     _header: ListNode<T>
@@ -84,7 +85,7 @@ export class List<T> {
      * @return {*}
      */    
     public size(): number {
-        return ListIterator.distance(this.begin(),this.end())
+        return ListIterator.distance(this.begin(), this.end())
     }
 
     /**
@@ -120,7 +121,7 @@ export class List<T> {
      * @return {*}
      */    
     public front() {
-        return this.begin().get()
+        return this.begin().getValue()
     }
 
     /**
@@ -129,11 +130,11 @@ export class List<T> {
      * @return {*}
      */    
     public back() {
-        return this.end().prev().get()
+        return this.end().prev().getValue()
     }
 
     /**
-     * @description: insert elements innternally implementation
+     * @description: insert element innternally implementation
      * @param {ListIterator} pos
      * @param {T} x
      * @return {*}
@@ -148,13 +149,38 @@ export class List<T> {
     }
 
     /**
-     * @description: insert elements public method
+     * @description: insert new elements before the element at the sepcified position
+     * @param {ListIterator} pos
+     * @param {number} n
+     * @param {T} v
+     * @return {*}
+     */    
+    private _fill_insert(pos: ListIterator<T>, n: number, v: T) {
+        for(; n > 0; --n) this.insert(pos, v)
+    }
+
+    /**
+     * @description: insert elements by container iterator
+     * @param {ListIterator} pos
+     * @param {ListIterator} first
+     * @param {ListIterator} last
+     * @return {*}
+     */    
+    private _range_insert(pos: ListIterator<T>, first: Iterator<T>, last: Iterator<T>) {
+        for(; first.getNode() !== last.getNode(); first.next()) {
+            this.insert(pos, first.getValue())
+        }
+    }
+
+    /**
+     * @description: insert new element before the element at the specified position
      * @param {ListIterator} pos
      * @param {T} x
      * @return {*}
      */    
-    public insert(pos: ListIterator<T>, x: T) {
-        this._insert(pos, x)
+    public insert(pos: ListIterator<T>, x: T | number, v?: T) {
+        if(typeof x === 'number' && v) this._fill_insert(pos, x, v)
+        else this._insert(pos, (x as T))
     }
 
     /**
@@ -181,6 +207,7 @@ export class List<T> {
      * @return {*}
      */    
     private _erase(pos: ListIterator<T>) {
+        if(pos.getNode() === this.header) return
         let next_node = pos.getNode().next
         let prev_node = pos.getNode().prev
 
@@ -188,16 +215,7 @@ export class List<T> {
         prev_node.next = next_node
         next_node.prev = prev_node
 
-        return next_node
-    }
-
-    /**
-     * @description: erase elments
-     * @param {ListIterator} pos
-     * @return {*}
-     */    
-    public erase(pos: ListIterator<T>) {
-        this._erase(pos)
+        return new ListIterator(next_node)
     }
 
     /**
@@ -206,12 +224,22 @@ export class List<T> {
      * @param {ListIterator} last
      * @return {*}
      */    
-    private _fill_erase(fisrt: ListIterator<T>, last: ListIterator<T>) {
+    private _range_erase(fisrt: ListIterator<T>, last: ListIterator<T>) {
         while(fisrt.getNode() !== last.getNode()) {
             this.erase(fisrt)
             fisrt.increment();
         }
         return last
+    }
+
+    /**
+     * @description: erase elments
+     * @param {ListIterator} pos
+     * @return {*}
+     */    
+    public erase(first: ListIterator<T>, last?: ListIterator<T>) {
+        if(last) this._range_erase(first, last)
+        else this._erase(first)
     }
 
     /**
@@ -230,6 +258,51 @@ export class List<T> {
      */    
     public pop_back() {
         this.erase(this.end().prev())
+    }
+
+    /**
+     * @description: Exchanges the content of the container by the content of x, 
+     * which is another list of the same type. Sizes may differ.
+     * TODO
+     * @param {type} params
+     * @return {*}
+     */    
+    public swap(list: List<T>) {
+    }
+
+    /**
+     * @description: resizes the container so that it contains new_size elements.
+     * If n is smaller than the current container size, the content is reduced to its first n elements, removing those beyond (and destroying them).
+     * If n is greater than the current container size, the content is expanded by inserting at the end as many elements as needed to reach a size of n. 
+     * If val is specified, the new elements are initialized as copies of val, otherwise, they are value-initialized.
+     * 
+     * Notice that this function changes the actual content of the container by inserting or erasing elements from it.
+     * @param {number} new_size
+     * @param {T} v
+     * @return {*}
+     */    
+    resize(new_size: number, v: T) {
+        let i = this.begin()
+        let len = 0
+        for(; !this.isEnd(i) && len < new_size; i.increment(), ++len);
+        if(len === new_size) this.erase(i, this.end())
+        else this.insert(this.end(), new_size - len, v)
+    }
+
+    /**
+     * @description: Removes all elements from the list container (which are destroyed)
+     * and leaving the container with a size of 0.
+     * @param {*}
+     * @return {*}
+     */    
+    clear() {
+        // let cur = this.header.next
+        // while(cur !== this.header) {
+        //     let temp = cur
+        //     cur = cur.next
+        // }
+        this.header.next = this.header
+        this.header.prev = this.header
     }
 
     /**
@@ -333,10 +406,6 @@ export class List<T> {
 
     }
 
-    private _fill_insert(pos: ListIterator<T>, n: number, v: T) {
-        for(; n > 0; --n) this.insert(pos, v)
-    }
-
     /**
      * @description: fill assign a list with given value
      * @param {number} n
@@ -345,13 +414,13 @@ export class List<T> {
      */    
     private _fill_assign(n: number, v: T) {
         let i = this.begin()
-        for(; i.getNode() != this.end().getNode(); i.increment(), --n) {
+        for(; i.getNode() !== this.end().getNode() && n > 0; i.increment(), --n) {
             i.getNode().setValue(v)
         }
         if(n > 0) {
-            this._fill_insert(this.end(), n, v)
+            this.insert(this.end(), n, v)
         } else {
-            this._fill_erase(i, this.end());
+            this.erase(i, this.end());
         }
     }
 
@@ -364,23 +433,4 @@ export class List<T> {
         this._fill_assign(n, v)
     }
 
-    /**
-     * @description: resizes the container so that it contains new_size elements.
-     * If n is smaller than the current container size, the content is reduced to its first n elements, removing those beyond (and destroying them).
-     * If n is greater than the current container size, the content is expanded by inserting at the end as many elements as needed to reach a size of n. 
-     * If val is specified, the new elements are initialized as copies of val, otherwise, they are value-initialized.
-     * 
-     * Notice that this function changes the actual content of the container by inserting or erasing elements from it.
-     * @param {number} new_size
-     * @param {T} v
-     * @return {*}
-     */    
-    resize(new_size: number, v: T) {
-        let i = this.begin()
-        let len = 0
-        for(; !this.isEnd(i) && len < new_size; i.increment(), ++len) {
-            if(len === new_size) this._fill_erase(i, this.end())
-            else this._fill_insert(this.end(), new_size - len, v)
-        }
-    }
 }

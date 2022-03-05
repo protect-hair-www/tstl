@@ -1,13 +1,13 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:50:15
- * @LastEditTime: 2022-03-03 17:02:46
+ * @LastEditTime: 2022-03-05 10:50:55
  * @LastEditors: hzheyuan
  * @Description: 迭代器测试
- * @FilePath: \tstl\demo\Set.vue
+ * @FilePath: /tstl/demo/Set.vue
 -->
 <template>
-  <dev class="Set-test"></dev>
+  <div class="Set-test"></div>
 </template>
 
 <script setup lang="ts">

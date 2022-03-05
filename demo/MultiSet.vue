@@ -1,15 +1,15 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:50:15
- * @LastEditTime: 2022-03-03 17:16:10
+ * @LastEditTime: 2022-03-05 10:50:35
  * @LastEditors: hzheyuan
  * @Description: 迭代器测试
- * @FilePath: \tstl\demo\MultiSet.vue
+ * @FilePath: /tstl/demo/MultiSet.vue
 -->
 <template>
-  <dev class="Set-test">
+  <div class="Set-test">
     <div id="multiset-box" style="width: 100vw;height:100vh;"></div>
-  </dev>
+  </div>
 </template>
 
 <script setup lang="ts">

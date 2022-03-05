@@ -1,16 +1,16 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-03-03 16:55:55
+ * @LastEditTime: 2022-03-05 16:01:13
  * @LastEditors: hzheyuan
  * @Description: 红黑树对应的迭代器
- * @FilePath: \tstl\src\container\tree\Iterator.ts
+ * @FilePath: /tstl/src/container/tree/Iterator.ts
  */
 import { Iterator } from '../../Iterator/index'
 import { RBTNode, Color } from './RBTNode'
 const isNil = RBTNode.isNil
 
-export class RBTIterator<K, V> extends Iterator {
+export class RBTIterator<K, V> extends Iterator<K> {
   _cur: RBTNode<K, V>
 
   constructor(c) {
