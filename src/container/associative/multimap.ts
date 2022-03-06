@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:48
- * @LastEditTime: 2022-03-04 14:39:50
+ * @LastEditTime: 2022-03-06 23:10:18
  * @LastEditors: hzheyuan
  * @Description: associative container multimap
  * Multimaps are associative containers that store elements formed by a combination of a key value and a mapped value, 
@@ -61,7 +61,7 @@ export class MultiMap<K, V> {
   }
 
   /**
-   * @description: begin迭代器
+   * @description: return iterator to begining
    * @return {*}
    */
   public begin() {
@@ -69,7 +69,7 @@ export class MultiMap<K, V> {
   }
 
   /**
-   * @description: end迭代器
+   * @description: return iterator to begining
    * @return {*}
    */
   public end() {
@@ -77,7 +77,7 @@ export class MultiMap<K, V> {
   }
 
   /**
-   * @description: 是否为空
+   * @description: test whether container is empty
    * @return {*}
    */
   public empty(): boolean {
@@ -85,7 +85,7 @@ export class MultiMap<K, V> {
   }
 
   /**
-   * @description: 容器中元素数量
+   * @description: return container size
    * @return {*}
    */
   public size() {
@@ -93,7 +93,7 @@ export class MultiMap<K, V> {
   }
 
   /**
-   * @description: 容器中键值为x的元素的数量
+   * @description: Count elements with a specific key
    * @param {K} x
    * @return {*}
    */
@@ -102,7 +102,7 @@ export class MultiMap<K, V> {
   }
 
   /**
-   * @description: 插入元素
+   * @description: insert elements
    * @param {*} x
    * @return {*}
    */
@@ -111,7 +111,7 @@ export class MultiMap<K, V> {
   }
 
   /**
-   * @description: 查找元素，返回为迭代器
+   * @description: get iterator to element
    * @param {*} x
    * @return {*}
    */
@@ -120,7 +120,7 @@ export class MultiMap<K, V> {
   }
 
   /**
-   * @description: 删除元素
+   * @description: erase element
    * @param {*} x
    * @return {*}
    */
@@ -130,7 +130,7 @@ export class MultiMap<K, V> {
   }
 
   /**
-   * @description: lower_bound
+   * @description: get iterator to lower_bound
    * @param {K} x
    * @return {*}
    */
@@ -139,7 +139,7 @@ export class MultiMap<K, V> {
   }
 
   /**
-   * @description: upper_bound
+   * @description: get iterator to upper_bound
    * @param {K} x
    * @return {*}
    */
@@ -148,7 +148,7 @@ export class MultiMap<K, V> {
   }
 
   /**
-   * @description: equal_range
+   * @description: get iterator to equal elements
    * @param {K} x
    * @return {*}
    */
@@ -158,7 +158,7 @@ export class MultiMap<K, V> {
   }
 
   /**
-   * @description: 清除当前容器
+   * @description: clear content
    * @param {*}
    * @return {*}
    */

@@ -1,16 +1,42 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-03-03 16:55:14
+ * @LastEditTime: 2022-03-06 22:51:58
  * @LastEditors: hzheyuan
- * @Description: 关联式容器基础数据结构红黑树
+ * @Description: red_black_tree
+ *
+ * A red-black tree is a binary tree that satisfies the following red-black properties: 
+ *  1. Every node is either red or black.
+ *  2. The root is black.
+ *  3. Every leaf (NIL) is black.
+ *  4. If a node is red, then both its children are black.
+ *  5. For each node, all simple paths from the node to descendant leaves contain the same number of black nodes
+ * 
+ * Red-black tree class, designed for use in implementing
+ * associative containers (set, multiset, map, and multimap). The
+ * insertion and deletion algorithms are based on those in Cormen,
+ * Leiserson, and Rivest, Introduction to Algorithms (MIT Press,
+ * 1990), except that
+ *  
+ * (1) the header cell is maintained with links not only to the root
+ * but also to the leftmost node of the tree, to enable constant
+ * time begin(), and to the rightmost node of the tree, to enable
+ * linear time performance when used with the generic set algorithms
+ * (set_union, etc.)
+ * 
+ * (2) when a node being deleted has two children its successor node
+ * is relinked into its place, rather than copied, so that the only
+ * iterators invalidated are those referring to the deleted node.
+ * 
+ * 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
  * 红黑树的性质：
- *    (1)每个节点或是红色的,或是黑色的.
- *    (2)根节点是黑色的.
- *    (3)每个叶节点（NULL）是黑色的.
- *    (4)如果一个节点是红色的，则它的两个孩子节点都是黑色的.
- *    (5)对每个节点，从该节点到其所有后代叶节点的简单路径上，均包含相同数目的黑色节点.
+ *  1.每个节点或是红色的,或是黑色的.
+ *  2.根节点是黑色的.
+ *  3.每个叶节点（NULL）是黑色的.
+ *  4.如果一个节点是红色的，则它的两个孩子节点都是黑色的.
+ *  5.对每个节点，从该节点到其所有后代叶节点的简单路径上，均包含相同数目的黑色节点.
+ *
  * @FilePath: \tstl\src\container\tree\Tree.ts
  */
 import { RBTNode, Color } from './RBTNode'

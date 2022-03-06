@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:17
- * @LastEditTime: 2022-03-04 14:40:18
+ * @LastEditTime: 2022-03-06 22:58:09
  * @LastEditors: hzheyuan
  * @Description: sorted associative container set
  * 
@@ -36,7 +36,7 @@ export class Set<K> {
   }
 
   /**
-   * @description: begin迭代器
+   * @description: return iterator to begining
    * @return {*}
    */  
   public begin() {
@@ -44,7 +44,7 @@ export class Set<K> {
   }
 
   /**
-   * @description: end迭代器
+   * @description: return iterator of end
    * @return {*}
    */  
   public end() {
@@ -52,7 +52,7 @@ export class Set<K> {
   }
 
   /**
-   * @description: 是否为空
+   * @description: test whether container is empty
    * @return {*}
    */  
   public empty(): boolean {
@@ -60,7 +60,7 @@ export class Set<K> {
   }
 
   /**
-   * @description: set中元素数量
+   * @description: return container size
    * @return {*}
    */  
   public size() {
@@ -68,7 +68,7 @@ export class Set<K> {
   }
 
   /**
-   * @description: set中元素为x的数量，返回0或1
+   * @description: count elements with specific value
    * @param {K} x
    * @return {*}
    */  
@@ -77,7 +77,7 @@ export class Set<K> {
   }
 
   /**
-   * @description: 插入元素
+   * @description: insert elements
    * @param {*} x
    * @return {*}
    */  
@@ -86,7 +86,7 @@ export class Set<K> {
   }
 
   /**
-   * @description: 查找元素，返回为迭代器
+   * @description: get iterator to element
    * @param {*} x
    * @return {*}
    */  
@@ -95,7 +95,7 @@ export class Set<K> {
   }
 
   /**
-   * @description: 删除元素
+   * @description: erase elements
    * @param {*} x
    * @return {*}
    */  
@@ -105,7 +105,7 @@ export class Set<K> {
   }
 
   /**
-   * @description: lower_bound
+   * @description: return iterator to lower bound
    * @param {K} x
    * @return {*}
    */  
@@ -114,7 +114,7 @@ export class Set<K> {
   }
 
   /**
-   * @description: upper_bound
+   * @description: return iterator to upper bound
    * @param {K} x
    * @return {*}
    */  
@@ -123,7 +123,7 @@ export class Set<K> {
   }
 
   /**
-   * @description: equal_range
+   * @description: get range of equal elements
    * @param {K} x
    * @return {*}
    */  
@@ -133,7 +133,16 @@ export class Set<K> {
   }
 
   /**
-   * @description: 清除当前set
+   * @description: swap content (todo)
+   * @param {*}
+   * @return {*}
+   */  
+  public swap() {
+
+  }
+
+  /**
+   * @description: clear content
    * @param {*}
    * @return {*}
    */  

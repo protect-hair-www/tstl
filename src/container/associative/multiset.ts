@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:39
- * @LastEditTime: 2022-03-04 14:39:29
+ * @LastEditTime: 2022-03-06 23:13:36
  * @LastEditors: hzheyuan
  * @Description: associative containers multiset
  * 
@@ -37,7 +37,7 @@ export class MultiSet<K> {
   }
 
   /**
-   * @description: begin迭代器
+   * @description: return iterator to begining
    * @return {*}
    */  
   public begin() {
@@ -45,7 +45,7 @@ export class MultiSet<K> {
   }
 
   /**
-   * @description: end迭代器
+   * @description: return iterator to end
    * @return {*}
    */  
   public end() {
@@ -53,7 +53,7 @@ export class MultiSet<K> {
   }
 
   /**
-   * @description: 是否为空
+   * @description: test whether container is empty
    * @return {*}
    */  
   public empty(): boolean {
@@ -61,7 +61,7 @@ export class MultiSet<K> {
   }
 
   /**
-   * @description: 容器中元素数量
+   * @description: return container size
    * @return {*}
    */  
   public size() {
@@ -69,7 +69,7 @@ export class MultiSet<K> {
   }
 
   /**
-   * @description: 容器中键值为x的元素的数量，返回0或1
+   * @description: count elements with specific key
    * @param {K} x
    * @return {*}
    */  
@@ -78,7 +78,7 @@ export class MultiSet<K> {
   }
 
   /**
-   * @description: 插入元素
+   * @description: insert elements
    * @param {*} x
    * @return {*}
    */  
@@ -87,7 +87,7 @@ export class MultiSet<K> {
   }
 
   /**
-   * @description: 查找元素，返回为迭代器
+   * @description: get iterator to element
    * @param {*} x
    * @return {*}
    */  
@@ -96,7 +96,7 @@ export class MultiSet<K> {
   }
 
   /**
-   * @description: 删除元素
+   * @description: erase element
    * @param {*} x
    * @return {*}
    */  
@@ -106,7 +106,7 @@ export class MultiSet<K> {
   }
 
   /**
-   * @description: lower_bound
+   * @description: return iterator to lower_bound
    * @param {K} x
    * @return {*}
    */  
@@ -115,7 +115,7 @@ export class MultiSet<K> {
   }
 
   /**
-   * @description: upper_bound
+   * @description: Return iterator to upper_bound
    * @param {K} x
    * @return {*}
    */  
@@ -124,7 +124,7 @@ export class MultiSet<K> {
   }
 
   /**
-   * @description: equal_range
+   * @description: return iterator to equal elements
    * @param {K} x
    * @return {*}
    */  
@@ -134,7 +134,7 @@ export class MultiSet<K> {
   }
 
   /**
-   * @description: 清除当前容器
+   * @description: clear content
    * @param {*}
    * @return {*}
    */  

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:17
- * @LastEditTime: 2022-03-04 14:40:01
+ * @LastEditTime: 2022-03-06 23:05:35
  * @LastEditors: hzheyuan
  * @Description: associative container map
  * 
@@ -62,7 +62,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: begin迭代器
+   * @description: return iterator to begining
    * @return {*}
    */
   public begin() {
@@ -70,7 +70,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: end迭代器
+   * @description: return iterator to end
    * @return {*}
    */
   public end() {
@@ -78,7 +78,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: 是否为空
+   * @description: test whether container is empty
    * @return {*}
    */
   public empty(): boolean {
@@ -86,7 +86,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: 容器中元素数量
+   * @description: return container size
    * @return {*}
    */
   public size() {
@@ -94,7 +94,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: 容器中元素为x的数量，返回0或1
+   * @description: count elements with a specific key
    * @param {K} x
    * @return {*}
    */
@@ -103,8 +103,8 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: 插入元素
-   * @param {*} x
+   * @description: insett elements
+   * @param {*} 
    * @return {*}
    */
   public insert(k: K, v: V) {
@@ -112,7 +112,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: 在位置i处插入
+   * @description: insert at spicified position
    * @param {*} i
    * @param {*} k
    * @param {*} v
@@ -123,7 +123,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: 查找元素，返回为迭代器
+   * @description: get iterator to element
    * @param {*} x
    * @return {*}
    */
@@ -132,7 +132,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: 删除元素
+   * @description: erase elements
    * @param {*} x
    * @return {*}
    */
@@ -142,7 +142,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: lower_bound
+   * @description: return iterator to lower_bound
    * @param {K} x
    * @return {*}
    */
@@ -151,7 +151,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: upper_bound
+   * @description: return iterator to upper_bound
    * @param {K} x
    * @return {*}
    */
@@ -160,7 +160,7 @@ export class Map<K, V> {
   }
 
   /**
-   * @description: equal_range
+   * @description: return iterator equal elements
    * @param {K} x
    * @return {*}
    */
@@ -168,9 +168,27 @@ export class Map<K, V> {
     const r = this._t.equal_range(x);
     return [r[0].get(), r[1].get()]
   }
+  
+  /**
+   * @description: swap content(todo)
+   * @param {*}
+   * @return {*}
+   */  
+  public swap() {
+
+  }
 
   /**
-   * @description: 清除当前容器
+   * @description: access element(todo)
+   * @param {*}
+   * @return {*}
+   */  
+  public at() {
+
+  }
+
+  /**
+   * @description: clean content
    * @param {*}
    * @return {*}
    */
