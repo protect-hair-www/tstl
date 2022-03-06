@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:58:00
- * @LastEditTime: 2022-03-05 17:36:09
+ * @LastEditTime: 2022-03-06 21:08:45
  * @LastEditors: hzheyuan
  * @Description: sequenece container list
  * 
@@ -27,7 +27,7 @@ import { Iterator } from '@/Iterator/'
 export class List<T> {
     _header: ListNode<T>
 
-    constructor() {
+    constructor(data?: Iterable<T>) {
         this._header = this.createNode()
         this.empty_init()
     }
@@ -207,7 +207,7 @@ export class List<T> {
      * @return {*}
      */    
     private _erase(pos: ListIterator<T>) {
-        if(pos.getNode() === this.header) return
+        if(pos.getNode() === this.end().getNode()) return
         let next_node = pos.getNode().next
         let prev_node = pos.getNode().prev
 
@@ -224,10 +224,10 @@ export class List<T> {
      * @param {ListIterator} last
      * @return {*}
      */    
-    private _range_erase(fisrt: ListIterator<T>, last: ListIterator<T>) {
-        while(fisrt.getNode() !== last.getNode()) {
-            this.erase(fisrt)
-            fisrt.increment();
+    private _range_erase(first: ListIterator<T>, last: ListIterator<T>) {
+        while(first.getNode() !== last.getNode()) {
+            this.erase(first)
+            first.increment();
         }
         return last
     }
@@ -263,11 +263,13 @@ export class List<T> {
     /**
      * @description: Exchanges the content of the container by the content of x, 
      * which is another list of the same type. Sizes may differ.
-     * TODO
      * @param {type} params
      * @return {*}
      */    
-    public swap(list: List<T>) {
+    public swap(x: List<T>) {
+        const temp = x.header
+        x.header = this.header
+        this.header = temp
     }
 
     /**
@@ -307,6 +309,7 @@ export class List<T> {
 
     /**
      * @description: transfer list to list
+     * transfers elements from x into the container, inserting them at position(before)
      * @param {ListIterator} pos
      * @param {ListIterator} first
      * @param {ListIterator} last
@@ -328,43 +331,109 @@ export class List<T> {
     }
 
     /**
-     * @description: transfer elements from list to list
+     * @description: transfers elements from x into the container, inserting them at position(before).
+     * This effectively inserts those elements into the container and removes them from x, 
+     * altering the sizes of both containers. The operation does not involve the construction or destruction of any element. 
+     * They are transferred, no matter whether x is an lvalue or an rvalue, or whether the value_type supports move-construction or not.
+     * 
+     * The first version (1) transfers all the elements of x into the container.
+     * The second version (2) transfers only the element pointed by i from x into the container.
+     * The third version (3) transfers the range [first,last) from x into the container.
+
      * @param {ListIterator} pos
      * @param {List} list
      * @return {*}
      */    
-    public splice(pos: ListIterator<T>, list: List<T>) {
-        if(!list.empty())
-            this.transfer(pos, list.begin(), list.end())
+    public splice(pos: ListIterator<T>, list: List<T>, first?: ListIterator<T>, last?: ListIterator<T>) {
+        if(!first) {
+            if(!list.empty()) this.transfer(pos, list.begin(), list.end())
+        } else {
+            if(!last) {
+                this._splice_one(pos, list, first)
+            } else {
+                this._splice_range(pos, list, first, last)
+            }
+        }
+    }
+
+    /**
+     * @description: splice version(2) interanlly implementation
+     * @param {ListIterator} pos
+     * @param {List} list
+     * @param {ListIterator} i
+     * @return {*}
+     */    
+    private _splice_one(pos: ListIterator<T>, list: List<T>, i: ListIterator<T>) {
+        let j = i
+        j = j.next()
+        if(pos.getNode() === i.getNode() || pos.getNode() === j.getNode()) return
+        this.transfer(pos, i, j)
+    }
+
+    /**
+     * @description: splice version(3) internally implementation
+     * @param {ListIterator} pos
+     * @param {List} list
+     * @param {ListIterator} first
+     * @param {ListIterator} last
+     * @return {*}
+     */    
+    private _splice_range(pos: ListIterator<T>, list: List<T>, first: ListIterator<T>, last: ListIterator<T>) {
+        if(first.getNode() !== last.getNode()) this.transfer(pos, first, last)
     }
 
     /**
      * @description: remove elements with specific value
+     * Removes from the container all the elements that compare equal to val. 
+     * This calls the destructor of these objects and reduces the container size by the number of elements removed.
+     * Unlike member function list::erase, which erases elements by their position (using an iterator), 
+     * this function (list::remove) removes elements by their value.
+     * 
+     * A similar function, list::remove_if, exists, 
+     * which allows for a condition other than an equality comparison to determine whether an element is removed.
      * @param {T} v
      * @return {*}
      */    
     public remove(v: T) {
         let first = this.begin(), last = this.end()
         while(first.getNode() !== last.getNode()) {
-            let next = first
-            next.increment()
-            if(first.getValue() === v) this.erase(first)
-            first = next
+            // let next = first;
+            if(v === first.getValue()) this.erase(first)
+            first.increment()
+            // first = next
+        }
+    }
+    
+    /**
+     * @description: remove elements with specific condition
+     * which allows for a condition other than an equality comparison to determine whether an element is removed.
+     * @param {function} fn
+     * @return {*}
+     */    
+    public remove_if(fn: (v: T) => boolean) {
+        let first = this.begin(), last = this.end()
+        while(first.getNode() !== last.getNode()) {
+            // let next = first;
+            const value = first.getValue()
+            if(fn(value as T)) this.erase(first)
+            first.increment()
+            // first = next
         }
     }
 
     /**
      * @description: remove duplicate values
+     * The version with no parameters (1), 
+     * removes all but the first element from every consecutive group of equal elements in the container
      * @param {*}
      * @return {*}
      */    
     public unique() {
         let first = this.begin(), last = this.end()        
         if(first.getNode() === last.getNode()) return
-        let next = first
-        next.increment()
-        while(next.getNode() !== last.getNode()) {
-            if(first.getNode() === next.getNode()) {
+        let next = first;
+        while((next = next.next()) && next.getNode() !== last.getNode()) {
+            if(first.getValue() === next.getValue()) {
                 this.erase(next)
             } else {
                 first = next
@@ -383,18 +452,67 @@ export class List<T> {
         let fisrt2 = list.begin(), last2 = list.end()
         while(first1.getNode() !== last1.getNode() && fisrt2.getNode() !== last2.getNode()) {
             if(fisrt2.getValue() < first1.getValue()) {
-                let next = fisrt2, nn = next.increment();
+                let next = fisrt2.next()
+                // next.increment()
+                this.transfer(first1, fisrt2, next)
+                fisrt2 = next
+            } else {
+                first1.increment()
             }
         }
+        if(fisrt2.getNode() !== last2.getNode()) this.transfer(last1, fisrt2, last2)
     }
 
     /**
      * @description: sort elements in container
+     * The sorting is performed by applying an algorithm that uses either 
+     * operator< (in version (1)) or comp (in version (2) todo) to compare elements. 
+     * This comparison shall produce a strict weak ordering of the elements 
+     * (i.e., a consistent transitive comparison, without considering its reflexiveness).
      * @param {*}
      * @return {*}
      */    
     public sort() {
+        // if list has length 0 or 1 do nothing 
+        if(this.header.next !== this.header && this.header.next.next !== this.header) {
+            let carry = new List<T>()
+            let counter = new Array<List<T>>(64)
+            counter.fill(new List<T>())
 
+            let fill = 0
+            while(!this.empty()) {
+                carry.splice(carry.begin(), this, this.begin())
+                let i = 0
+                while(i < fill && !counter[i].empty()) {
+                    counter[i].merge(carry)
+                    carry.swap(counter[i++])
+                }
+                carry.swap(counter[i])
+                if(i === fill) ++fill
+            }
+            // console.log(this, this.empty(), counter, fill)
+            // for(let i = 1; i < fill; ++i) {
+            //     counter[i].merge(counter[i-1])
+            // }
+            this.swap(counter[fill-1])
+        }
+    }
+
+    /**
+     * @description: reverse the elements of container(internally implementation)
+     * @param {ListNode} p
+     * @return {*}
+     */    
+    _reverse(p: ListNode<T>) {
+        let temp = p
+        do {
+            // swap
+            let t = temp.next
+            temp.next = temp.prev
+            temp.prev = t
+            // next
+            temp = temp.prev
+        } while(temp !== p)
     }
 
     /**
@@ -403,7 +521,7 @@ export class List<T> {
      * @return {*}
      */    
     public reverse() {
-
+        this._reverse(this.header)
     }
 
     /**

@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-05 17:41:29
+ * @LastEditTime: 2022-03-06 21:10:11
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/demo/List.vue
@@ -81,7 +81,7 @@ const logData = (list, dec?: string) => {
   else console.log(str)
 }
 
-const testSet = () => {
+const test = () => {
   // 可视化整颗树
   chart = new Chart('list-box')
 
@@ -142,10 +142,102 @@ const testSet = () => {
   list.push_back('4')
   list.push_back('5')
 
+  const list2 = new List<string>()
+  list2.push_back('6')
+  list2.push_back('7')
+  list2.push_back('8')
+  list2.push_back('9')
 
+  logData(list, 'list')
+  let it = list.begin().next()
+  list.splice(it, list2)
+  logData(list, 'splice list2 of  6,7,8,9')
+  logData(list2, 'after splice list2')
+
+  list2.splice(list2.begin(), list, it)
+  logData(list, 'splice one element')
+  logData(list2, 'splice one element')
+
+  it = list.begin().next().next()
+  list.splice(list.begin(), list, it, list.end())
+  logData(list, 'splice self range [7, end) to begin')
+
+  list.remove('8')
+  logData(list, 'list remove value = 8')
+  list.remove_if((v) => v > '5')
+  logData(list, 'list remove if value > 5')
+
+  list.push_back('6')
+  list.push_back('6')
+  list.push_back('7')
+  list.push_back('7')
+  list.push_back('7')
+  list.push_back('8')
+  list.push_back('8')
+  list.push_back('9')
+  logData(list, 'list push_back 6 6 7 7 7 8 8 9')
+
+  list.unique()
+  logData(list, 'list unique')
+
+  list.clear()
+  list.push_back('1')
+  list.push_back('2')
+  list.push_back('3')
+  list.push_back('5')
+
+  list2.clear()
+  list2.push_back('2')
+  list2.push_back('3')
+  list2.push_back('4')
+  list2.push_back('6')
+  list2.push_back('8')
+
+  list.merge(list2)
+  logData(list, 'list merge')
+
+  list.clear()
+  list.push_back('1')
+  list.push_back('2')
+  list.push_back('3')
+  list.push_back('5')
+
+  list2.clear()
+  list2.push_back('4')
+  list2.push_back('6')
+  list2.push_back('8')
+  logData(list, 'list')
+  logData(list2, 'list2')
+
+  list.swap(list2)
+  logData(list, 'list swap')
+  logData(list2, 'list2 swap')
+
+  list.clear()
+  list.push_back('1')
+  list.push_back('5')
+  list.push_back('3')
+  list.push_back('9')
+  list.push_back('7')
+  list.push_back('7')
+  list.push_back('2')
+  list.push_back('9')
+  list.push_back('2')
+  list.sort()
+  logData(list, 'list sort')
+
+  list.reverse()
+  logData(list, 'list reverse')
+
+  list.clear()
+  list.push_back('1')
+  list.push_back('2')
+  list.push_back('3')
+  list.push_back('4')
+  list.push_back('5')
 }
 
-onMounted(testSet)
+onMounted(test)
 
 </script>
 <style lang="css" scoped>
