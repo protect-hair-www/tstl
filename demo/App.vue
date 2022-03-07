@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2021-12-02 13:22:09
- * @LastEditTime: 2022-03-05 15:17:43
+ * @LastEditTime: 2022-03-07 22:29:53
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/demo/App.vue
@@ -14,7 +14,8 @@
     <!-- <MultiSet /> -->
     <!-- <MultiMap /> -->
     <!-- <Map /> -->
-    <List/>
+    <!-- <List/> -->
+    <Vector/>
   </div>
 </template>
 
@@ -26,6 +27,7 @@ import MultiSet from './MultiSet.vue'
 import MultiMap from './MultiMap.vue'
 import Map from './Map.vue'
 import List from './List.vue'
+import Vector from './Vector.vue'
 </script>
 
 <style>

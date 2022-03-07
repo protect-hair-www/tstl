@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-07 18:54:58
+ * @LastEditTime: 2022-03-07 23:21:06
  * @LastEditors: hzheyuan
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
@@ -21,13 +21,15 @@
 import { VCIterator } from './iterator'
 
 export class Vector<T> {
-    container: Array<T>
+    cntr: Array<T>
 
-    _begin: number = 0
-    _end: number = 0
+    start: number = 0
+    finish: number = 0
 
-    constructor(n?) {
-        this.container = new Array<T>(n)
+    constructor(p?: number | Iterable<T>) {
+        if(typeof p === 'number' && p) this.cntr = new Array<T>(p)
+        else if(p) this.cntr = new Array(...(p as Iterable<T>))
+        else this.cntr = new Array()
     }
 
     /**
@@ -35,8 +37,8 @@ export class Vector<T> {
      * @param {*}
      * @return {*}
      */    
-    begin() {
-        return this._begin
+    begin(): VCIterator<T> {
+        return new VCIterator(this.start, this.cntr) 
     }
 
     /**
@@ -44,8 +46,9 @@ export class Vector<T> {
      * @param {*}
      * @return {*}
      */    
-    end() {
-        return this._end
+    end(): VCIterator<T> {
+        let last = this.cntr.length
+        return new VCIterator(last, this.cntr)
     }
 
     /**
@@ -54,7 +57,7 @@ export class Vector<T> {
      * @return {*}
      */    
     size(): number {
-        return this.container.length
+        return this.cntr.length
     }
 
     /**
@@ -66,13 +69,45 @@ export class Vector<T> {
         return this.size() === 0
     }
 
+    getValue(): T {
+        return this.cntr[0]
+    }
+
+    /**
+     * @description: access first element
+     * @param {*}
+     * @return {*}
+     */    
+    front() {
+        return this.cntr[this.start]
+    }
+
+    /**
+     * @description: access last element
+     * @param {*}
+     * @return {*}
+     */    
+    back() {
+        let len = this.cntr.length
+        return this.cntr[len - 1]
+    }
+
+    /**
+     * @description: access data
+     * @param {*}
+     * @return {*}
+     */    
+    data() {
+        return this.cntr
+    }
+
     /**
      * @description: change size
      * @param {*}
      * @return {*}
      */    
     resize() {
-        this.container.length = 0
+        this.cntr.length = 0
     }
 
     /**
@@ -93,36 +128,7 @@ export class Vector<T> {
 
     }
 
-    getValue(): T {
-        return this.container[0]
-    }
 
-    /**
-     * @description: access first element
-     * @param {*}
-     * @return {*}
-     */    
-    front() {
-        return this.container[this._begin]
-    }
-
-    /**
-     * @description: access last element
-     * @param {*}
-     * @return {*}
-     */    
-    back() {
-        return this.container[this._end]
-    }
-
-    /**
-     * @description: access data
-     * @param {*}
-     * @return {*}
-     */    
-    data() {
-
-    }
 
     /**
      * @description: assign container content
@@ -139,7 +145,8 @@ export class Vector<T> {
      * @return {*}
      */    
     push_back(x: T) {
-        this.container.push(x)
+        this.cntr.push(x)
+        this.finish++
     }
 
     /**
@@ -148,7 +155,8 @@ export class Vector<T> {
      * @return {*}
      */    
     pop_back() {
-
+        this.cntr.pop()
+        this.finish--
     }
 
     /**
@@ -156,8 +164,9 @@ export class Vector<T> {
      * @param {*}
      * @return {*}
      */    
-    insert() {
-
+    insert(pos: VCIterator<T>, x: T) {
+        this.cntr.splice(pos.getNode(), 0, x)
+        this.finish++
     }
 
     /**
@@ -165,17 +174,39 @@ export class Vector<T> {
      * @param {*}
      * @return {*}
      */    
-    swap() {
-
+    swap(pos: VCIterator<T>, last?: VCIterator<T>) {
     }
 
     /**
      * @description: erase elements
+     * Removes from the vector either a single element (position) or a range of elements ([first,last)).
      * @param {*}
      * @return {*}
      */    
-    erase() {
+    erase(pos: VCIterator<T>, last?: VCIterator<T>) {
+        if(!last) this._erase_position(pos)
+        else this._erase_range(pos, last)
+    }
 
+    /**
+     * @description: erase version(1) erase one element of a position(internally implementation)
+     * @param {VCIterator} pos
+     * @return {*}
+     */    
+    private _erase_position(pos: VCIterator<T>) {
+        this.cntr.splice(pos.getNode(), 1);
+    }
+
+    /**
+     * @description: 
+     * @param {VCIterator} first
+     * @param {VCIterator} last
+     * @return {*}
+     */    
+    private _erase_range(first: VCIterator<T>, last: VCIterator<T>) {
+        const count = first.getNode() - last.getNode()
+        this.cntr.splice(first.getNode(), count)
+        this.finish = this.finish - count
     }
 
     /**
@@ -184,7 +215,9 @@ export class Vector<T> {
      * @return {*}
      */    
     clear() {
-
+        this.cntr = []
+        this.cntr.length = 0
+        this.finish = 0
     }
 
     /**

@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-02 10:53:35
- * @LastEditTime: 2022-03-05 10:50:20
+ * @LastEditTime: 2022-03-07 22:47:38
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/demo/Map.vue
@@ -21,7 +21,7 @@ import { Chart } from './chart'
 let chart: any = ref(null)
 let tr: Tree<number, string> = ref<any>(null)
 
-const testSet = () => {
+const test = () => {
   const m = new Map<string, number>(); 
   console.log(m.empty())
 
@@ -74,7 +74,7 @@ const testSet = () => {
   console.log('equal_range', m.equal_range('d'))
 }
 
-onMounted(testSet)
+onMounted(test)
 
 </script>
 <style lang="css" scoped>

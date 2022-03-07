@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-17 15:19:12
- * @LastEditTime: 2022-03-05 15:17:34
+ * @LastEditTime: 2022-03-07 22:47:07
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/demo/rbtree.vue
@@ -76,7 +76,7 @@ const getRanddomTestData = (num) => {
   return Array.from(test);
 }
 
-const createChart = () => {
+const test = () => {
   // const array = getRanddomTestData(100)
   const array = [11, 2, 14, 1, 7, 15, 5, 8, 4, 9, 12, 17, 10, 20, 22]
   // const array = []
@@ -143,7 +143,7 @@ const createChart = () => {
 
 
 }
-onMounted(createChart)
+onMounted(test)
 
 </script>
 <style lang="css" scoped>

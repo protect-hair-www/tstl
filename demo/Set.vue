@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:50:15
- * @LastEditTime: 2022-03-05 10:50:55
+ * @LastEditTime: 2022-03-07 22:46:51
  * @LastEditors: hzheyuan
  * @Description: 迭代器测试
  * @FilePath: /tstl/demo/Set.vue
@@ -14,7 +14,7 @@
 import { onMounted } from 'vue'
 import { Set } from '../src/container/associative/set'
 
-const testSet = () => {
+const test = () => {
   const s = new Set<string>();
   console.log(s.empty())
 
@@ -64,7 +64,7 @@ const testSet = () => {
 
   s.clear()
 }
-onMounted(testSet)
+onMounted(test)
 
 </script>
 <style lang="css" scoped>

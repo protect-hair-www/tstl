@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:50:15
- * @LastEditTime: 2022-03-05 10:50:28
+ * @LastEditTime: 2022-03-07 22:47:27
  * @LastEditors: hzheyuan
  * @Description: 迭代器测试
  * @FilePath: /tstl/demo/MultiMap.vue
@@ -21,7 +21,7 @@ import { Chart } from './chart'
 let chart: any = ref(null)
 let tr: Tree<number, string> = ref<any>(null)
 
-const testSet = () => {
+const test = () => {
   const s = new MultiMap<string, number>();
   console.log('empty', s.empty())
 
@@ -79,7 +79,7 @@ const testSet = () => {
 
   s.clear()
 }
-onMounted(testSet)
+onMounted(test)
 
 </script>
 <style lang="css" scoped>

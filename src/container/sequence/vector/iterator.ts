@@ -1,19 +1,21 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-07 18:54:14
+ * @LastEditTime: 2022-03-07 23:16:37
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
- * @FilePath: \tstl\src\container\sequence\vector\iterator.ts
+ * @FilePath: /tstl/src/container/sequence/vector/iterator.ts
  */
 import { Iterator } from '../../../Iterator/index'
 
 export class VCIterator<T> extends Iterator<T> {
-  _cur: T
+  _cur: number
+  _cntr
 
-  constructor(c) {
+  constructor(c, cntr) {
     super()
     this._cur = c
+    this._cntr = cntr
   }
 
   private get cur() {
@@ -29,7 +31,7 @@ export class VCIterator<T> extends Iterator<T> {
    * @return {*}
    */
   get = (): T | boolean => {
-    return this.hasNext() ? false : this.cur
+    return this.hasNext() ? this._cntr[this.cur] : false
   }
 
   /**
@@ -37,7 +39,7 @@ export class VCIterator<T> extends Iterator<T> {
    * @return {*}
    */
   value = (): T | boolean => {
-    return this.isEnd() ? false : this.cur
+    return this.hasNext() ? this._cntr[this.cur] : false
   }
 
   /**
@@ -45,17 +47,16 @@ export class VCIterator<T> extends Iterator<T> {
    * @return {*}
    */
   getValue = (): T | boolean => {
-    return this.isEnd() ? false : this.cur
+    return this.hasNext() ? this._cntr[this.cur] : false
   }
-
 
   /**
    * @description: access node (vector no need this method)
    * @param {*}
    * @return {*}
    */  
-  getNode() {
-      
+  getNode(): number {
+    return this.cur
   }
 
   /**
@@ -63,7 +64,7 @@ export class VCIterator<T> extends Iterator<T> {
    * @return {*}
    */
   private isEnd() {
-    return false
+    return this.cur === this._cntr.length
   }
 
   /**
@@ -77,7 +78,7 @@ export class VCIterator<T> extends Iterator<T> {
    * @description: 迭代结束条件
    */
   done(): boolean {
-    return !this.isEnd()
+    return this.isEnd()
   }
 
   /**
@@ -105,7 +106,8 @@ export class VCIterator<T> extends Iterator<T> {
    * @param {*}
    * @return {*}
    */
-  public next() {
+  public next(): VCIterator<T> {
+    return new VCIterator(++this.cur, this._cntr)
   }
 
   /**
@@ -117,7 +119,7 @@ export class VCIterator<T> extends Iterator<T> {
     return {
       next: () => {
         if (this.hasNext()) {
-          let node = { done: false, value: this.cur }
+          let node = { done: false, value: this._cntr[this.cur] }
           this.increment()
           return node
         } else {
@@ -130,7 +132,7 @@ export class VCIterator<T> extends Iterator<T> {
   *_nodes() {
     while (this.hasNext()) {
       try {
-        let entry = this.cur
+        let entry = this._cntr[this.cur]
         this.increment()
         yield entry
       } catch (error) {
@@ -192,7 +194,7 @@ export class VCIterator<T> extends Iterator<T> {
    * @return {*}
    */
   private increment(): void {
-
+    this.cur++
   }
 
   /**
@@ -201,7 +203,7 @@ export class VCIterator<T> extends Iterator<T> {
    * @return {*}
    */
   private decrement(): void {
-
+    this.cur--
   }
 
   /**
@@ -211,13 +213,8 @@ export class VCIterator<T> extends Iterator<T> {
    * @return {*}
    */
   static distance(begin, end) {
-    let n = 0;
-    let first = begin;
-    while (first.hasNext() && first.getNode() !== end.getNode()) {
-      first.next()
-      n++
-    }
-    return n
+    let f = begin.getNode(), l = end.getNode()
+    return l - f
   }
 
   remove() { }
