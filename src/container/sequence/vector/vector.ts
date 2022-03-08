@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-07 23:21:06
+ * @LastEditTime: 2022-03-08 19:19:49
  * @LastEditors: hzheyuan
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
@@ -103,20 +103,21 @@ export class Vector<T> {
 
     /**
      * @description: change size
+     * Resizes the container so that it contains n elements.
+     * 
+     * If n is smaller than the current container size, the content is reduced to its first n elements, removing those beyond (and destroying them).
+     * If n is greater than the current container size, the content is expanded by inserting at the end as many elements as needed to reach a size of n. 
+     * If val is specified, the new elements are initialized as copies of val, otherwise, they are value-initialized.
+     * If n is also greater than the current container capacity, an automatic reallocation of the allocated storage space takes place.
+     * 
+     * Notice that this function changes the actual content of the container by inserting or erasing elements from it.
      * @param {*}
      * @return {*}
      */    
-    resize() {
-        this.cntr.length = 0
-    }
-
-    /**
-     * @description: request a change in capacity
-     * @param {*}
-     * @return {*}
-     */    
-    reserve() {
-
+    resize(n: number, v?: T) {
+        let first = new VCIterator<T>(this.begin().getNode() + n, this.cntr);
+        if(n < this.size()) this.erase(first, this.end())
+        else this.insert(this.end(), n - this.size(), v)
     }
 
     /**
@@ -124,11 +125,9 @@ export class Vector<T> {
      * @param {*}
      * @return {*}
      */    
-    at() {
-
+    at(pos: number) {
+        return this.cntr.at(pos)
     }
-
-
 
     /**
      * @description: assign container content
@@ -150,6 +149,15 @@ export class Vector<T> {
     }
 
     /**
+     * @description: request a change in capacity
+     * @param {*}
+     * @return {*}
+     */    
+    reserve() {
+
+    }
+
+    /**
      * @description: delete last element
      * @param {*}
      * @return {*}
@@ -161,12 +169,74 @@ export class Vector<T> {
 
     /**
      * @description: inset elemnts
+     * 
+     * The vector is extended by inserting new elements before the element at the specified position, 
+     * effectively increasing the container size by the number of elements inserted.
+     * 
+     * the method has 3 versions:
+     * version 1: Position in the vector where the new elements are inserted.
+     * version 2: Number of elements to insert. Each element is initialized to a copy of val.
+     * version 3: Iterators specifying a range of elements.
+     * 
      * @param {*}
      * @return {*}
      */    
-    insert(pos: VCIterator<T>, x: T) {
-        this.cntr.splice(pos.getNode(), 0, x)
+    insert(pos: VCIterator<T>, x: T | number | VCIterator<T>, last?: T | VCIterator<T>) {
+        if(typeof x === 'number' && last) {
+            this._fill_insert(pos, x, (last as T))
+        } else if(x instanceof VCIterator && last instanceof VCIterator) {
+            this._range_insert(pos, (x as VCIterator<T>), (last as VCIterator<T>))
+        } else {
+            this._pos_insert(pos, (x as T));
+        }
+    }
+
+    /**
+     * @description: insert at a specificed pos (internally implementation)
+     * @param {VCIterator} pos
+     * @param {T} x
+     * @return {*}
+     */    
+    private _pos_insert(pos: VCIterator<T>, val: T) {
+        this.cntr.splice(pos.getNode(), 0, val)
         this.finish++
+    }
+
+    /**
+     * @description: Number of elements to insert. Each element is initialized to a copy of val (internally implementation)
+     * @param {VCIterator} pos
+     * @param {number} n
+     * @param {T} x
+     * @return {*}
+     */
+    private _fill_insert(pos: VCIterator<T>, n: number, val: T) {
+        if(n !== 0) {
+            const added = new Array<T>(n);
+            added.fill(val)
+            this.cntr.splice(pos.getNode(), 0, ...added)
+            this.finish +=n
+        }
+    }
+
+    /**
+     * @description: Iterators specifying a range of elements. 
+     * Copies of the elements in the range [first,last) are inserted at position in the same order (internally implementation)
+     * @param {VCIterator} pos
+     * @param {VCIterator} first
+     * @param {VCIterator} last
+     * @return {*}
+     */    
+    private _range_insert(pos: VCIterator<T>, first: VCIterator<T>, last: VCIterator<T>) {
+        let added = new Array<T>();
+        let cur = first, n = 0;
+        while(cur.hasNext() && cur.getNode() !== last.getNode()) {
+            added.push(cur.getValue() as T)
+            cur = cur.next()
+            n++
+        }
+        console.log(n, added);
+        this.cntr.splice(pos.getNode(), 0, ...added)
+        this.finish +=n
     }
 
     /**
@@ -174,7 +244,8 @@ export class Vector<T> {
      * @param {*}
      * @return {*}
      */    
-    swap(pos: VCIterator<T>, last?: VCIterator<T>) {
+    swap(vec: Vector<T>) {
+
     }
 
     /**
@@ -204,7 +275,7 @@ export class Vector<T> {
      * @return {*}
      */    
     private _erase_range(first: VCIterator<T>, last: VCIterator<T>) {
-        const count = first.getNode() - last.getNode()
+        const count = last.getNode() - first.getNode()
         this.cntr.splice(first.getNode(), count)
         this.finish = this.finish - count
     }
@@ -225,7 +296,7 @@ export class Vector<T> {
      * @param {*}
      * @return {*}
      */    
-    emplace() {
+    emplace(ctr?: {}) {
 
     }
 
@@ -234,7 +305,7 @@ export class Vector<T> {
      * @param {*}
      * @return {*}
      */    
-    emplace_back() {
+    emplace_back(ctr?: {}) {
 
     }
 }
