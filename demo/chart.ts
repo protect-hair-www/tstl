@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-03 14:42:44
- * @LastEditTime: 2022-03-05 17:46:02
+ * @LastEditTime: 2022-03-09 22:30:36
  * @LastEditors: hzheyuan
  * @Description: 绘制数据结构，方便测试
  * @FilePath: /tstl/demo/chart.ts
@@ -90,49 +90,54 @@ export class Chart {
     }
 
     getListData = (list) => {
-        const begin = list.begin();
-        const end = list.end();
         let data = [], links = []
         // 处理header部分
         data.push({ name: 'header' })
+
+        let cur = list.begin()
+        while (cur.hasNext()) {
+            data.push({ name: cur.getValue() })
+            let curValue = cur.getValue(), nextValue = cur.next()
+            // console.log([curValue, nextValue], 'aaa')
+            links.push({
+                source: curValue,
+                target: nextValue === null ? 'header' : nextValue,
+                lineStyle: {
+                    curveness: 0.05
+                }
+            })
+        }
+
+        cur = list.begin()
+        while(cur.hasNext()) {
+            let curValue = cur.getValue(), nextValue = cur.next()
+            // console.log([curValue, nextValue], 'bbb')
+            links.push({
+                source: nextValue === null ? 'header' : nextValue,
+                target: curValue,
+                lineStyle: {
+                    curveness: -0.05
+                }
+            })
+        }
+
         links.push(
             {
                 source: 'header',
-                target: begin.getValue(),
+                target: list.begin().getValue(),
                 lineStyle: {
                     curveness: -0.05
                 }
             },
             {
-                source: 'header',
-                target: end.prev().getValue(),
+                source: list.begin().getValue(),
+                target: 'header',
                 lineStyle: {
                     curveness: 0.05
                 }
             }
         )
-        let cur = begin
-        while (cur.hasNext()) {
-            data.push({ name: cur.getValue() })
-            const prev = cur.prev()
-            const next = cur.next()
-            // console.log(cur.getValue(), prev.getValue(), next.getValue(), 'zzz')
-            links.push({
-                source: cur.getValue(),
-                target: prev.isEnd() ? 'header' : prev.getValue(),
-                lineStyle: {
-                    curveness: 0.05
-                }
-            })
-            links.push({
-                source: cur.getValue(),
-                target: next.isEnd() ? 'header' : next.getValue(),
-                lineStyle: {
-                    curveness: -0.05
-                }
-            })
-            cur = cur.next()
-        }
+
         return { data, links }
     }
 

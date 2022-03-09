@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:58:00
- * @LastEditTime: 2022-03-06 21:08:45
+ * @LastEditTime: 2022-03-09 23:40:53
  * @LastEditors: hzheyuan
  * @Description: sequenece container list
  * 
@@ -130,7 +130,7 @@ export class List<T> {
      * @return {*}
      */    
     public back() {
-        return this.end().prev().getValue()
+        return this.end().prev()
     }
 
     /**
@@ -257,7 +257,8 @@ export class List<T> {
      * @return {*}
      */    
     public pop_back() {
-        this.erase(this.end().prev())
+        const pos = this.end(); pos.prev()
+        this.erase(pos)
     }
 
     /**
@@ -364,8 +365,7 @@ export class List<T> {
      * @return {*}
      */    
     private _splice_one(pos: ListIterator<T>, list: List<T>, i: ListIterator<T>) {
-        let j = i
-        j = j.next()
+        let j = i; j = j.nextItr()
         if(pos.getNode() === i.getNode() || pos.getNode() === j.getNode()) return
         this.transfer(pos, i, j)
     }
@@ -429,10 +429,11 @@ export class List<T> {
      * @return {*}
      */    
     public unique() {
-        let first = this.begin(), last = this.end()        
+        let first = this.begin(), last = this.end()
         if(first.getNode() === last.getNode()) return
-        let next = first;
-        while((next = next.next()) && next.getNode() !== last.getNode()) {
+        let next = first
+        while(next.hasNext()) {
+            next = next.nextItr()
             if(first.getValue() === next.getValue()) {
                 this.erase(next)
             } else {
@@ -452,8 +453,7 @@ export class List<T> {
         let fisrt2 = list.begin(), last2 = list.end()
         while(first1.getNode() !== last1.getNode() && fisrt2.getNode() !== last2.getNode()) {
             if(fisrt2.getValue() < first1.getValue()) {
-                let next = fisrt2.next()
-                // next.increment()
+                const next = fisrt2.nextItr();
                 this.transfer(first1, fisrt2, next)
                 fisrt2 = next
             } else {
@@ -530,7 +530,7 @@ export class List<T> {
      * @param {T} v
      * @return {*}
      */    
-    private _fill_assign(n: number, v: T) {
+    private _assign_fill(n: number, v: T) {
         let i = this.begin()
         for(; i.getNode() !== this.end().getNode() && n > 0; i.increment(), --n) {
             i.getNode().setValue(v)
@@ -548,7 +548,25 @@ export class List<T> {
      * @return {*}
      */    
     assign(n: number, v: T) {
-        this._fill_assign(n, v)
+        this._assign_fill(n, v)
     }
 
+    /**
+     * @description: assign new content to container with iterator
+     * @param {Iterator} first
+     * @param {Iterator} last
+     * @return {*}
+     */    
+    private _assign_range(first: Iterator<T>, last: Iterator<T>) {
+
+    }
+
+    /**
+     * @description: assign new content with other iterable content
+     * @param {Iterable} cntr
+     * @return {*}
+     */    
+    private _assign_container(cntr: Iterable<T>) {
+
+    }
 }

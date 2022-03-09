@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-06 21:10:11
+ * @LastEditTime: 2022-03-09 23:23:45
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/demo/List.vue
@@ -92,10 +92,9 @@ const test = () => {
   list.push_back('3')
   list.push_back('4')
   list.push_back('5')
-  chart.drawList(list)
 
   // 可视化  
-  // chart.drawList(list)
+  chart.drawList(list)
 
   console.log('=====Iterator=====')
   logData(list)
@@ -110,7 +109,9 @@ const test = () => {
 
 
   console.log('=====Modifiers=====')
-  list.insert(list.begin().next(), '5')
+  let itr = list.begin();
+  itr.next();
+  list.insert(itr, '5')
   logData(list, 'begin next insert 5')
 
   list.insert(list.end(), 2, '20')
@@ -121,19 +122,22 @@ const test = () => {
 
   list.erase(list.begin())
   logData(list, 'erase begin')
-  console.log(list)
 
   list.resize(5, '5')
   logData(list, 'resize 5 5')
 
-  // list.unique()
-  // logData(list, 'resize 5 5')
+  list.push_back('4')
+  list.push_back('5')
+  list.push_back('5')
+  list.push_back('5')
+  list.unique()
+  logData(list, 'unique list')
 
   list.resize(2, '5')
   logData(list, 'resize 5 5')
 
   list.clear()
-  logData(list, 'resize 5 5')
+  logData(list, 'clear')
 
   console.log('=====Operations=====')
   list.push_back('1')
@@ -149,17 +153,20 @@ const test = () => {
   list2.push_back('9')
 
   logData(list, 'list')
-  let it = list.begin().next()
-  list.splice(it, list2)
+  itr = list.begin()
+  itr.next()
+  list.splice(itr, list2)
+
   logData(list, 'splice list2 of  6,7,8,9')
   logData(list2, 'after splice list2')
+  console.log(itr.getValue())
 
-  list2.splice(list2.begin(), list, it)
+  list2.splice(list2.begin(), list, itr)
   logData(list, 'splice one element')
   logData(list2, 'splice one element')
 
-  it = list.begin().next().next()
-  list.splice(list.begin(), list, it, list.end())
+  itr = list.begin(); itr.next(); itr.next()
+  list.splice(list.begin(), list, itr, list.end())
   logData(list, 'splice self range [7, end) to begin')
 
   list.remove('8')
@@ -181,6 +188,8 @@ const test = () => {
   logData(list, 'list unique')
 
   list.clear()
+  console.log('clear list');
+  
   list.push_back('1')
   list.push_back('2')
   list.push_back('3')

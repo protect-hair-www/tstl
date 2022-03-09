@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:24
- * @LastEditTime: 2022-03-09 19:08:54
+ * @LastEditTime: 2022-03-09 23:31:33
  * @LastEditors: hzheyuan
  * @Description: list container iterator 
- * @FilePath: \tstl\src\container\sequence\list\iterator.ts
+ * @FilePath: /tstl/src/container/sequence/list/iterator.ts
  */
 import { Iterator } from '../../../Iterator/index'
 import { ListNode } from './ListNode'
@@ -50,7 +50,17 @@ export class ListIterator<T> extends Iterator<T> {
      * @return {*}
      */
     private isEnd(): boolean {
-        return this.getValue() === Symbol.for('header')
+        // return this.getValue() === Symbol.for('header')
+        return this._cur.getValue() === null
+    }
+
+    /**
+     * @description: same as hasnext
+     * @param {*}
+     * @return {*}
+     */    
+    done(): boolean {
+        return !this.isEnd()
     }
 
     /**
@@ -82,24 +92,6 @@ export class ListIterator<T> extends Iterator<T> {
     }
 
     /**
-     * @description: js iterator protocol next method
-     * @param {*}
-     * @return {*}
-     */
-    next(): ListIterator<T> {
-        return new ListIterator(this._cur.next)
-    }
-
-    /**
-     * @description: prev element
-     * @param {*}
-     * @return {*}
-     */
-    prev(): ListIterator<T> {
-        return new ListIterator(this._cur.prev)
-    }
-
-    /**
      * @description: goto next (interanlly implementation)
      * @param {*}
      * @return {*}
@@ -118,16 +110,50 @@ export class ListIterator<T> extends Iterator<T> {
     }
 
     /**
+     * @description: iterator increment and return the element 
+     * @param {*}
+     * @return {*}
+     */
+    public next():T {
+        this.increment()
+        return this._cur.getValue()
+    }
+
+    /**
+     * @description: return next iterator
+     * @param {*}
+     * @return {*}
+     */    
+    nextItr(): ListIterator<T> {
+        return new ListIterator(this._cur.next)
+    }
+
+    /**
+     * @description: iterator decrement and return the element 
+     * @param {*}
+     * @return {*}
+     */
+    public prev():T {
+        this.decrement()
+        return this._cur.getValue()
+    }
+
+    /**
+     * @description: return prev iterator
+     * @param {*}
+     * @return {*}
+     */    
+    prevItr(): ListIterator<T> {
+        return new ListIterator(this._cur.prev)
+    }
+
+    /**
      * @description: remove by iterator
      * @param {*}
      * @return {*}
      */
     remove() {
 
-    }
-
-    done(): boolean {
-        return !this.isEnd()
     }
 
     /**
