@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-07 23:16:37
+ * @LastEditTime: 2022-03-09 18:55:55
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
- * @FilePath: /tstl/src/container/sequence/vector/iterator.ts
+ * @FilePath: \tstl\src\container\sequence\vector\iterator.ts
  */
 import { Iterator } from '../../../Iterator/index'
 
@@ -16,6 +16,26 @@ export class VCIterator<T> extends Iterator<T> {
     super()
     this._cur = c
     this._cntr = cntr
+    return new Proxy(this, {
+      get: function (target, prop, receiver) {
+        // console.log('get', target, prop, Reflect.has(target, prop), receiver);
+        if (Reflect.has(target, prop)) return Reflect.get(target, prop, receiver)
+      },
+      set: function (target, prop, value, receiver) {
+        console.log(`set: `, target, prop, value, Reflect.has(target, prop));
+        // if(prop === 'cur') {
+        //   target.cur =  value
+        // } else
+        if(prop !== 'cur' && Reflect.has(target, prop)) {
+          Reflect.set(target, prop, value, receiver);
+          return true
+        } else {
+          target._cur = value;
+          return true
+        }
+        return true
+      }
+    })
   }
 
   private get cur() {

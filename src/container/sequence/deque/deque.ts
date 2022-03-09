@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-08 21:17:38
- * @LastEditTime: 2022-03-08 21:45:30
+ * @LastEditTime: 2022-03-09 13:37:35
  * @LastEditors: hzheyuan
  * @Description: deque(double ended queue)
  * deque is an irregular acronym of double-ended queue.
@@ -20,13 +20,23 @@
  * 
  * @FilePath: /tstl/src/container/sequence/deque/deque.ts
  */
+import { DequeIterator } from './iterator'
 
-class Deque<T> {
+export class Deque<T> {
     // the container
     cntr
 
-    constructor() {
+    // iternally iterator to begining
+    start: number = 0
+
+    // iternally iterator to end 
+    finish: number = 0
+
+    constructor(p: T | Iterable<T>) {
         this.cntr = new Array<T>()
+        if(typeof p === 'number' && p) this.cntr = new Array<T>(p)
+        else if(p) this.cntr = new Array(...(p as Iterable<T>))
+        else this.cntr = new Array()
     }
 
     /**
@@ -35,7 +45,7 @@ class Deque<T> {
      * @return {*}
      */    
     begin() {
-
+        return new DequeIterator<T>(0, this.cntr)
     }
 
     /**
@@ -44,7 +54,7 @@ class Deque<T> {
      * @return {*}
      */    
     end() {
-
+        return new DequeIterator<T>(this.finish, this.cntr)
     }
 
     /**
@@ -70,8 +80,8 @@ class Deque<T> {
      * @param {*}
      * @return {*}
      */    
-    size() {
-
+    size(): number {
+        return this.cntr.length
     }
 
     /**
@@ -79,8 +89,8 @@ class Deque<T> {
      * @param {*}
      * @return {*}
      */    
-    empty() {
-
+    empty(): boolean {
+        return this.cntr.length === 0
     } 
 
     /**
@@ -88,8 +98,8 @@ class Deque<T> {
      * @param {*}
      * @return {*}
      */    
-    at() {
-
+    at(x: DequeIterator<T>) {
+        return this.cntr.at(x.getNode())
     }
 
     /**

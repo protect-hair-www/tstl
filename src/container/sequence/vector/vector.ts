@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-08 19:19:49
+ * @LastEditTime: 2022-03-09 18:24:07
  * @LastEditors: hzheyuan
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
@@ -22,7 +22,6 @@ import { VCIterator } from './iterator'
 
 export class Vector<T> {
     cntr: Array<T>
-
     start: number = 0
     finish: number = 0
 
@@ -145,7 +144,7 @@ export class Vector<T> {
      */    
     push_back(x: T) {
         this.cntr.push(x)
-        this.finish++
+        // this.finish++
     }
 
     /**
@@ -164,7 +163,7 @@ export class Vector<T> {
      */    
     pop_back() {
         this.cntr.pop()
-        this.finish--
+        // this.finish--
     }
 
     /**

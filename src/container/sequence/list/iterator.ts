@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:24
- * @LastEditTime: 2022-03-05 17:38:40
+ * @LastEditTime: 2022-03-09 19:08:54
  * @LastEditors: hzheyuan
  * @Description: list container iterator 
- * @FilePath: /tstl/src/container/sequence/list/iterator.ts
+ * @FilePath: \tstl\src\container\sequence\list\iterator.ts
  */
 import { Iterator } from '../../../Iterator/index'
 import { ListNode } from './ListNode'

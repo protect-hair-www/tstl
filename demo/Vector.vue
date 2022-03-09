@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-08 19:13:06
+ * @LastEditTime: 2022-03-09 18:58:20
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\Vector.vue
@@ -112,27 +112,31 @@ const test = () => {
 
   console.log('=====Modifiers=====')
   let begin = vec.begin(), end = vec.end()
-  vec.insert(begin.next(), '5')
-  logData(vec, 'begin next insert 5')
+  console.log(begin)
 
-  vec.insert(vec.end(), '2')
-  logData(vec, 'insert at en with 2')
+  // begin = begin++
+  // begin++
+  // vec.insert(begin.next(), '5')
+  // logData(vec, 'begin next insert 5')
+
+  // vec.insert(vec.end(), '2')
+  // logData(vec, 'insert at en with 2')
 
 
-  vec.insert(vec.begin().next(), 5, '7')
-  logData(vec, 'insert at begin.next with 5 7')
+  // vec.insert(vec.begin().next(), 5, '7')
+  // logData(vec, 'insert at begin.next with 5 7')
 
-  vec.insert(vec.begin().next(), vec.begin(), vec.end())
-  logData(vec, 'inset a range of iterator')
+  // vec.insert(vec.begin().next(), vec.begin(), vec.end())
+  // logData(vec, 'inset a range of iterator')
 
-  vec.erase(vec.begin())
-  logData(vec, 'erase begin')
+  // vec.erase(vec.begin())
+  // logData(vec, 'erase begin')
 
-  vec.resize(10, '1')
-  logData(vec, 'resize of 10 1')
+  // vec.resize(10, '1')
+  // logData(vec, 'resize of 10 1')
 
-  vec.resize(15, '1')
-  logData(vec, 'resize of 15 1')
+  // vec.resize(15, '1')
+  // logData(vec, 'resize of 15 1')
 
 //   vec.resize(5, '5')
 //   logData(list, 'resize 5 5')

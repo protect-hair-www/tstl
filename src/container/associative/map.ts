@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:17
- * @LastEditTime: 2022-03-06 23:05:35
+ * @LastEditTime: 2022-03-09 18:25:23
  * @LastEditors: hzheyuan
  * @Description: associative container map
  * 
@@ -43,7 +43,7 @@ export class Map<K, V> {
       },
       set: function (target, prop, value, receiver) {
         // console.log(`set: `, target, prop, value, Reflect.has(target, prop));
-        if(Reflect.has(target, prop)) Reflect.set(target, prop, receiver);
+        if(Reflect.has(target, prop)) Reflect.set(target, prop, value, receiver);
         else {
           const propKey: unknown | K = prop
           const lb = target.lower_bound((propKey as K)), n = lb.getNode();
