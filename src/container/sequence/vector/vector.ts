@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-10 18:12:55
+ * @LastEditTime: 2022-03-10 23:52:45
  * @LastEditors: hzheyuan
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
@@ -19,8 +19,9 @@
  * @FilePath: \tstl\src\container\sequence\vector\vector.ts
  */
 import { VCIterator } from './iterator'
+import { TSTLIterable } from '@/iterator/Iterable'
 
-export class Vector<T> {
+export class Vector<T> implements TSTLIterable<T> {
     cntr: Array<T>
     start: number = 0
     finish: number = 0
@@ -92,8 +93,17 @@ export class Vector<T> {
      * @param {*}
      * @return {*}
      */
-    data(): Array<T> {
+    get data(): Array<T> {
         return this.cntr
+    }
+
+    /**
+     * @description: set content data
+     * @param {Array} x
+     * @return {*}
+     */    
+    set data(x: Array<T>) {
+        this.cntr = x
     }
 
     /**
@@ -101,20 +111,28 @@ export class Vector<T> {
      * @param {*}
      * @return {*}
      */
-    [Symbol.iterator]() {
+    *[Symbol.iterator](): IterableIterator<T> {
         let cur = this.begin()
-        return {
-            next: () => {
-                if (cur.hasNext()) {
-                    let node = { done: false, value: cur.getValue() }
-                    console.log(node)
-                    cur.next();
-                    return node
-                } else {
-                    return { done: true, value: null }
-                }
+        while(cur.hasNext()) {
+            try {
+                // let node = { done: false, value: cur.getValue() }
+                cur.next();
+                yield cur.getValue() 
+            } catch (error) {
+                console.log(error)
             }
         }
+        // return {
+        //     next: () => {
+        //         if (cur.hasNext()) {
+        //             let node = { done: false, value: cur.getValue() }
+        //             cur.next();
+        //             return node
+        //         } else {
+        //             return { done: true, value: undefined }
+        //         }
+        //     }
+        // }
     }
 
     /**
@@ -154,10 +172,10 @@ export class Vector<T> {
      * @return {*}
      */
     *entries() {
-        let cur = this.begin(), idx = 0
+        let cur = this.begin(), idx: number = 0
         while (cur.hasNext()) {
             try {
-                let entry = { key: idx, value: cur.getValue() }
+                const entry: [number, T] = [idx++, cur.getValue()]
                 cur.next()
                 yield entry
             } catch (error) {
@@ -182,7 +200,7 @@ export class Vector<T> {
     resize(n: number);
     resize(n: number, v: T);
     resize(n: number, v?: T) {
-        let first = new VCIterator<T>(this.begin().getNode() + n, this.cntr);
+        let first = new VCIterator<T>(this.begin().getKey() + n, this.cntr);
         if (n < this.size()) this.erase(first, this.end())
         else this.insert(this.end(), n - this.size(), v)
     }
@@ -241,7 +259,7 @@ export class Vector<T> {
      */    
     private _assign_range(first: VCIterator<T>, last: VCIterator<T>) {
         let cur = first, elements: T[] = []
-        while(cur.hasNext() && cur.getNode() !== last.getNode()) {
+        while(cur.hasNext() && cur.getKey() !== last.getKey()) {
             elements.push(cur.getValue());
             cur.next()
         }
@@ -322,7 +340,7 @@ export class Vector<T> {
      * @return {*}
      */
     private _pos_insert(pos: VCIterator<T>, val: T) {
-        this.cntr.splice(pos.getNode(), 0, val)
+        this.cntr.splice(pos.getKey(), 0, val)
         this.finish++
     }
 
@@ -337,7 +355,7 @@ export class Vector<T> {
         if (n !== 0) {
             const added = new Array<T>(n);
             added.fill(val)
-            this.cntr.splice(pos.getNode(), 0, ...added)
+            this.cntr.splice(pos.getKey(), 0, ...added)
             this.finish += n
         }
     }
@@ -353,12 +371,12 @@ export class Vector<T> {
     private _range_insert(pos: VCIterator<T>, first: VCIterator<T>, last: VCIterator<T>) {
         let added = new Array<T>();
         let cur = first, n = 0;
-        while (cur.hasNext() && cur.getNode() !== last.getNode()) {
+        while (cur.hasNext() && cur.getKey() !== last.getKey()) {
             added.push(cur.getValue() as T)
-            cur = cur.next()
+            cur.next()
             n++
         }
-        this.cntr.splice(pos.getNode(), 0, ...added)
+        this.cntr.splice(pos.getKey(), 0, ...added)
         this.finish += n
     }
 
@@ -369,7 +387,9 @@ export class Vector<T> {
      * @return {*}
      */
     swap(vec: Vector<T>) {
-        this.cntr = vec.data()
+        const temp = vec.data
+        vec.data = this.cntr
+        this.cntr = temp
     }
 
     /**
@@ -389,7 +409,7 @@ export class Vector<T> {
      * @return {*}
      */
     private _erase_position(pos: VCIterator<T>) {
-        this.cntr.splice(pos.getNode(), 1);
+        this.cntr.splice(pos.getKey(), 1);
     }
 
     /**
@@ -399,8 +419,8 @@ export class Vector<T> {
      * @return {*}
      */
     private _erase_range(first: VCIterator<T>, last: VCIterator<T>) {
-        const count = last.getNode() - first.getNode()
-        this.cntr.splice(first.getNode(), count)
+        const count = last.getKey() - first.getKey()
+        this.cntr.splice(first.getKey(), count)
         this.finish = this.finish - count
     }
 
@@ -420,8 +440,9 @@ export class Vector<T> {
      * @param {*}
      * @return {*}
      */
-    emplace(ctr?: {}) {
-
+    emplace<K>(pos: VCIterator<T>, c: { new(...arg)}, ...arg) {
+        const ins: T = new c(arg)
+        this.insert(pos, ins)
     }
 
     /**
@@ -429,7 +450,8 @@ export class Vector<T> {
      * @param {*}
      * @return {*}
      */
-    emplace_back(ctr?: {}) {
-
+    emplace_back<K>(c: { new(...arg)}, ...arg) {
+        const ins: T = new c(arg);
+        this.push_back(ins);
     }
 }

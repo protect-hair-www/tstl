@@ -1,0 +1,22 @@
+/*
+ * @Author: hzheyuan
+ * @Date: 2022-03-10 23:20:17
+ * @LastEditTime: 2022-03-10 23:21:39
+ * @LastEditors: hzheyuan
+ * @Description: Iterable Interface
+ * @FilePath: /tstl/src/Iterator/Iterable.ts
+ */
+
+export interface TSTLIterable<T> extends Iterable<T> {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<T>;
+
+    /** Returns an iterable of key, value pairs for every entry in the array */
+    entries(): IterableIterator<[number, T]>;
+
+    /** Returns an iterable of keys in the array */
+    keys(): IterableIterator<number>;
+
+    /** Returns an iterable of values in the array */
+    values(): IterableIterator<T>;
+}

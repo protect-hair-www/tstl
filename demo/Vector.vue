@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-10 18:09:02
+ * @LastEditTime: 2022-03-10 23:52:26
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\demo\Vector.vue
+ * @FilePath: /tstl/demo/Vector.vue
 -->
 <template>
   <div class="Vector-test">
@@ -102,18 +102,22 @@ const test = () => {
   console.log('back', vec.back())
 
   console.log('=====Modifiers=====')
-  let begin = vec.begin(), end = vec.end()
-
-  vec.insert(begin.next(), '5')
+  let begin = vec.begin(), end = vec.end(), itr = vec.begin()
+  itr.next()
+  vec.insert(itr, '5')
   traverseCntr(vec, 'begin next insert 5')
 
   vec.insert(vec.end(), '2')
   traverseCntr(vec, 'insert at en with 2')
 
-  vec.insert(vec.begin().next(), 5, '7')
+  itr = vec.begin()
+  itr.next(); itr.next()
+  vec.insert(itr, 5, '7')
   traverseCntr(vec, 'insert at begin.next with 5 7')
 
-  vec.insert(vec.begin().next(), vec.begin(), vec.end())
+  itr = vec.begin()
+  itr.next()
+  vec.insert(itr, vec.begin(), vec.end())
   traverseCntr(vec, 'inset a range of iterator')
 
   vec.erase(vec.begin())
@@ -142,8 +146,20 @@ const test = () => {
   vec.assign(vec2.begin(), vec2.end())
   traverseCntr(vec, 'assign with iterator')
 
+  vec2.clear()
+  vec2.push_back('8')
+  vec2.push_back('9')
+  vec2.push_back('10')
+  vec.swap(vec2)
+  traverseCntr(vec, 'swap two vec')
+  traverseCntr(vec2, 'swap two vec')
+
   vec.clear()
   traverseCntr(vec, 'clear')
+
+  vec.emplace<String>(vec.begin(), String, '3')
+  vec.emplace_back<String>(String, '5')
+  traverseCntr(vec, 'emplace')
 }
 
 onMounted(test)

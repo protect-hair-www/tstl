@@ -1,20 +1,19 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-10 18:03:59
+ * @LastEditTime: 2022-03-10 23:24:15
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
- * @FilePath: \tstl\src\container\sequence\vector\iterator.ts
+ * @FilePath: /tstl/src/container/sequence/vector/iterator.ts
  */
-import { Iterator } from '../../../Iterator/index'
-import { Vector } from './vector'
+// import { Iterator } from '../../../Iterator/index'
+import { TSTLIterator } from '@/Iterator/Iterator'
 
-export class VCIterator<T> extends Iterator<T> {
+export class VCIterator<T> implements TSTLIterator<T> {
   _cur: number
   _cntr: Array<T>
 
   constructor(c, cntr: Array<T>) {
-    super()
     this._cur = c
     this._cntr = cntr
     // return new Proxy(this, {
@@ -56,11 +55,12 @@ export class VCIterator<T> extends Iterator<T> {
   }
 
   /**
-   * @description: get element value
+   * @description: return index
+   * @param {*}
    * @return {*}
-   */
-  get = (): T | boolean => {
-    return this.hasNext() ? this.cntr[this.cur] : false
+   */  
+  getKey() {
+    return this.cur
   }
 
   /**
@@ -117,8 +117,10 @@ export class VCIterator<T> extends Iterator<T> {
    * @param {*}
    * @return {*}
    */
-  public next(): VCIterator<T> {
-    return new VCIterator(++this.cur, this._cntr)
+  public next(): T {
+    this.cur++
+    return this.cntr[this.cur]
+    // return new VCIterator(++this.cur, this._cntr)
   }
 
   /**
@@ -126,7 +128,7 @@ export class VCIterator<T> extends Iterator<T> {
    * @param {*}
    * @return {*}
    */
-  [Symbol.iterator]() {
+  [Symbol.iterator](): Iterator<T> {
     return {
       next: () => {
         if (this.hasNext()) {
@@ -134,55 +136,8 @@ export class VCIterator<T> extends Iterator<T> {
           this.increment()
           return node
         } else {
-          return { done: true, value: null }
+          return { done: true, value: undefined }
         }
-      }
-    }
-  }
-
-  /**
-   * @description: keys迭代器
-   * @param {*}
-   * @return {*}
-   */
-  *keys() {
-    while (this.hasNext()) {
-      try {
-        let key = this.cur
-        this.increment()
-        yield key
-      } catch (error) {
-        console.log(error)
-      }
-    }
-  }
-
-  /**
-   * @description: values迭代器
-   * @param {*}
-   * @return {*}
-   */
-  *values() {
-    while (this.hasNext()) {
-      let value = this.getValue()
-      this.increment()
-      yield value
-    }
-  }
-
-  /**
-   * @description: entries迭代器
-   * @param {*}
-   * @return {*}
-   */
-  *entries() {
-    while (this.hasNext()) {
-      try {
-        let entry = { key: this.cur, value: this.getValue() }
-        this.increment()
-        yield entry
-      } catch (error) {
-        console.log(error)
       }
     }
   }
