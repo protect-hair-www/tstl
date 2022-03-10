@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:58:00
- * @LastEditTime: 2022-03-09 23:40:53
+ * @LastEditTime: 2022-03-10 16:29:27
  * @LastEditors: hzheyuan
  * @Description: sequenece container list
  * 
@@ -20,7 +20,7 @@
  * 
  * @FilePath: \tstl\src\container\sequence\list\list.ts
  */
-import { ListNode }  from './ListNode'
+import { ListNode } from './ListNode'
 import { ListIterator } from './iterator'
 import { Iterator } from '@/Iterator/'
 
@@ -36,7 +36,7 @@ export class List<T> {
      * @description: create a link list node by given value
      * @param {T} x
      * @return {*}
-     */    
+     */
     private createNode(x?: T): ListNode<T> {
         const node = new ListNode(x);
         return node
@@ -46,7 +46,7 @@ export class List<T> {
      * @description: initialize empty list
      * @param {*}
      * @return {*}
-     */    
+     */
     private empty_init() {
         this.header.prev = this.header
         this.header.next = this.header
@@ -56,7 +56,7 @@ export class List<T> {
      * @description: set header node(internally use)
      * @param {*} x
      * @return {*}
-     */    
+     */
     set header(x) {
         this._header = x
     }
@@ -65,7 +65,7 @@ export class List<T> {
      * @description: get header node(internally use)
      * @param {*}
      * @return {*}
-     */    
+     */
     get header() {
         return this._header
     }
@@ -74,7 +74,7 @@ export class List<T> {
      * @description: test whether container is empty
      * @param {*}
      * @return {*}
-     */    
+     */
     public empty(): boolean {
         return this.header.next === this.header
     }
@@ -83,7 +83,7 @@ export class List<T> {
      * @description: return size
      * @param {*}
      * @return {*}
-     */    
+     */
     public size(): number {
         return ListIterator.distance(this.begin(), this.end())
     }
@@ -92,34 +92,106 @@ export class List<T> {
      * @description: return iterator to beginning
      * @param {*}
      * @return {*}
-     */    
+     */
     public begin(): ListIterator<T> {
-        return new ListIterator(this.header.next) 
+        return new ListIterator(this.header.next)
     }
 
     /**
      * @description: return iterator to end
      * @param {*}
      * @return {*}
-     */    
+     */
     public end(): ListIterator<T> {
-        return new ListIterator(this.header) 
+        return new ListIterator(this.header)
     }
+
+    /**
+     * @description: js iterator protocol
+     * @param {*}
+     * @return {*}
+     */
+    [Symbol.iterator]() {
+        let cur = this.begin()
+        return {
+            next: () => {
+                if (cur.hasNext()) {
+                    const node = { done: false, value: cur.getValue() }
+                    cur.next()
+                    return node
+                } else {
+                    return { done: true, value: undefined }
+                }
+            }
+        }
+    }
+
+    /**
+     * @description: keys迭代器
+     * @param {*}
+     * @return {*}
+     */
+    *keys() {
+        let cur = this.begin()
+        let idx = 0
+        while (cur.hasNext()) {
+            try {
+                let key = idx++; cur.next()
+                yield key
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+    /**
+     * @description: values迭代器
+     * @param {*}
+     * @return {*}
+     */
+    *values() {
+        let cur = this.begin()
+        while (cur.hasNext()) {
+            let value = cur.getValue(); cur.next()
+            yield value
+        }
+    }
+
+    /**
+     * @description: entries迭代器
+     * @param {*}
+     * @return {*}
+     */
+    *entries() {
+        let cur = this.begin()
+        let idx = 0
+        while (cur.hasNext()) {
+            try {
+                let entry = { key: idx, value: cur.getValue() }
+                cur.next()
+                yield entry
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+
 
     /**
      * @description: check is at end
      * @param {*}
      * @return {*}
-     */    
+     */
     private isEnd(p: ListIterator<T>): boolean {
-        return p.getNode() === this.end().getNode() 
+        return p.getNode() === this.end().getNode()
     }
 
     /**
      * @description: access first element
      * @param {*}
      * @return {*}
-     */    
+     */
     public front() {
         return this.begin().getValue()
     }
@@ -128,7 +200,7 @@ export class List<T> {
      * @description: access last element
      * @param {*}
      * @return {*}
-     */    
+     */
     public back() {
         return this.end().prev()
     }
@@ -138,7 +210,7 @@ export class List<T> {
      * @param {ListIterator} pos
      * @param {T} x
      * @return {*}
-     */    
+     */
     private _insert(pos: ListIterator<T>, x: T) {
         const temp = this.createNode(x)
         temp.next = pos.getNode()
@@ -154,9 +226,9 @@ export class List<T> {
      * @param {number} n
      * @param {T} v
      * @return {*}
-     */    
+     */
     private _fill_insert(pos: ListIterator<T>, n: number, v: T) {
-        for(; n > 0; --n) this.insert(pos, v)
+        for (; n > 0; --n) this.insert(pos, v)
     }
 
     /**
@@ -165,9 +237,9 @@ export class List<T> {
      * @param {ListIterator} first
      * @param {ListIterator} last
      * @return {*}
-     */    
+     */
     private _range_insert(pos: ListIterator<T>, first: Iterator<T>, last: Iterator<T>) {
-        for(; first.getNode() !== last.getNode(); first.next()) {
+        for (; first.getNode() !== last.getNode(); first.next()) {
             this.insert(pos, first.getValue())
         }
     }
@@ -177,9 +249,9 @@ export class List<T> {
      * @param {ListIterator} pos
      * @param {T} x
      * @return {*}
-     */    
+     */
     public insert(pos: ListIterator<T>, x: T | number, v?: T) {
-        if(typeof x === 'number' && v) this._fill_insert(pos, x, v)
+        if (typeof x === 'number' && v) this._fill_insert(pos, x, v)
         else this._insert(pos, (x as T))
     }
 
@@ -187,7 +259,7 @@ export class List<T> {
      * @description: add element at begining
      * @param {T} x
      * @return {*}
-     */    
+     */
     public push_front(x: T) {
         this.insert(this.begin(), x)
     }
@@ -196,7 +268,7 @@ export class List<T> {
      * @description: add element at end
      * @param {T} x
      * @return {*}
-     */    
+     */
     public push_back(x: T) {
         this.insert(this.end(), x)
     }
@@ -205,9 +277,9 @@ export class List<T> {
      * @description: erase elements internally implementation
      * @param {ListIterator} pos
      * @return {*}
-     */    
+     */
     private _erase(pos: ListIterator<T>) {
-        if(pos.getNode() === this.end().getNode()) return
+        if (pos.getNode() === this.end().getNode()) return
         let next_node = pos.getNode().next
         let prev_node = pos.getNode().prev
 
@@ -223,9 +295,9 @@ export class List<T> {
      * @param {ListIterator} fisrt
      * @param {ListIterator} last
      * @return {*}
-     */    
+     */
     private _range_erase(first: ListIterator<T>, last: ListIterator<T>) {
-        while(first.getNode() !== last.getNode()) {
+        while (first.getNode() !== last.getNode()) {
             this.erase(first)
             first.increment();
         }
@@ -236,9 +308,9 @@ export class List<T> {
      * @description: erase elments
      * @param {ListIterator} pos
      * @return {*}
-     */    
+     */
     public erase(first: ListIterator<T>, last?: ListIterator<T>) {
-        if(last) this._range_erase(first, last)
+        if (last) this._range_erase(first, last)
         else this._erase(first)
     }
 
@@ -246,7 +318,7 @@ export class List<T> {
      * @description: delete fisrt element
      * @param {*}
      * @return {*}
-     */    
+     */
     public pop_front() {
         this.erase(this.begin())
     }
@@ -255,7 +327,7 @@ export class List<T> {
      * @description: delete last element
      * @param {*}
      * @return {*}
-     */    
+     */
     public pop_back() {
         const pos = this.end(); pos.prev()
         this.erase(pos)
@@ -266,7 +338,7 @@ export class List<T> {
      * which is another list of the same type. Sizes may differ.
      * @param {type} params
      * @return {*}
-     */    
+     */
     public swap(x: List<T>) {
         const temp = x.header
         x.header = this.header
@@ -283,12 +355,12 @@ export class List<T> {
      * @param {number} new_size
      * @param {T} v
      * @return {*}
-     */    
+     */
     resize(new_size: number, v: T) {
         let i = this.begin()
         let len = 0
-        for(; !this.isEnd(i) && len < new_size; i.increment(), ++len);
-        if(len === new_size) this.erase(i, this.end())
+        for (; !this.isEnd(i) && len < new_size; i.increment(), ++len);
+        if (len === new_size) this.erase(i, this.end())
         else this.insert(this.end(), new_size - len, v)
     }
 
@@ -297,7 +369,7 @@ export class List<T> {
      * and leaving the container with a size of 0.
      * @param {*}
      * @return {*}
-     */    
+     */
     clear() {
         // let cur = this.header.next
         // while(cur !== this.header) {
@@ -315,9 +387,9 @@ export class List<T> {
      * @param {ListIterator} first
      * @param {ListIterator} last
      * @return {*}
-     */    
+     */
     private transfer(pos: ListIterator<T>, first: ListIterator<T>, last: ListIterator<T>) {
-        if(pos.getNode() !== last.getNode()) {
+        if (pos.getNode() !== last.getNode()) {
             // remove [first, last) from its old position
             last.getNode().prev.next = pos.getNode()
             first.getNode().prev.next = last.getNode()
@@ -344,12 +416,12 @@ export class List<T> {
      * @param {ListIterator} pos
      * @param {List} list
      * @return {*}
-     */    
+     */
     public splice(pos: ListIterator<T>, list: List<T>, first?: ListIterator<T>, last?: ListIterator<T>) {
-        if(!first) {
-            if(!list.empty()) this.transfer(pos, list.begin(), list.end())
+        if (!first) {
+            if (!list.empty()) this.transfer(pos, list.begin(), list.end())
         } else {
-            if(!last) {
+            if (!last) {
                 this._splice_one(pos, list, first)
             } else {
                 this._splice_range(pos, list, first, last)
@@ -363,10 +435,10 @@ export class List<T> {
      * @param {List} list
      * @param {ListIterator} i
      * @return {*}
-     */    
+     */
     private _splice_one(pos: ListIterator<T>, list: List<T>, i: ListIterator<T>) {
         let j = i; j = j.nextItr()
-        if(pos.getNode() === i.getNode() || pos.getNode() === j.getNode()) return
+        if (pos.getNode() === i.getNode() || pos.getNode() === j.getNode()) return
         this.transfer(pos, i, j)
     }
 
@@ -377,9 +449,9 @@ export class List<T> {
      * @param {ListIterator} first
      * @param {ListIterator} last
      * @return {*}
-     */    
+     */
     private _splice_range(pos: ListIterator<T>, list: List<T>, first: ListIterator<T>, last: ListIterator<T>) {
-        if(first.getNode() !== last.getNode()) this.transfer(pos, first, last)
+        if (first.getNode() !== last.getNode()) this.transfer(pos, first, last)
     }
 
     /**
@@ -393,29 +465,29 @@ export class List<T> {
      * which allows for a condition other than an equality comparison to determine whether an element is removed.
      * @param {T} v
      * @return {*}
-     */    
+     */
     public remove(v: T) {
         let first = this.begin(), last = this.end()
-        while(first.getNode() !== last.getNode()) {
+        while (first.getNode() !== last.getNode()) {
             // let next = first;
-            if(v === first.getValue()) this.erase(first)
+            if (v === first.getValue()) this.erase(first)
             first.increment()
             // first = next
         }
     }
-    
+
     /**
      * @description: remove elements with specific condition
      * which allows for a condition other than an equality comparison to determine whether an element is removed.
      * @param {function} fn
      * @return {*}
-     */    
+     */
     public remove_if(fn: (v: T) => boolean) {
         let first = this.begin(), last = this.end()
-        while(first.getNode() !== last.getNode()) {
+        while (first.getNode() !== last.getNode()) {
             // let next = first;
             const value = first.getValue()
-            if(fn(value as T)) this.erase(first)
+            if (fn(value as T)) this.erase(first)
             first.increment()
             // first = next
         }
@@ -427,14 +499,14 @@ export class List<T> {
      * removes all but the first element from every consecutive group of equal elements in the container
      * @param {*}
      * @return {*}
-     */    
+     */
     public unique() {
         let first = this.begin(), last = this.end()
-        if(first.getNode() === last.getNode()) return
+        if (first.getNode() === last.getNode()) return
         let next = first
-        while(next.hasNext()) {
+        while (next.hasNext()) {
             next = next.nextItr()
-            if(first.getValue() === next.getValue()) {
+            if (first.getValue() === next.getValue()) {
                 this.erase(next)
             } else {
                 first = next
@@ -447,12 +519,12 @@ export class List<T> {
      * @description: merge sorted lists
      * @param {*}
      * @return {*}
-     */    
+     */
     public merge(list: List<T>) {
         let first1 = this.begin(), last1 = this.end()
         let fisrt2 = list.begin(), last2 = list.end()
-        while(first1.getNode() !== last1.getNode() && fisrt2.getNode() !== last2.getNode()) {
-            if(fisrt2.getValue() < first1.getValue()) {
+        while (first1.getNode() !== last1.getNode() && fisrt2.getNode() !== last2.getNode()) {
+            if (fisrt2.getValue() < first1.getValue()) {
                 const next = fisrt2.nextItr();
                 this.transfer(first1, fisrt2, next)
                 fisrt2 = next
@@ -460,7 +532,7 @@ export class List<T> {
                 first1.increment()
             }
         }
-        if(fisrt2.getNode() !== last2.getNode()) this.transfer(last1, fisrt2, last2)
+        if (fisrt2.getNode() !== last2.getNode()) this.transfer(last1, fisrt2, last2)
     }
 
     /**
@@ -471,30 +543,30 @@ export class List<T> {
      * (i.e., a consistent transitive comparison, without considering its reflexiveness).
      * @param {*}
      * @return {*}
-     */    
+     */
     public sort() {
         // if list has length 0 or 1 do nothing 
-        if(this.header.next !== this.header && this.header.next.next !== this.header) {
+        if (this.header.next !== this.header && this.header.next.next !== this.header) {
             let carry = new List<T>()
             let counter = new Array<List<T>>(64)
             counter.fill(new List<T>())
 
             let fill = 0
-            while(!this.empty()) {
+            while (!this.empty()) {
                 carry.splice(carry.begin(), this, this.begin())
                 let i = 0
-                while(i < fill && !counter[i].empty()) {
+                while (i < fill && !counter[i].empty()) {
                     counter[i].merge(carry)
                     carry.swap(counter[i++])
                 }
                 carry.swap(counter[i])
-                if(i === fill) ++fill
+                if (i === fill) ++fill
             }
             // console.log(this, this.empty(), counter, fill)
             // for(let i = 1; i < fill; ++i) {
             //     counter[i].merge(counter[i-1])
             // }
-            this.swap(counter[fill-1])
+            this.swap(counter[fill - 1])
         }
     }
 
@@ -502,7 +574,7 @@ export class List<T> {
      * @description: reverse the elements of container(internally implementation)
      * @param {ListNode} p
      * @return {*}
-     */    
+     */
     _reverse(p: ListNode<T>) {
         let temp = p
         do {
@@ -512,14 +584,14 @@ export class List<T> {
             temp.prev = t
             // next
             temp = temp.prev
-        } while(temp !== p)
+        } while (temp !== p)
     }
 
     /**
      * @description: reverse the ordered of elements
      * @param {*}
      * @return {*}
-     */    
+     */
     public reverse() {
         this._reverse(this.header)
     }
@@ -529,13 +601,13 @@ export class List<T> {
      * @param {number} n
      * @param {T} v
      * @return {*}
-     */    
+     */
     private _assign_fill(n: number, v: T) {
         let i = this.begin()
-        for(; i.getNode() !== this.end().getNode() && n > 0; i.increment(), --n) {
+        for (; i.getNode() !== this.end().getNode() && n > 0; i.increment(), --n) {
             i.getNode().setValue(v)
         }
-        if(n > 0) {
+        if (n > 0) {
             this.insert(this.end(), n, v)
         } else {
             this.erase(i, this.end());
@@ -546,7 +618,7 @@ export class List<T> {
      * @description: assign new content to container
      * @param {*}
      * @return {*}
-     */    
+     */
     assign(n: number, v: T) {
         this._assign_fill(n, v)
     }
@@ -556,7 +628,7 @@ export class List<T> {
      * @param {Iterator} first
      * @param {Iterator} last
      * @return {*}
-     */    
+     */
     private _assign_range(first: Iterator<T>, last: Iterator<T>) {
 
     }
@@ -565,7 +637,7 @@ export class List<T> {
      * @description: assign new content with other iterable content
      * @param {Iterable} cntr
      * @return {*}
-     */    
+     */
     private _assign_container(cntr: Iterable<T>) {
 
     }

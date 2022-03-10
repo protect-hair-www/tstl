@@ -1,42 +1,47 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-09 18:55:55
+ * @LastEditTime: 2022-03-10 18:03:59
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
  * @FilePath: \tstl\src\container\sequence\vector\iterator.ts
  */
 import { Iterator } from '../../../Iterator/index'
+import { Vector } from './vector'
 
 export class VCIterator<T> extends Iterator<T> {
   _cur: number
-  _cntr
+  _cntr: Array<T>
 
-  constructor(c, cntr) {
+  constructor(c, cntr: Array<T>) {
     super()
     this._cur = c
     this._cntr = cntr
-    return new Proxy(this, {
-      get: function (target, prop, receiver) {
-        // console.log('get', target, prop, Reflect.has(target, prop), receiver);
-        if (Reflect.has(target, prop)) return Reflect.get(target, prop, receiver)
-      },
-      set: function (target, prop, value, receiver) {
-        console.log(`set: `, target, prop, value, Reflect.has(target, prop));
-        // if(prop === 'cur') {
-        //   target.cur =  value
-        // } else
-        if(prop !== 'cur' && Reflect.has(target, prop)) {
-          Reflect.set(target, prop, value, receiver);
-          return true
-        } else {
-          target._cur = value;
-          return true
-        }
-        return true
-      }
-    })
+    // return new Proxy(this, {
+    //   get: function (target, prop, receiver) {
+    //     console.log('get', target, prop, Reflect.has(target, prop), receiver);
+    //     if (Reflect.has(target, prop)) return Reflect.get(target, prop, receiver)
+    //   },
+    //   set: function (target, prop, value, receiver) {
+    //     console.log(`set: `, target, prop, value, Reflect.has(target, prop));
+    //     // if(prop === 'cur') {
+    //     //   target.cur =  value
+    //     // } else
+    //     if(prop !== 'cur' && Reflect.has(target, prop)) {
+    //       Reflect.set(target, prop, value, receiver);
+    //       return true
+    //     } else {
+    //       target._cur = value;
+    //       return true
+    //     }
+    //     return true
+    //   }
+    // })
   }
+
+  // valueOf() {
+  //   return this._cur
+  // }
 
   private get cur() {
     return this._cur
@@ -46,59 +51,55 @@ export class VCIterator<T> extends Iterator<T> {
     this._cur = val
   }
 
+  private get cntr() {
+    return this._cntr
+  }
+
   /**
-   * @description: 获取迭代器指向成员，对外接口，返回结点值
+   * @description: get element value
    * @return {*}
    */
   get = (): T | boolean => {
-    return this.hasNext() ? this._cntr[this.cur] : false
+    return this.hasNext() ? this.cntr[this.cur] : false
   }
 
   /**
-   * @description: 获取迭代器指向成员，对外接口，返回结点值
+   * @description: get element value(same as get)
    * @return {*}
    */
   value = (): T | boolean => {
-    return this.hasNext() ? this._cntr[this.cur] : false
+    return this.hasNext() ? this.cntr[this.cur] : false
   }
 
   /**
-   * @description: 获取迭代器指向成员，对外接口，返回结点值
+   * @description: get element value(same as get)
    * @return {*}
    */
-  getValue = (): T | boolean => {
-    return this.hasNext() ? this._cntr[this.cur] : false
+  getValue = ():T => {
+    return this.cntr[this.cur]
   }
 
   /**
    * @description: access node (vector no need this method)
    * @param {*}
    * @return {*}
-   */  
+   */
   getNode(): number {
     return this.cur
   }
 
   /**
-   * @description: 迭代器是否位于end位置
-   * @return {*}
-   */
-  private isEnd() {
-    return this.cur === this._cntr.length
-  }
-
-  /**
-   * @description: 同下done方法，jdk方法
+   * @description: test whether has next element (like jdk hasnext method)
    */
   hasNext(): boolean {
-    return !this.isEnd()
+    return this.cur !== this.cntr.length
   }
 
   /**
-   * @description: 迭代结束条件
+   * @description: same with has next (like jdk hasnext method)
    */
   done(): boolean {
-    return this.isEnd()
+    return !this.hasNext()
   }
 
   /**
@@ -108,17 +109,7 @@ export class VCIterator<T> extends Iterator<T> {
    */
   prev() {
     this.decrement()
-    return this
-  }
-
-  /**
-   * @description: 测试next方法
-   * @param {*}
-   * @return {*}
-   */
-  private _next() {
-    this.increment()
-    return this
+    return this._cntr[this.cur]
   }
 
   /**
@@ -139,7 +130,7 @@ export class VCIterator<T> extends Iterator<T> {
     return {
       next: () => {
         if (this.hasNext()) {
-          let node = { done: false, value: this._cntr[this.cur] }
+          let node = { done: false, value: this.getValue() }
           this.increment()
           return node
         } else {
@@ -149,10 +140,45 @@ export class VCIterator<T> extends Iterator<T> {
     }
   }
 
-  *_nodes() {
+  /**
+   * @description: keys迭代器
+   * @param {*}
+   * @return {*}
+   */
+  *keys() {
     while (this.hasNext()) {
       try {
-        let entry = this._cntr[this.cur]
+        let key = this.cur
+        this.increment()
+        yield key
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
+  /**
+   * @description: values迭代器
+   * @param {*}
+   * @return {*}
+   */
+  *values() {
+    while (this.hasNext()) {
+      let value = this.getValue()
+      this.increment()
+      yield value
+    }
+  }
+
+  /**
+   * @description: entries迭代器
+   * @param {*}
+   * @return {*}
+   */
+  *entries() {
+    while (this.hasNext()) {
+      try {
+        let entry = { key: this.cur, value: this.getValue() }
         this.increment()
         yield entry
       } catch (error) {
@@ -160,53 +186,6 @@ export class VCIterator<T> extends Iterator<T> {
       }
     }
   }
-
-  //   /**
-  //    * @description: entries迭代器
-  //    * @param {*}
-  //    * @return {*}
-  //    */
-  //   *entries() {
-  //     while (this.hasNext()) {
-  //       try {
-  //         let entry = { key: this.cur.key, value: this.cur.getValue() }
-  //         this.increment()
-  //         yield entry
-  //       } catch (error) {
-  //         console.log(error)
-  //       }
-  //     }
-  //   }
-
-  //   /**
-  //    * @description: keys迭代器
-  //    * @param {*}
-  //    * @return {*}
-  //    */
-  //   *keys() {
-  //     while (this.hasNext()) {
-  //       try {
-  //         let key = this.cur.key
-  //         this.increment()
-  //         yield key
-  //       } catch (error) {
-  //         console.log(error)
-  //       }
-  //     }
-  //   }
-
-  //   /**
-  //    * @description: values迭代器
-  //    * @param {*}
-  //    * @return {*}
-  //    */
-  //   *values() {
-  //     while (this.hasNext()) {
-  //       let value = this.cur.getValue()
-  //       this.increment()
-  //       yield value
-  //     }
-  //   }
 
   /**
    * @description: 迭代器后移，具体实现
@@ -239,4 +218,3 @@ export class VCIterator<T> extends Iterator<T> {
 
   remove() { }
 }
-

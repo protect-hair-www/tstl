@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:24
- * @LastEditTime: 2022-03-09 23:31:33
+ * @LastEditTime: 2022-03-10 15:51:17
  * @LastEditors: hzheyuan
  * @Description: list container iterator 
- * @FilePath: /tstl/src/container/sequence/list/iterator.ts
+ * @FilePath: \tstl\src\container\sequence\list\iterator.ts
  */
 import { Iterator } from '../../../Iterator/index'
 import { ListNode } from './ListNode'
@@ -45,13 +45,12 @@ export class ListIterator<T> extends Iterator<T> {
     }
 
     /**
-     * @description: check is at end
+     * @description: check has next element
      * @param {*}
      * @return {*}
      */
-    private isEnd(): boolean {
-        // return this.getValue() === Symbol.for('header')
-        return this._cur.getValue() === null
+    hasNext(): boolean {
+        return this._cur.getValue() !== null
     }
 
     /**
@@ -60,16 +59,7 @@ export class ListIterator<T> extends Iterator<T> {
      * @return {*}
      */    
     done(): boolean {
-        return !this.isEnd()
-    }
-
-    /**
-     * @description: check has next element
-     * @param {*}
-     * @return {*}
-     */
-    hasNext(): boolean {
-        return !this.isEnd()
+        return !this.hasNext()
     }
 
     /**

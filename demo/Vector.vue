@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-09 18:58:20
+ * @LastEditTime: 2022-03-10 18:09:02
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\Vector.vue
@@ -28,7 +28,6 @@
         <button @click="onPopFront">pop_front</button>
         <button @click="onPopBack">pop_back</button>
       </div>
-
     </div>
     <div id="list-box" style="width: 100vw;height:100vh;"></div>
   </div>
@@ -38,6 +37,7 @@
 import { ref, onMounted } from 'vue'
 import { Chart } from './chart'
 import { Vector } from '../src/container/sequence/vector/vector'
+import { testAllIterators, traverseCntr } from './util'
 
 let chart: any = ref(null)
 let vec: Vector<string> = ref<any>(null);
@@ -45,13 +45,13 @@ let vec: Vector<string> = ref<any>(null);
 const onPushBack = (e) => {
   const v = e.target.value
   vec.push_back(v)
-//   chart.updateList(list)
+  //   chart.updateList(list)
 }
 
 const onPushFront = (e) => {
-  const v = e.target.value 
+  const v = e.target.value
   vec.push_back(v)
-//   chart.updateList(list)
+  //   chart.updateList(list)
 }
 
 const onGetFront = () => {
@@ -64,27 +64,18 @@ const onGetBack = () => {
 
 const onPopFront = (e) => {
   vec.pop_back()
-//   chart.updateList(list)
+  //   chart.updateList(list)
 }
 
 const onPopBack = (e) => {
   vec.pop_back()
-//   chart.updateList(list)
-}
-
-const logData = (list, dec?: string) => {
-  let begin = list.begin(), str = ''
-  for(let item of begin) {
-    str += ` ${item}`
-  }
-  if(dec) console.log(`${dec}: `, str)
-  else console.log(str)
+  //   chart.updateList(list)
 }
 
 const test = () => {
   // 可视化整颗树
-//   chart = new Chart('list-box')
-//   chart.drawList(list)
+  //   chart = new Chart('list-box')
+  //   chart.drawList(list)
 
   // 创建一个list容器
   vec = new Vector<string>();
@@ -99,7 +90,8 @@ const test = () => {
   // chart.drawList(list)
 
   console.log('=====Iterator=====')
-  logData(vec, 'iterator')
+  traverseCntr(vec, 'iterator')
+  testAllIterators(vec)
 
   console.log('=====Capacity=====')
   console.log('empty', vec.empty())
@@ -109,44 +101,49 @@ const test = () => {
   console.log('front', vec.front())
   console.log('back', vec.back())
 
-
   console.log('=====Modifiers=====')
   let begin = vec.begin(), end = vec.end()
-  console.log(begin)
 
-  // begin = begin++
-  // begin++
-  // vec.insert(begin.next(), '5')
-  // logData(vec, 'begin next insert 5')
+  vec.insert(begin.next(), '5')
+  traverseCntr(vec, 'begin next insert 5')
 
-  // vec.insert(vec.end(), '2')
-  // logData(vec, 'insert at en with 2')
+  vec.insert(vec.end(), '2')
+  traverseCntr(vec, 'insert at en with 2')
 
+  vec.insert(vec.begin().next(), 5, '7')
+  traverseCntr(vec, 'insert at begin.next with 5 7')
 
-  // vec.insert(vec.begin().next(), 5, '7')
-  // logData(vec, 'insert at begin.next with 5 7')
+  vec.insert(vec.begin().next(), vec.begin(), vec.end())
+  traverseCntr(vec, 'inset a range of iterator')
 
-  // vec.insert(vec.begin().next(), vec.begin(), vec.end())
-  // logData(vec, 'inset a range of iterator')
+  vec.erase(vec.begin())
+  traverseCntr(vec, 'erase begin')
 
-  // vec.erase(vec.begin())
-  // logData(vec, 'erase begin')
+  vec.resize(10, '1')
+  traverseCntr(vec, 'resize of 10 1')
+  vec.resize(15, '1')
+  traverseCntr(vec, 'resize of 15 1')
 
-  // vec.resize(10, '1')
-  // logData(vec, 'resize of 10 1')
+  vec.resize(5, '5')
+  traverseCntr(vec, 'resize 5 5')
 
-  // vec.resize(15, '1')
-  // logData(vec, 'resize of 15 1')
-
-//   vec.resize(5, '5')
-//   logData(list, 'resize 5 5')
-
-  // list.unique()
-  // logData(list, 'resize 5 5')
-
-  // vec.clear()
-//   logData(list, 'resize 5 5')
   console.log('=====Operations=====')
+  vec.assign(6, '5')
+  traverseCntr(vec, 'assign 6 5')
+
+  let arr = ['1', '2', '4', '3']
+  vec.assign(arr)
+  traverseCntr(vec, 'assign iterable cntr')
+
+  let vec2 = new Vector<string>();
+  vec2.push_back('3')
+  vec2.push_back('5')
+  vec2.push_back('2')
+  vec.assign(vec2.begin(), vec2.end())
+  traverseCntr(vec, 'assign with iterator')
+
+  vec.clear()
+  traverseCntr(vec, 'clear')
 }
 
 onMounted(test)

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-09 18:24:07
+ * @LastEditTime: 2022-03-10 18:12:55
  * @LastEditors: hzheyuan
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
@@ -26,8 +26,8 @@ export class Vector<T> {
     finish: number = 0
 
     constructor(p?: number | Iterable<T>) {
-        if(typeof p === 'number' && p) this.cntr = new Array<T>(p)
-        else if(p) this.cntr = new Array(...(p as Iterable<T>))
+        if (typeof p === 'number' && p) this.cntr = new Array<T>(p)
+        else if (p) this.cntr = new Array(...(p as Iterable<T>))
         else this.cntr = new Array()
     }
 
@@ -35,16 +35,16 @@ export class Vector<T> {
      * @description: return iterator to begining
      * @param {*}
      * @return {*}
-     */    
+     */
     begin(): VCIterator<T> {
-        return new VCIterator(this.start, this.cntr) 
+        return new VCIterator(this.start, this.cntr)
     }
 
     /**
      * @description: return iterator to end
      * @param {*}
      * @return {*}
-     */    
+     */
     end(): VCIterator<T> {
         let last = this.cntr.length
         return new VCIterator(last, this.cntr)
@@ -54,7 +54,7 @@ export class Vector<T> {
      * @description: return size
      * @param {*}
      * @return {*}
-     */    
+     */
     size(): number {
         return this.cntr.length
     }
@@ -63,20 +63,16 @@ export class Vector<T> {
      * @description: test whether container is empty
      * @param {*}
      * @return {*}
-     */    
+     */
     empty(): boolean {
         return this.size() === 0
-    }
-
-    getValue(): T {
-        return this.cntr[0]
     }
 
     /**
      * @description: access first element
      * @param {*}
      * @return {*}
-     */    
+     */
     front() {
         return this.cntr[this.start]
     }
@@ -85,7 +81,7 @@ export class Vector<T> {
      * @description: access last element
      * @param {*}
      * @return {*}
-     */    
+     */
     back() {
         let len = this.cntr.length
         return this.cntr[len - 1]
@@ -95,9 +91,79 @@ export class Vector<T> {
      * @description: access data
      * @param {*}
      * @return {*}
-     */    
-    data() {
+     */
+    data(): Array<T> {
         return this.cntr
+    }
+
+    /**
+     * @description: 迭代器
+     * @param {*}
+     * @return {*}
+     */
+    [Symbol.iterator]() {
+        let cur = this.begin()
+        return {
+            next: () => {
+                if (cur.hasNext()) {
+                    let node = { done: false, value: cur.getValue() }
+                    console.log(node)
+                    cur.next();
+                    return node
+                } else {
+                    return { done: true, value: null }
+                }
+            }
+        }
+    }
+
+    /**
+     * @description: keys迭代器
+     * @param {*}
+     * @return {*}
+     */
+    *keys() {
+        let cur = this.begin(), idx = 0
+        while (cur.hasNext()) {
+            try {
+                let key = idx++; cur.next()
+                yield key
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+    /**
+     * @description: values迭代器
+     * @param {*}
+     * @return {*}
+     */
+    *values() {
+        let cur = this.begin()
+        while (cur.hasNext()) {
+            let value = cur.getValue()
+            cur.next()
+            yield value
+        }
+    }
+
+    /**
+     * @description: entries迭代器
+     * @param {*}
+     * @return {*}
+     */
+    *entries() {
+        let cur = this.begin(), idx = 0
+        while (cur.hasNext()) {
+            try {
+                let entry = { key: idx, value: cur.getValue() }
+                cur.next()
+                yield entry
+            } catch (error) {
+                console.log(error)
+            }
+        }
     }
 
     /**
@@ -112,10 +178,12 @@ export class Vector<T> {
      * Notice that this function changes the actual content of the container by inserting or erasing elements from it.
      * @param {*}
      * @return {*}
-     */    
+     */
+    resize(n: number);
+    resize(n: number, v: T);
     resize(n: number, v?: T) {
         let first = new VCIterator<T>(this.begin().getNode() + n, this.cntr);
-        if(n < this.size()) this.erase(first, this.end())
+        if (n < this.size()) this.erase(first, this.end())
         else this.insert(this.end(), n - this.size(), v)
     }
 
@@ -123,25 +191,82 @@ export class Vector<T> {
      * @description: asscess element
      * @param {*}
      * @return {*}
-     */    
+     */
     at(pos: number) {
         return this.cntr.at(pos)
     }
 
     /**
      * @description: assign container content
+     * assign new content to the container, replacing current contents, and modifying its size accodingly
+     * this mothed has three versions:
+     * 
+     * version(1): the new contents are n elements, each initialized to copy of val
+     * version(2): range version, the new content are elements constructed from each of elements in the range of [first, last]，in same order
+     * version(3): the new contents are copies of the values passed as initialized list, in the same order.
+     *   
      * @param {*}
      * @return {*}
-     */    
-    assign() {
+     */
+    assign(x: number | Iterable<T>, v?: T);
+    assign(first: VCIterator<T>, last: VCIterator<T>);
+    assign(x: unknown, y: unknown) {
+        if(typeof x === 'number' && y) {
+            this._assign_n_elements(x, (y as T))
+        } else if(x instanceof VCIterator && y instanceof VCIterator) {
+            this._assign_range(x, y)
+        } else {
+            this._assing_itrabel_cntr(x as Iterable<T>)
+        }
+    }
 
+    /**
+     * @description: assign version(1)
+     * the new contents are n elements, each initialized to copy of val 
+     * @param {number} n
+     * @param {T} v
+     * @return {*}
+     */    
+    private _assign_n_elements(n: number, v: T) {
+        this.cntr.length = n
+        this.cntr.fill(v)
+    }
+
+    /**
+     * @description: assign new content version(2)
+     * range version, the new content are elements constructed from each of elements in the range of [first, last]，in same order
+     * @param {Iterator} firt
+     * @param {Iterator} last
+     * @return {*}
+     */    
+    private _assign_range(first: VCIterator<T>, last: VCIterator<T>) {
+        let cur = first, elements: T[] = []
+        while(cur.hasNext() && cur.getNode() !== last.getNode()) {
+            elements.push(cur.getValue());
+            cur.next()
+        }
+        this.clear()
+        this.cntr.splice(0, 0, ...elements)
+    }
+
+    /**
+     * @description: assign new content version(3)
+     * the new contents are copies of the values passed as initialized list, in the same order.
+     * @param {*}
+     * @return {*}
+     */
+    private _assing_itrabel_cntr(cntr: Iterable<T>) {
+        this.clear()
+        for (const item of cntr) {
+            this.cntr.push(item)
+        }
     }
 
     /**
      * @description: add element to the end
      * @param {T} x
      * @return {*}
-     */    
+     */
     push_back(x: T) {
         this.cntr.push(x)
         // this.finish++
@@ -151,7 +276,7 @@ export class Vector<T> {
      * @description: request a change in capacity
      * @param {*}
      * @return {*}
-     */    
+     */
     reserve() {
 
     }
@@ -160,10 +285,10 @@ export class Vector<T> {
      * @description: delete last element
      * @param {*}
      * @return {*}
-     */    
+     */
     pop_back() {
         this.cntr.pop()
-        // this.finish--
+        this.finish--
     }
 
     /**
@@ -179,11 +304,11 @@ export class Vector<T> {
      * 
      * @param {*}
      * @return {*}
-     */    
+     */
     insert(pos: VCIterator<T>, x: T | number | VCIterator<T>, last?: T | VCIterator<T>) {
-        if(typeof x === 'number' && last) {
+        if (typeof x === 'number' && last) {
             this._fill_insert(pos, x, (last as T))
-        } else if(x instanceof VCIterator && last instanceof VCIterator) {
+        } else if (x instanceof VCIterator && last instanceof VCIterator) {
             this._range_insert(pos, (x as VCIterator<T>), (last as VCIterator<T>))
         } else {
             this._pos_insert(pos, (x as T));
@@ -195,7 +320,7 @@ export class Vector<T> {
      * @param {VCIterator} pos
      * @param {T} x
      * @return {*}
-     */    
+     */
     private _pos_insert(pos: VCIterator<T>, val: T) {
         this.cntr.splice(pos.getNode(), 0, val)
         this.finish++
@@ -209,11 +334,11 @@ export class Vector<T> {
      * @return {*}
      */
     private _fill_insert(pos: VCIterator<T>, n: number, val: T) {
-        if(n !== 0) {
+        if (n !== 0) {
             const added = new Array<T>(n);
             added.fill(val)
             this.cntr.splice(pos.getNode(), 0, ...added)
-            this.finish +=n
+            this.finish += n
         }
     }
 
@@ -224,27 +349,27 @@ export class Vector<T> {
      * @param {VCIterator} first
      * @param {VCIterator} last
      * @return {*}
-     */    
+     */
     private _range_insert(pos: VCIterator<T>, first: VCIterator<T>, last: VCIterator<T>) {
         let added = new Array<T>();
         let cur = first, n = 0;
-        while(cur.hasNext() && cur.getNode() !== last.getNode()) {
+        while (cur.hasNext() && cur.getNode() !== last.getNode()) {
             added.push(cur.getValue() as T)
             cur = cur.next()
             n++
         }
-        console.log(n, added);
         this.cntr.splice(pos.getNode(), 0, ...added)
-        this.finish +=n
+        this.finish += n
     }
 
     /**
      * @description: swap content
+     * exchange the content of this container by content of x, which is a other vector with same type, size may differ
      * @param {*}
      * @return {*}
-     */    
+     */
     swap(vec: Vector<T>) {
-
+        this.cntr = vec.data()
     }
 
     /**
@@ -252,9 +377,9 @@ export class Vector<T> {
      * Removes from the vector either a single element (position) or a range of elements ([first,last)).
      * @param {*}
      * @return {*}
-     */    
+     */
     erase(pos: VCIterator<T>, last?: VCIterator<T>) {
-        if(!last) this._erase_position(pos)
+        if (!last) this._erase_position(pos)
         else this._erase_range(pos, last)
     }
 
@@ -262,7 +387,7 @@ export class Vector<T> {
      * @description: erase version(1) erase one element of a position(internally implementation)
      * @param {VCIterator} pos
      * @return {*}
-     */    
+     */
     private _erase_position(pos: VCIterator<T>) {
         this.cntr.splice(pos.getNode(), 1);
     }
@@ -272,7 +397,7 @@ export class Vector<T> {
      * @param {VCIterator} first
      * @param {VCIterator} last
      * @return {*}
-     */    
+     */
     private _erase_range(first: VCIterator<T>, last: VCIterator<T>) {
         const count = last.getNode() - first.getNode()
         this.cntr.splice(first.getNode(), count)
@@ -283,7 +408,7 @@ export class Vector<T> {
      * @description: clear content
      * @param {*}
      * @return {*}
-     */    
+     */
     clear() {
         this.cntr = []
         this.cntr.length = 0
@@ -294,7 +419,7 @@ export class Vector<T> {
      * @description: construct and insert element
      * @param {*}
      * @return {*}
-     */    
+     */
     emplace(ctr?: {}) {
 
     }
@@ -303,7 +428,7 @@ export class Vector<T> {
      * @description: construct and insert element at the end
      * @param {*}
      * @return {*}
-     */    
+     */
     emplace_back(ctr?: {}) {
 
     }
