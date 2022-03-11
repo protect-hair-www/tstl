@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-10 23:24:15
+ * @LastEditTime: 2022-03-11 10:50:54
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
- * @FilePath: /tstl/src/container/sequence/vector/iterator.ts
+ * @FilePath: \tstl\src\container\sequence\vector\iterator.ts
  */
 // import { Iterator } from '../../../Iterator/index'
 import { TSTLIterator } from '@/Iterator/Iterator'
@@ -55,6 +55,15 @@ export class VCIterator<T> implements TSTLIterator<T> {
   }
 
   /**
+   * @description: access the index (getter)
+   * @param {*}
+   * @return {*}
+   */  
+  get key() {
+    return this.cur
+  }
+
+  /**
    * @description: return index
    * @param {*}
    * @return {*}
@@ -67,8 +76,8 @@ export class VCIterator<T> implements TSTLIterator<T> {
    * @description: get element value(same as get)
    * @return {*}
    */
-  value = (): T | boolean => {
-    return this.hasNext() ? this.cntr[this.cur] : false
+  get value(): T {
+    return this.cntr[this.cur]
   }
 
   /**
@@ -103,6 +112,24 @@ export class VCIterator<T> implements TSTLIterator<T> {
   }
 
   /**
+   * @description: 迭代器后移，具体实现
+   * @param {*}
+   * @return {*}
+   */
+  private increment(): void {
+    this.cur++
+  }
+
+  /**
+   * @description: 迭代器前移具体实现
+   * @param {*}
+   * @return {*}
+   */
+  private decrement(): void {
+    this.cur--
+  }
+
+  /**
    * @description: 迭代器前移接口
    * @param {*}
    * @return {*}
@@ -120,8 +147,25 @@ export class VCIterator<T> implements TSTLIterator<T> {
   public next(): T {
     this.cur++
     return this.cntr[this.cur]
-    // return new VCIterator(++this.cur, this._cntr)
   }
+
+  /**
+   * @description: 两个迭代器之间的距离
+   * @param {*} begin
+   * @param {*} end
+   * @return {*}
+   */
+  static distance(begin, end) {
+    const f = begin.getKey(), l = end.getKey()
+    return l - f
+  }
+
+  /**
+   * @description: erase the element by iterator
+   * @param {*}
+   * @return {*}
+   */  
+  remove() { }
 
   /**
    * @description: 迭代器
@@ -141,35 +185,4 @@ export class VCIterator<T> implements TSTLIterator<T> {
       }
     }
   }
-
-  /**
-   * @description: 迭代器后移，具体实现
-   * @param {*}
-   * @return {*}
-   */
-  private increment(): void {
-    this.cur++
-  }
-
-  /**
-   * @description: 迭代器前移具体实现
-   * @param {*}
-   * @return {*}
-   */
-  private decrement(): void {
-    this.cur--
-  }
-
-  /**
-   * @description: 两个迭代器之间的距离
-   * @param {*} begin
-   * @param {*} end
-   * @return {*}
-   */
-  static distance(begin, end) {
-    let f = begin.getNode(), l = end.getNode()
-    return l - f
-  }
-
-  remove() { }
 }

@@ -1,19 +1,18 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-08 21:31:24
+ * @LastEditTime: 2022-03-11 10:55:41
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
- * @FilePath: /tstl/src/container/sequence/deque/iterator.ts
+ * @FilePath: \tstl\src\container\sequence\deque\iterator.ts
  */
-import { Iterator } from '../../../Iterator/index'
+import { TSTLIterator } from '@/Iterator/iterator'
 
-export class DequeIterator<T> extends Iterator<T> {
+export class DequeIterator<T> implements TSTLIterator<T> {
   _cur: number
   _cntr
 
   constructor(c, cntr) {
-    super()
     this._cur = c
     this._cntr = cntr
   }
@@ -26,28 +25,42 @@ export class DequeIterator<T> extends Iterator<T> {
     this._cur = val
   }
 
-  /**
-   * @description: 获取迭代器指向成员，对外接口，返回结点值
-   * @return {*}
-   */
-  get = (): T | boolean => {
-    return this.hasNext() ? this._cntr[this.cur] : false
+  private get cntr() {
+    return this._cntr
   }
 
   /**
-   * @description: 获取迭代器指向成员，对外接口，返回结点值
+   * @description: access current index (getter)
+   * @param {*}
    * @return {*}
-   */
-  value = (): T | boolean => {
-    return this.hasNext() ? this._cntr[this.cur] : false
+   */  
+  get key(): number {
+    return this.cur
   }
 
   /**
-   * @description: 获取迭代器指向成员，对外接口，返回结点值
+   * @description: get current index
+   * @param {*}
+   * @return {*}
+   */  
+  public getKey() {
+      return this.cur
+  }
+
+  /**
+   * @description: access the element(same as getValue)
    * @return {*}
    */
-  getValue = (): T | boolean => {
-    return this.hasNext() ? this._cntr[this.cur] : false
+  get value(): T {
+    return this._cntr[this.cur]
+  }
+
+  /**
+   * @description: access the element (getter)
+   * @return {*}
+   */
+  public getValue = (): T => {
+    return this._cntr[this.cur]
   }
 
   /**
@@ -55,168 +68,97 @@ export class DequeIterator<T> extends Iterator<T> {
    * @param {*}
    * @return {*}
    */  
-  getNode(): number {
+  public getNode(): number {
     return this.cur
   }
 
   /**
-   * @description: 迭代器是否位于end位置
-   * @return {*}
+   * @description: test whether has next element(iteratro can increment)
    */
-  private isEnd() {
-    return this.cur === this._cntr.length
+  public hasNext(): boolean {
+    return this.cur !== this._cntr.length
   }
 
   /**
-   * @description: 同下done方法，jdk方法
+   * @description: iterator at the end
    */
-  hasNext(): boolean {
-    return !this.isEnd()
+  public done(): boolean {
+    return !this.hasNext()
   }
 
   /**
-   * @description: 迭代结束条件
-   */
-  done(): boolean {
-    return this.isEnd()
-  }
-
-  /**
-   * @description: 迭代器前移接口
+   * @description: iterator goto next
    * @param {*}
    * @return {*}
    */
-  prev() {
-    this.decrement()
-    return this
-  }
-
-  /**
-   * @description: 测试next方法
-   * @param {*}
-   * @return {*}
-   */
-  private _next() {
-    this.increment()
-    return this
-  }
-
-  /**
-   * @description: js迭代协议规定的next方法
-   * @param {*}
-   * @return {*}
-   */
-  public next(): DequeIterator<T> {
-    return new DequeIterator(++this.cur, this._cntr)
-  }
-
-  /**
-   * @description: 迭代器
-   * @param {*}
-   * @return {*}
-   */
-  [Symbol.iterator]() {
-    return {
-      next: () => {
-        if (this.hasNext()) {
-          let node = { done: false, value: this._cntr[this.cur] }
-          this.increment()
-          return node
-        } else {
-          return { done: true, value: null }
-        }
-      }
-    }
-  }
-
-  *_nodes() {
-    while (this.hasNext()) {
-      try {
-        let entry = this._cntr[this.cur]
-        this.increment()
-        yield entry
-      } catch (error) {
-        console.log(error)
-      }
-    }
-  }
-
-  //   /**
-  //    * @description: entries迭代器
-  //    * @param {*}
-  //    * @return {*}
-  //    */
-  //   *entries() {
-  //     while (this.hasNext()) {
-  //       try {
-  //         let entry = { key: this.cur.key, value: this.cur.getValue() }
-  //         this.increment()
-  //         yield entry
-  //       } catch (error) {
-  //         console.log(error)
-  //       }
-  //     }
-  //   }
-
-  //   /**
-  //    * @description: keys迭代器
-  //    * @param {*}
-  //    * @return {*}
-  //    */
-  //   *keys() {
-  //     while (this.hasNext()) {
-  //       try {
-  //         let key = this.cur.key
-  //         this.increment()
-  //         yield key
-  //       } catch (error) {
-  //         console.log(error)
-  //       }
-  //     }
-  //   }
-
-  //   /**
-  //    * @description: values迭代器
-  //    * @param {*}
-  //    * @return {*}
-  //    */
-  //   *values() {
-  //     while (this.hasNext()) {
-  //       let value = this.cur.getValue()
-  //       this.increment()
-  //       yield value
-  //     }
-  //   }
-
-  /**
-   * @description: 迭代器后移，具体实现
-   * @param {*}
-   * @return {*}
-   */
-  private increment(): void {
+  increment(): void {
     this.cur++
   }
 
   /**
-   * @description: 迭代器前移具体实现
+   * @description: iterator goto prev
    * @param {*}
    * @return {*}
    */
-  private decrement(): void {
+  decrement(): void {
     this.cur--
   }
 
   /**
-   * @description: 两个迭代器之间的距离
+   * @description: iterator decrement and return the element
+   * @param {*}
+   * @return {*}
+   */
+  public next():T {
+    this.increment()
+    return this.cntr[this.cur]
+  }
+
+  /**
+   * @description: iterator increment and return the element
+   * @param {*}
+   * @return {*}
+   */
+  public prev(): T {
+    this.decrement()
+    return this.cntr[this.cur]
+  }
+
+  /**
+   * @description: distance of to iterator
    * @param {*} begin
    * @param {*} end
    * @return {*}
    */
   static distance(begin, end) {
-    let f = begin.getNode(), l = end.getNode()
+    const f = begin.getKey(), l = end.getKey()
     return l - f
   }
 
+  /**
+   * @description: remove the interator element
+   * @param {*}
+   * @return {*}
+   */  
   remove() { }
+
+  /**
+   * @description: Javascript iterator protocol
+   * @param {*}
+   * @return {*}
+   */
+  [Symbol.iterator](): Iterator<T> {
+    return {
+      next: () => {
+        if (this.hasNext()) {
+          let node = { done: false, value: this.cntr[this.cur] }
+          this.increment()
+          return node
+        } else {
+          return { done: true, value: undefined }
+        }
+      }
+    }
+  }
 }
 

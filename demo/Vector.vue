@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-10 23:52:26
+ * @LastEditTime: 2022-03-11 11:06:03
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: /tstl/demo/Vector.vue
+ * @FilePath: \tstl\demo\Vector.vue
 -->
 <template>
   <div class="Vector-test">
@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Chart } from './chart'
-import { Vector } from '../src/container/sequence/vector/vector'
+import { Vector, VCIterator } from '../src/container/sequence/vector'
 import { testAllIterators, traverseCntr } from './util'
 
 let chart: any = ref(null)
@@ -102,7 +102,7 @@ const test = () => {
   console.log('back', vec.back())
 
   console.log('=====Modifiers=====')
-  let begin = vec.begin(), end = vec.end(), itr = vec.begin()
+  let itr = vec.begin()
   itr.next()
   vec.insert(itr, '5')
   traverseCntr(vec, 'begin next insert 5')

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-10 23:52:45
+ * @LastEditTime: 2022-03-11 11:22:56
  * @LastEditors: hzheyuan
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
@@ -47,7 +47,7 @@ export class Vector<T> implements TSTLIterable<T> {
      * @return {*}
      */
     end(): VCIterator<T> {
-        let last = this.cntr.length
+        const last = this.cntr.length
         return new VCIterator(last, this.cntr)
     }
 
@@ -75,7 +75,7 @@ export class Vector<T> implements TSTLIterable<T> {
      * @return {*}
      */
     front() {
-        return this.cntr[this.start]
+        return this.cntr[0]
     }
 
     /**
@@ -84,7 +84,7 @@ export class Vector<T> implements TSTLIterable<T> {
      * @return {*}
      */
     back() {
-        let len = this.cntr.length
+        const len = this.cntr.length
         return this.cntr[len - 1]
     }
 
@@ -104,84 +104,6 @@ export class Vector<T> implements TSTLIterable<T> {
      */    
     set data(x: Array<T>) {
         this.cntr = x
-    }
-
-    /**
-     * @description: 迭代器
-     * @param {*}
-     * @return {*}
-     */
-    *[Symbol.iterator](): IterableIterator<T> {
-        let cur = this.begin()
-        while(cur.hasNext()) {
-            try {
-                // let node = { done: false, value: cur.getValue() }
-                cur.next();
-                yield cur.getValue() 
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        // return {
-        //     next: () => {
-        //         if (cur.hasNext()) {
-        //             let node = { done: false, value: cur.getValue() }
-        //             cur.next();
-        //             return node
-        //         } else {
-        //             return { done: true, value: undefined }
-        //         }
-        //     }
-        // }
-    }
-
-    /**
-     * @description: keys迭代器
-     * @param {*}
-     * @return {*}
-     */
-    *keys() {
-        let cur = this.begin(), idx = 0
-        while (cur.hasNext()) {
-            try {
-                let key = idx++; cur.next()
-                yield key
-            } catch (error) {
-                console.log(error)
-            }
-        }
-    }
-
-    /**
-     * @description: values迭代器
-     * @param {*}
-     * @return {*}
-     */
-    *values() {
-        let cur = this.begin()
-        while (cur.hasNext()) {
-            let value = cur.getValue()
-            cur.next()
-            yield value
-        }
-    }
-
-    /**
-     * @description: entries迭代器
-     * @param {*}
-     * @return {*}
-     */
-    *entries() {
-        let cur = this.begin(), idx: number = 0
-        while (cur.hasNext()) {
-            try {
-                const entry: [number, T] = [idx++, cur.getValue()]
-                cur.next()
-                yield entry
-            } catch (error) {
-                console.log(error)
-            }
-        }
     }
 
     /**
@@ -306,7 +228,7 @@ export class Vector<T> implements TSTLIterable<T> {
      */
     pop_back() {
         this.cntr.pop()
-        this.finish--
+        // this.finish--
     }
 
     /**
@@ -325,11 +247,11 @@ export class Vector<T> implements TSTLIterable<T> {
      */
     insert(pos: VCIterator<T>, x: T | number | VCIterator<T>, last?: T | VCIterator<T>) {
         if (typeof x === 'number' && last) {
-            this._fill_insert(pos, x, (last as T))
+            this._insert_fill(pos, x, (last as T))
         } else if (x instanceof VCIterator && last instanceof VCIterator) {
-            this._range_insert(pos, (x as VCIterator<T>), (last as VCIterator<T>))
+            this._insert_range(pos, (x as VCIterator<T>), (last as VCIterator<T>))
         } else {
-            this._pos_insert(pos, (x as T));
+            this._insert_pos(pos, (x as T));
         }
     }
 
@@ -339,7 +261,7 @@ export class Vector<T> implements TSTLIterable<T> {
      * @param {T} x
      * @return {*}
      */
-    private _pos_insert(pos: VCIterator<T>, val: T) {
+    private _insert_pos(pos: VCIterator<T>, val: T) {
         this.cntr.splice(pos.getKey(), 0, val)
         this.finish++
     }
@@ -351,7 +273,7 @@ export class Vector<T> implements TSTLIterable<T> {
      * @param {T} x
      * @return {*}
      */
-    private _fill_insert(pos: VCIterator<T>, n: number, val: T) {
+    private _insert_fill(pos: VCIterator<T>, n: number, val: T) {
         if (n !== 0) {
             const added = new Array<T>(n);
             added.fill(val)
@@ -368,7 +290,7 @@ export class Vector<T> implements TSTLIterable<T> {
      * @param {VCIterator} last
      * @return {*}
      */
-    private _range_insert(pos: VCIterator<T>, first: VCIterator<T>, last: VCIterator<T>) {
+    private _insert_range(pos: VCIterator<T>, first: VCIterator<T>, last: VCIterator<T>) {
         let added = new Array<T>();
         let cur = first, n = 0;
         while (cur.hasNext() && cur.getKey() !== last.getKey()) {
@@ -454,4 +376,84 @@ export class Vector<T> implements TSTLIterable<T> {
         const ins: T = new c(arg);
         this.push_back(ins);
     }
+
+    /**
+     * @description: Javascript iterator protocol(Internally implementation)
+     * @param {*}
+     * @return {*}
+     */
+    *[Symbol.iterator](): IterableIterator<T> {
+        let cur = this.begin()
+        while(cur.hasNext()) {
+            try {
+                // let node = { done: false, value: cur.getValue() }
+                cur.next();
+                yield cur.getValue() 
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        // return {
+        //     next: () => {
+        //         if (cur.hasNext()) {
+        //             let node = { done: false, value: cur.getValue() }
+        //             cur.next();
+        //             return node
+        //         } else {
+        //             return { done: true, value: undefined }
+        //         }
+        //     }
+        // }
+    }
+
+    /**
+     * @description: Javascript keys iterator
+     * @param {*}
+     * @return {*}
+     */
+    *keys() {
+        let cur = this.begin(), idx = 0
+        while (cur.hasNext()) {
+            try {
+                let key = idx++; cur.next()
+                yield key
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+    /**
+     * @description: Javascript values iterator
+     * @param {*}
+     * @return {*}
+     */
+    *values() {
+        let cur = this.begin()
+        while (cur.hasNext()) {
+            let value = cur.getValue()
+            cur.next()
+            yield value
+        }
+    }
+
+    /**
+     * @description: Javascript entries iterator
+     * @param {*}
+     * @return {*}
+     */
+    *entries() {
+        let cur = this.begin(), idx: number = 0
+        while (cur.hasNext()) {
+            try {
+                const entry: [number, T] = [idx++, cur.getValue()]
+                cur.next()
+                yield entry
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+
 }

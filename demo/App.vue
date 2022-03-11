@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2021-12-02 13:22:09
- * @LastEditTime: 2022-03-10 16:57:58
+ * @LastEditTime: 2022-03-11 11:18:06
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\App.vue
@@ -15,7 +15,8 @@
     <!-- <MultiMap /> -->
     <!-- <Map /> -->
     <!-- <List/> -->
-    <Vector/>
+    <!-- <Vector/> -->
+    <Deque />
   </div>
 </template>
 
@@ -28,6 +29,7 @@ import MultiMap from './MultiMap.vue'
 import Map from './Map.vue'
 import List from './List.vue'
 import Vector from './Vector.vue'
+import Deque from './Deque.vue'
 </script>
 
 <style>

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:24
- * @LastEditTime: 2022-03-10 15:51:17
+ * @LastEditTime: 2022-03-11 10:57:50
  * @LastEditors: hzheyuan
  * @Description: list container iterator 
  * @FilePath: \tstl\src\container\sequence\list\iterator.ts
@@ -60,25 +60,6 @@ export class ListIterator<T> extends Iterator<T> {
      */    
     done(): boolean {
         return !this.hasNext()
-    }
-
-    /**
-     * @description: js iterator protocol
-     * @param {*}
-     * @return {*}
-     */
-    [Symbol.iterator]() {
-        return {
-            next: () => {
-                if (this.hasNext()) {
-                    const node = { done: false, value: this._cur.getValue() }
-                    this.increment()
-                    return node
-                } else {
-                    return { done: true, value: undefined }
-                }
-            }
-        }
     }
 
     /**
@@ -159,5 +140,24 @@ export class ListIterator<T> extends Iterator<T> {
             n++
         }
         return n
+    }
+
+    /**
+     * @description: js iterator protocol
+     * @param {*}
+     * @return {*}
+     */
+    [Symbol.iterator]() {
+        return {
+            next: () => {
+                if (this.hasNext()) {
+                    const node = { done: false, value: this._cur.getValue() }
+                    this.increment()
+                    return node
+                } else {
+                    return { done: true, value: undefined }
+                }
+            }
+        }
     }
 }
