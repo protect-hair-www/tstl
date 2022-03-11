@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-03 14:42:44
- * @LastEditTime: 2022-03-09 22:30:36
+ * @LastEditTime: 2022-03-11 17:59:43
  * @LastEditors: hzheyuan
  * @Description: 绘制数据结构，方便测试
- * @FilePath: /tstl/demo/chart.ts
+ * @FilePath: \tstl\demo\chart.ts
  */
 
 import { MarkedLinksPlugin } from "typedoc/dist/lib/output/plugins";
@@ -97,8 +97,8 @@ export class Chart {
         let cur = list.begin()
         while (cur.hasNext()) {
             data.push({ name: cur.getValue() })
-            let curValue = cur.getValue(), nextValue = cur.next()
-            // console.log([curValue, nextValue], 'aaa')
+            let curValue = cur.getValue(); cur.next();
+            let nextValue = cur.getValue();
             links.push({
                 source: curValue,
                 target: nextValue === null ? 'header' : nextValue,
@@ -110,8 +110,8 @@ export class Chart {
 
         cur = list.begin()
         while(cur.hasNext()) {
-            let curValue = cur.getValue(), nextValue = cur.next()
-            // console.log([curValue, nextValue], 'bbb')
+            let curValue = cur.getValue(); cur.next()
+            let nextValue = cur.getValue()
             links.push({
                 source: nextValue === null ? 'header' : nextValue,
                 target: curValue,

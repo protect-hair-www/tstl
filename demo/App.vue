@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2021-12-02 13:22:09
- * @LastEditTime: 2022-03-11 11:18:06
+ * @LastEditTime: 2022-03-11 17:21:29
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\App.vue
@@ -14,9 +14,9 @@
     <!-- <MultiSet /> -->
     <!-- <MultiMap /> -->
     <!-- <Map /> -->
-    <!-- <List/> -->
+    <List/>
     <!-- <Vector/> -->
-    <Deque />
+    <!-- <Deque /> -->
   </div>
 </template>
 

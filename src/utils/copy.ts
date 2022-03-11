@@ -1,16 +1,14 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-05 09:50:47
- * @LastEditTime: 2022-03-05 10:09:12
+ * @LastEditTime: 2022-03-11 15:29:27
  * @LastEditors: hzheyuan
- * @Description: 
- * @FilePath: /tstl/src/utils/copy.ts
+ * @Description: deep copy
+ * @FilePath: \tstl\src\utils\copy.ts
  */
 import {isPrimitive, getTypeOf, createInstanceOf } from './jstype'
 
 export function copy(target, map = new WeakMap()) {
-    // console.log(getTypeTag(target));
-    // console.log(isPrimitive(target));
     if (isPrimitive(target)) {
         return target;
     }

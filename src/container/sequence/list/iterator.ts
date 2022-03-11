@@ -1,29 +1,49 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:24
- * @LastEditTime: 2022-03-11 10:57:50
+ * @LastEditTime: 2022-03-11 18:07:54
  * @LastEditors: hzheyuan
  * @Description: list container iterator 
  * @FilePath: \tstl\src\container\sequence\list\iterator.ts
  */
-import { Iterator } from '../../../Iterator/index'
 import { ListNode } from './ListNode'
+import { ListIterator } from '@/Iterator/Iterator'
 
-export class ListIterator<T> extends Iterator<T> {
+export class LinkListIterator<T> implements ListIterator<T> {
     _cur: ListNode<T>
 
     constructor(cur) {
-        super()
         this._cur = cur
     }
 
+    get cur() {
+        return this._cur
+    }
+
+    set cur(x) {
+        this._cur = x
+    }
+
     /**
-     * @description: get the list node saved value, same as getValue()
+     * @description: access node key (getter)
      * @param {*}
      * @return {*}
-     */
-    get() {
-        return this._cur.getValue()
+     */    
+    get key() {
+        return this.cur.getValue()
+    }
+
+    getKey() {
+        return this.cur.getValue()
+    }
+
+    /**
+     * @description: access node value (getter)
+     * @param {*}
+     * @return {*}
+     */    
+    get value() {
+        return this.cur.getValue()
     }
 
     /**
@@ -32,7 +52,7 @@ export class ListIterator<T> extends Iterator<T> {
      * @return {*}
      */
     getValue() {
-        return this._cur.getValue()
+        return this.cur.getValue()
     }
 
     /**
@@ -54,10 +74,19 @@ export class ListIterator<T> extends Iterator<T> {
     }
 
     /**
-     * @description: same as hasnext
+     * @description: test whether has previous element
      * @param {*}
      * @return {*}
      */    
+    hasPerv(): boolean {
+        return this.cur.prev.getValue() !== null
+    }
+
+    /**
+     * @description: same as hasnext
+     * @param {*}
+     * @return {*}
+     */
     done(): boolean {
         return !this.hasNext()
     }
@@ -85,18 +114,16 @@ export class ListIterator<T> extends Iterator<T> {
      * @param {*}
      * @return {*}
      */
-    public next():T {
-        this.increment()
-        return this._cur.getValue()
-    }
-
-    /**
-     * @description: return next iterator
-     * @param {*}
-     * @return {*}
-     */    
-    nextItr(): ListIterator<T> {
-        return new ListIterator(this._cur.next)
+    public next(): IteratorResult<T> {
+        // this.increment()
+        // return this._cur.getValue()
+        if (this.hasNext()) {
+            const node = { done: false, value: this.cur.getValue() }
+            this.increment()
+            return node
+        } else {
+            return { done: true, value: undefined }
+        }
     }
 
     /**
@@ -104,18 +131,34 @@ export class ListIterator<T> extends Iterator<T> {
      * @param {*}
      * @return {*}
      */
-    public prev():T {
-        this.decrement()
-        return this._cur.getValue()
+    public prev(): IteratorResult<T> {
+        // this.decrement()
+        // return this._cur.getValue()
+        if (this.hasPerv()) {
+            const node = { done: false, value: this._cur.getValue() }
+            this.increment()
+            return node
+        } else {
+            return { done: true, value: undefined }
+        }
+    }
+
+    /**
+     * @description: return next iterator
+     * @param {*}
+     * @return {*}
+     */
+    nextItr(): LinkListIterator<T> {
+        return new LinkListIterator(this._cur.next)
     }
 
     /**
      * @description: return prev iterator
      * @param {*}
      * @return {*}
-     */    
-    prevItr(): ListIterator<T> {
-        return new ListIterator(this._cur.prev)
+     */
+    prevItr(): LinkListIterator<T> {
+        return new LinkListIterator(this._cur.prev)
     }
 
     /**
@@ -132,7 +175,7 @@ export class ListIterator<T> extends Iterator<T> {
      * @param {*} fisrt
      * @param {*} last
      * @return {*}
-     */    
+     */
     static distance(fisrt, last) {
         let n = 0, begin = fisrt;
         while (begin.hasNext() && begin.getNode() !== last.getNode()) {
@@ -148,16 +191,6 @@ export class ListIterator<T> extends Iterator<T> {
      * @return {*}
      */
     [Symbol.iterator]() {
-        return {
-            next: () => {
-                if (this.hasNext()) {
-                    const node = { done: false, value: this._cur.getValue() }
-                    this.increment()
-                    return node
-                } else {
-                    return { done: true, value: undefined }
-                }
-            }
-        }
+        return this 
     }
 }

@@ -1,15 +1,15 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-11 10:50:54
+ * @LastEditTime: 2022-03-11 17:29:49
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
  * @FilePath: \tstl\src\container\sequence\vector\iterator.ts
  */
 // import { Iterator } from '../../../Iterator/index'
-import { TSTLIterator } from '@/Iterator/Iterator'
+import { ListIterator } from '@/Iterator/Iterator'
 
-export class VCIterator<T> implements TSTLIterator<T> {
+export class VCIterator<T> implements ListIterator<T> {
   _cur: number
   _cntr: Array<T>
 
@@ -58,7 +58,7 @@ export class VCIterator<T> implements TSTLIterator<T> {
    * @description: access the index (getter)
    * @param {*}
    * @return {*}
-   */  
+   */
   get key() {
     return this.cur
   }
@@ -67,7 +67,7 @@ export class VCIterator<T> implements TSTLIterator<T> {
    * @description: return index
    * @param {*}
    * @return {*}
-   */  
+   */
   getKey() {
     return this.cur
   }
@@ -84,7 +84,7 @@ export class VCIterator<T> implements TSTLIterator<T> {
    * @description: get element value(same as get)
    * @return {*}
    */
-  getValue = ():T => {
+  getValue(): T {
     return this.cntr[this.cur]
   }
 
@@ -102,6 +102,15 @@ export class VCIterator<T> implements TSTLIterator<T> {
    */
   hasNext(): boolean {
     return this.cur !== this.cntr.length
+  }
+
+  /**
+   * @description: test whether has previous element
+   * @param {*}
+   * @return {*}
+   */  
+  hasPrev(): boolean {
+    return this.cur !== 0
   }
 
   /**
@@ -130,27 +139,39 @@ export class VCIterator<T> implements TSTLIterator<T> {
   }
 
   /**
+   * @description: Javascript iterator protocol method next()
+   * @param {*}
+   * @return {*}
+   */
+  next():IteratorResult<T> {
+    // this.cur++
+    // return this.cntr[this.cur]
+    if (this.hasNext()) {
+      let node: IteratorResult<T> = { done: false, value: this.getValue() }
+      this.increment()
+      return node
+    } else {
+      return { done: true, value: undefined }
+    }
+  }
+
+  /**
    * @description: 迭代器前移接口
    * @param {*}
    * @return {*}
    */
-  prev() {
-    this.decrement()
-    return this._cntr[this.cur]
+  prev(): IteratorResult<T> {
+    if (this.hasPrev()) {
+      let node: IteratorResult<T> = { done: false, value: this.getValue() }
+      this.decrement()
+      return node
+    } else {
+      return { done: true, value: undefined }
+    }
   }
 
   /**
-   * @description: js迭代协议规定的next方法
-   * @param {*}
-   * @return {*}
-   */
-  public next(): T {
-    this.cur++
-    return this.cntr[this.cur]
-  }
-
-  /**
-   * @description: 两个迭代器之间的距离
+   * @description: distance of two interator
    * @param {*} begin
    * @param {*} end
    * @return {*}
@@ -164,25 +185,15 @@ export class VCIterator<T> implements TSTLIterator<T> {
    * @description: erase the element by iterator
    * @param {*}
    * @return {*}
-   */  
+   */
   remove() { }
 
   /**
-   * @description: 迭代器
+   * @description: Javascript iterable implementation
    * @param {*}
    * @return {*}
    */
-  [Symbol.iterator](): Iterator<T> {
-    return {
-      next: () => {
-        if (this.hasNext()) {
-          let node = { done: false, value: this.getValue() }
-          this.increment()
-          return node
-        } else {
-          return { done: true, value: undefined }
-        }
-      }
-    }
+  [Symbol.iterator]() {
+    return this
   }
 }

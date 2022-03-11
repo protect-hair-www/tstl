@@ -393,6 +393,8 @@ export class Vector<T> implements TSTLIterable<T> {
                 console.log(error)
             }
         }
+
+        // old version
         // return {
         //     next: () => {
         //         if (cur.hasNext()) {

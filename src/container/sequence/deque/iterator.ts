@@ -1,14 +1,14 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-11 10:55:41
+ * @LastEditTime: 2022-03-11 17:19:39
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
  * @FilePath: \tstl\src\container\sequence\deque\iterator.ts
  */
-import { TSTLIterator } from '@/Iterator/iterator'
+import { ListIterator } from '@/Iterator/iterator'
 
-export class DequeIterator<T> implements TSTLIterator<T> {
+export class DequeIterator<T> implements ListIterator<T> {
   _cur: number
   _cntr
 
@@ -33,7 +33,7 @@ export class DequeIterator<T> implements TSTLIterator<T> {
    * @description: access current index (getter)
    * @param {*}
    * @return {*}
-   */  
+   */
   get key(): number {
     return this.cur
   }
@@ -42,9 +42,9 @@ export class DequeIterator<T> implements TSTLIterator<T> {
    * @description: get current index
    * @param {*}
    * @return {*}
-   */  
+   */
   public getKey() {
-      return this.cur
+    return this.cur
   }
 
   /**
@@ -59,7 +59,7 @@ export class DequeIterator<T> implements TSTLIterator<T> {
    * @description: access the element (getter)
    * @return {*}
    */
-  public getValue = (): T => {
+  public getValue (): T {
     return this._cntr[this.cur]
   }
 
@@ -67,7 +67,7 @@ export class DequeIterator<T> implements TSTLIterator<T> {
    * @description: access node (vector no need this method)
    * @param {*}
    * @return {*}
-   */  
+   */
   public getNode(): number {
     return this.cur
   }
@@ -77,6 +77,15 @@ export class DequeIterator<T> implements TSTLIterator<T> {
    */
   public hasNext(): boolean {
     return this.cur !== this._cntr.length
+  }
+
+  /**
+   * @description: test whether has previous element
+   * @param {*}
+   * @return {*}
+   */  
+  public hasPrev(): boolean {
+    return this.cur !== 0
   }
 
   /**
@@ -109,19 +118,32 @@ export class DequeIterator<T> implements TSTLIterator<T> {
    * @param {*}
    * @return {*}
    */
-  public next():T {
-    this.increment()
-    return this.cntr[this.cur]
+  public next(): IteratorResult<T> {
+    // this.increment()
+    // return this.cntr[this.cur]
+    if (this.hasNext()) {
+      const node = { done: false, value: this.cntr[this.cur] }
+      this.increment()
+      return node
+    } else {
+      return { done: true, value: undefined }
+    }
   }
+
 
   /**
    * @description: iterator increment and return the element
    * @param {*}
    * @return {*}
    */
-  public prev(): T {
-    this.decrement()
-    return this.cntr[this.cur]
+  public prev(): IteratorResult<T> {
+    if (this.hasNext()) {
+      const node = { done: false, value: this.cntr[this.cur] }
+      this.decrement()
+      return node
+    } else {
+      return { done: true, value: undefined }
+    }
   }
 
   /**
@@ -139,7 +161,7 @@ export class DequeIterator<T> implements TSTLIterator<T> {
    * @description: remove the interator element
    * @param {*}
    * @return {*}
-   */  
+   */
   remove() { }
 
   /**

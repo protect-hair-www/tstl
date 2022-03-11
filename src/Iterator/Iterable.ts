@@ -1,12 +1,11 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-10 23:20:17
- * @LastEditTime: 2022-03-10 23:21:39
+ * @LastEditTime: 2022-03-11 17:20:53
  * @LastEditors: hzheyuan
  * @Description: Iterable Interface
- * @FilePath: /tstl/src/Iterator/Iterable.ts
+ * @FilePath: \tstl\src\Iterator\Iterable.ts
  */
-
 export interface TSTLIterable<T> extends Iterable<T> {
     /** Iterator */
     [Symbol.iterator](): IterableIterator<T>;

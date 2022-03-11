@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-10 16:56:49
+ * @LastEditTime: 2022-03-11 18:13:46
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\demo\List.vue
@@ -129,7 +129,7 @@ const test = () => {
   traverseCntr(list, 'unique list')
 
   list.resize(2, '5')
-  traverseCntr(list, 'resize 5 5')
+  traverseCntr(list, 'resize 2 5')
 
   list.clear()
   traverseCntr(list, 'clear')
@@ -154,7 +154,6 @@ const test = () => {
 
   traverseCntr(list, 'splice list2 of  6,7,8,9')
   traverseCntr(list2, 'after splice list2')
-  console.log(itr.getValue())
 
   list2.splice(list2.begin(), list, itr)
   traverseCntr(list, 'splice one element')

@@ -1,13 +1,13 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-03-10 23:22:11
+ * @LastEditTime: 2022-03-11 17:06:11
  * @LastEditors: hzheyuan
  * @Description:
  * 迭代器接口
  *  提供一种方法，使之能够依序访问某个容器所含的各个元素，而又无需暴露该容器内部的表示方式
  *  这个抽象类提供通用接口，各个容器做自身的实现
- * @FilePath: /tstl/src/Iterator/index.ts
+ * @FilePath: \tstl\src\Iterator\index.ts
  */
 export abstract class Iterator<T> {
   _cur
