@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:58:00
- * @LastEditTime: 2022-03-11 18:12:48
+ * @LastEditTime: 2022-03-11 18:24:54
  * @LastEditors: hzheyuan
  * @Description: sequenece container list
  * 
@@ -23,8 +23,9 @@
 import { ListNode } from './ListNode'
 import { LinkListIterator } from './iterator'
 import { Iterator } from '@/Iterator/'
+import { TSTLIterable } from '@/iterator/Iterable'
 
-export class List<T> {
+export class List<T> implements TSTLIterable<T>{
     _header: ListNode<T>
 
     constructor(data?: Iterable<T>) {
@@ -105,78 +106,6 @@ export class List<T> {
     public end(): LinkListIterator<T> {
         return new LinkListIterator(this.header)
     }
-
-    /**
-     * @description: js iterator protocol
-     * @param {*}
-     * @return {*}
-     */
-    [Symbol.iterator]() {
-        let cur = this.begin()
-        return {
-            next: () => {
-                if (cur.hasNext()) {
-                    const node = { done: false, value: cur.getValue() }
-                    cur.next()
-                    return node
-                } else {
-                    return { done: true, value: undefined }
-                }
-            }
-        }
-    }
-
-    /**
-     * @description: keys迭代器
-     * @param {*}
-     * @return {*}
-     */
-    *keys() {
-        let cur = this.begin()
-        let idx = 0
-        while (cur.hasNext()) {
-            try {
-                let key = idx++; cur.next()
-                yield key
-            } catch (error) {
-                console.log(error)
-            }
-        }
-    }
-
-    /**
-     * @description: values迭代器
-     * @param {*}
-     * @return {*}
-     */
-    *values() {
-        let cur = this.begin()
-        while (cur.hasNext()) {
-            let value = cur.getValue(); cur.next()
-            yield value
-        }
-    }
-
-    /**
-     * @description: entries迭代器
-     * @param {*}
-     * @return {*}
-     */
-    *entries() {
-        let cur = this.begin()
-        let idx = 0
-        while (cur.hasNext()) {
-            try {
-                const entry:[number, T] = [idx, cur.getValue()]
-                cur.next()
-                yield entry
-            } catch (error) {
-                console.log(error)
-            }
-        }
-    }
-
-
 
     /**
      * @description: check is at end
@@ -641,5 +570,84 @@ export class List<T> {
      */
     private _assign_container(cntr: Iterable<T>) {
 
+    }
+
+    /**
+     * @description: js iterator protocol
+     * @param {*}
+     * @return {*}
+     */
+    *[Symbol.iterator](): IterableIterator<T> {
+        // let cur = this.begin()
+        // return {
+        //     next: () => {
+        //         if (cur.hasNext()) {
+        //             const node: IteratorResult<T> = { done: false, value: cur.getValue() }
+        //             cur.next()
+        //             return node
+        //         } else {
+        //             return { done: true, value: undefined }
+        //         }
+        //     }
+        // }
+        let cur = this.begin()
+        while(cur.hasNext()) {
+            try {
+                const value = cur.getValue(); cur.next();
+                yield value 
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+    /**
+     * @description: keys iterable
+     * @param {*}
+     * @return {*}
+     */
+    *keys() {
+        let cur = this.begin()
+        let idx = 0
+        while (cur.hasNext()) {
+            try {
+                let key = idx++; cur.next()
+                yield key
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
+
+    /**
+     * @description: values iterable
+     * @param {*}
+     * @return {*}
+     */
+    *values() {
+        let cur = this.begin()
+        while (cur.hasNext()) {
+            let value = cur.getValue(); cur.next()
+            yield value
+        }
+    }
+
+    /**
+     * @description: entries iterable
+     * @param {*}
+     * @return {*}
+     */
+    *entries() {
+        let cur = this.begin()
+        let idx = 0
+        while (cur.hasNext()) {
+            try {
+                const entry:[number, T] = [idx, cur.getValue()]
+                cur.next()
+                yield entry
+            } catch (error) {
+                console.log(error)
+            }
+        }
     }
 }

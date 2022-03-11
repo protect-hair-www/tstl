@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-11 11:48:33
+ * @LastEditTime: 2022-03-11 18:25:28
  * @LastEditors: hzheyuan
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
@@ -387,13 +387,13 @@ export class Vector<T> implements TSTLIterable<T> {
         while(cur.hasNext()) {
             try {
                 // let node = { done: false, value: cur.getValue() }
+                const value = cur.getValue()
                 cur.next();
-                yield cur.getValue() 
+                yield value 
             } catch (error) {
                 console.log(error)
             }
         }
-
         // old version
         // return {
         //     next: () => {

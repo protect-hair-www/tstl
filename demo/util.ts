@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-20 15:06:15
- * @LastEditTime: 2022-03-10 16:57:20
+ * @LastEditTime: 2022-03-11 18:27:47
  * @LastEditors: hzheyuan
  * @Description: some helper functions
  * @FilePath: \tstl\demo\util.ts
@@ -20,6 +20,10 @@ export const testIteratorOf = (type) => {
     return (cntr) => {
         let str = '';
         switch (type) {
+            case 'forOf': 
+                for(const item of cntr) str += ` ${item}`
+                console.log('forOf: ', str)
+                return str
             case 'keys':
                 for (const item of cntr.keys()) str += ` ${item}`
                 console.log('keys: ', str)
@@ -44,6 +48,7 @@ export const testIteratorOf = (type) => {
  * @return {*}
  */
 export const testAllIterators = (cntr) => {
+    testIteratorOf('forOf')(cntr);
     testIteratorOf('keys')(cntr);
     testIteratorOf('values')(cntr);
     testIteratorOf('entries')(cntr);

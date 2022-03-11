@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-08 21:17:38
- * @LastEditTime: 2022-03-11 11:44:31
+ * @LastEditTime: 2022-03-11 18:26:00
  * @LastEditors: hzheyuan
  * @Description: deque(double ended queue)
  * deque is an irregular acronym of double-ended queue.
@@ -430,9 +430,9 @@ export class Deque<T>  implements TSTLIterable<T>{
         let cur = this.begin()
         while(cur.hasNext()) {
             try {
-                // let node = { done: false, value: cur.getValue() }
+                const value = cur.getValue()
                 cur.next();
-                yield cur.getValue() 
+                yield value 
             } catch (error) {
                 console.log(error)
             }
