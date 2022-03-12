@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-11 18:26:36
+ * @LastEditTime: 2022-03-12 14:59:20
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\demo\List.vue
+ * @FilePath: /tstl/demo/List.vue
 -->
 <template>
   <div class="List-test">
@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Chart } from './chart'
-import { List } from '../src/container/sequence/list/list'
+import { List } from '../src/index'
 import { testAllIterators, traverseCntr } from './util'
 
 let chart: any = ref(null)
@@ -79,6 +79,12 @@ const test = () => {
 
   // 创建一个list容器
   list = new List<string>();
+  // list.push_back({key: '1'})
+  // list.push_back({key: '2'})
+  // list.push_back({key: '3'})
+  // list.push_back({key: '4'})
+  // list.push_back({key: '5'})
+
   list.push_back('1')
   list.push_back('2')
   list.push_back('3')

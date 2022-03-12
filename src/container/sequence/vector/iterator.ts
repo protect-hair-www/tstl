@@ -1,15 +1,15 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-11 17:29:49
+ * @LastEditTime: 2022-03-12 15:55:04
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
- * @FilePath: \tstl\src\container\sequence\vector\iterator.ts
+ * @FilePath: /tstl/src/container/sequence/vector/iterator.ts
  */
 // import { Iterator } from '../../../Iterator/index'
-import { ListIterator } from '@/Iterator/Iterator'
+import { RandomAccessIterator } from '@/Iterator/'
 
-export class VCIterator<T> implements ListIterator<T> {
+export class VCIterator<T> implements RandomAccessIterator<T> {
   _cur: number
   _cntr: Array<T>
 

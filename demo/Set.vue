@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:50:15
- * @LastEditTime: 2022-03-07 22:46:51
+ * @LastEditTime: 2022-03-12 15:00:39
  * @LastEditors: hzheyuan
  * @Description: 迭代器测试
  * @FilePath: /tstl/demo/Set.vue
@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { Set } from '../src/container/associative/set'
+import { Set } from '../src/index'
 
 const test = () => {
   const s = new Set<string>();

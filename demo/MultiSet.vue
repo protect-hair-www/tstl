@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:50:15
- * @LastEditTime: 2022-03-07 22:47:17
+ * @LastEditTime: 2022-03-12 15:00:08
  * @LastEditors: hzheyuan
  * @Description: 迭代器测试
  * @FilePath: /tstl/demo/MultiSet.vue
@@ -14,8 +14,9 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { MultiSet } from '../src/container/associative/multiset'
 import { Tree } from '../src/container/tree/Tree'
+
+import { MultiSet } from '../src/index'
 import { Chart } from './chart'
 
 let chart: any = ref(null)

@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:50:15
- * @LastEditTime: 2022-03-07 22:47:27
+ * @LastEditTime: 2022-03-12 14:59:56
  * @LastEditors: hzheyuan
  * @Description: 迭代器测试
  * @FilePath: /tstl/demo/MultiMap.vue
@@ -14,8 +14,9 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { MultiMap } from '../src/container/associative/multimap'
 import { Tree } from '../src/container/tree/Tree'
+
+import { MultiMap } from '../src/index'
 import { Chart } from './chart'
 
 let chart: any = ref(null)

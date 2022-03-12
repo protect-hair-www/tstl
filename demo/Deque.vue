@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-11 11:45:12
+ * @LastEditTime: 2022-03-12 15:03:42
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\demo\Deque.vue
+ * @FilePath: /tstl/demo/Deque.vue
 -->
 <template>
   <div class="Deque-test">
@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { Chart } from './chart'
-import { Deque, DequeIterator } from '../src/container/sequence/deque/index'
+import { Deque } from '../src/index'
 import { testAllIterators, traverseCntr } from './util'
 
 let chart: any = ref(null)

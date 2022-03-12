@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-11 11:06:03
+ * @LastEditTime: 2022-03-12 15:03:30
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\demo\Vector.vue
+ * @FilePath: /tstl/demo/Vector.vue
 -->
 <template>
   <div class="Vector-test">
@@ -35,9 +35,10 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Chart } from './chart'
-import { Vector, VCIterator } from '../src/container/sequence/vector'
 import { testAllIterators, traverseCntr } from './util'
+
+import { Vector } from '../src/index'
+import { Chart } from './chart'
 
 let chart: any = ref(null)
 let vec: Vector<string> = ref<any>(null);
@@ -160,6 +161,7 @@ const test = () => {
   vec.emplace<String>(vec.begin(), String, '3')
   vec.emplace_back<String>(String, '5')
   traverseCntr(vec, 'emplace')
+
 }
 
 onMounted(test)

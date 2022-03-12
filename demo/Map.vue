@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-02 10:53:35
- * @LastEditTime: 2022-03-07 22:47:38
+ * @LastEditTime: 2022-03-12 14:59:43
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/demo/Map.vue
@@ -14,8 +14,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { Map } from '../src/container/associative/map'
 import { Tree } from '../src/container/tree/Tree'
+
+import { Map } from '../src/index'
 import { Chart } from './chart'
 
 let chart: any = ref(null)

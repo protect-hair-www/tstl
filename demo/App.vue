@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2021-12-02 13:22:09
- * @LastEditTime: 2022-03-11 18:28:10
+ * @LastEditTime: 2022-03-12 15:08:37
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\demo\App.vue
+ * @FilePath: /tstl/demo/App.vue
 -->
 <template>
   <div>
@@ -15,8 +15,9 @@
     <!-- <MultiMap /> -->
     <!-- <Map /> -->
     <!-- <List/> -->
-    <Vector/>
+    <!-- <Vector/> -->
     <!-- <Deque /> -->
+    <Heap />
   </div>
 </template>
 
@@ -30,6 +31,7 @@ import Map from './Map.vue'
 import List from './List.vue'
 import Vector from './Vector.vue'
 import Deque from './Deque.vue'
+import Heap from './Heap.vue'
 </script>
 
 <style>
