@@ -1,12 +1,17 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-12 11:24:36
- * @LastEditTime: 2022-03-12 11:24:36
+ * @LastEditTime: 2022-03-12 20:02:15
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/src/container/sequence/heap/index.ts
  */
-import { make_heap }  from './heap'
+import { make_heap, pop_heap, push_heap, sort_heap, is_heap, is_heap_until } from './heap'
 export {
-    make_heap as makeHeap
+    make_heap as makeHeap,
+    pop_heap as popHeap,
+    push_heap as pushHeap,
+    sort_heap as sortHeap,
+    is_heap as isHeap,
+    is_heap_until as isHeapUntil
 }

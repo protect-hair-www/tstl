@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-03 14:42:44
- * @LastEditTime: 2022-03-12 09:35:50
+ * @LastEditTime: 2022-03-12 21:21:05
  * @LastEditors: hzheyuan
  * @Description: 绘制数据结构，方便测试
  * @FilePath: /tstl/demo/chart.ts
@@ -47,6 +47,66 @@ export class Chart {
             return data;
         }
         return dfs(tr.root)
+    }
+
+    getHeapData = (heap) => {
+        const n = heap.size()
+        const dfs = (idx: any) => {
+            if (idx >= n)  return { name: 'nil', itemStyle: { color: '#000' }, children: [] };
+            let data: any = {
+                name: `${heap.at(idx)}`,
+                itemStyle: {
+                    color: '#f00'
+                },
+                children: []
+            };
+            let left = (idx * 2) + 1, right = 2 * idx + 2;
+            let ld: any = dfs(left); data.children.push(ld);
+            let rd = dfs(right); data.children.push(rd);
+            return data;
+        }
+        let data = dfs(0)
+        return data
+    }
+
+    drawHeap = (heap) => {
+        const data = this.getHeapData(heap)
+        this.chart.setOption(
+            ({
+                series: [
+                    {
+                        type: 'tree',
+                        data: [data],
+                        left: '2%',
+                        right: '2%',
+                        top: '8%',
+                        bottom: '20%',
+                        symbolSize: 32,
+                        symbol: 'circle',
+                        orient: 'vertical',
+                        initialTreeDepth: -1,
+                        label: {
+                            position: 'inside',
+                            verticalAlign: 'middle',
+                            align: 'middle',
+                            fontSize: 14
+                        },
+                        lineStyle: {
+                            curveness: 0
+                        },
+                        leaves: {
+                            lineStyle: {
+                                width: 0
+                            },
+                            itemStyle: {
+                                opacity: 0
+                            }
+                        },
+                        animationDurationUpdate: 750
+                    }
+                ]
+            })
+        )
     }
 
     drawTree = (tr) => {
@@ -186,6 +246,14 @@ export class Chart {
         op.series[0].links = links;
         // this.chart.clear()
         this.chart.setOption(op);
+    }
+
+    updateHeap = (heap) => {
+        const data = this.getHeapData(heap);
+        let op = this.chart.getOption();
+        op.series[0].data[0] = data;
+        op.series[0].data[0] = data;
+        this.chart.setOption(op, { notMerge: true });
     }
 
     updateChart = (tr) => {

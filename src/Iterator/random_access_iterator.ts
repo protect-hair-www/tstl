@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-12 11:00:45
- * @LastEditTime: 2022-03-12 11:30:57
+ * @LastEditTime: 2022-03-12 17:34:44
  * @LastEditors: hzheyuan
  * @Description: interface identify the category of an iteratro as a random-access iterator
  * 
@@ -14,32 +14,34 @@
  * @FilePath: /tstl/src/Iterator/random_access_iterator.ts
  */
 export interface RandomAccessIterator<T> extends Iterator<T>{
-  _cur                              // current position
+  _cur                                                          // current position
 
-  get key();                        // get current key or index(getter)
-  getKey();                         // get current key or index
+  get key();                                                    // get current key or index(getter)
+  getKey();                                                     // get current key or index
 
-  get value(): T                    // access current position element(getter)
-  getValue(): T                     // access current position element
+  get value(): T                                                // access current position element(getter)
+  getValue(): T                                                 // access current position element
 
-  // next(): T                      // position increment and return the value
-  prev?(): IteratorResult<T>        // iterator decrement and return IteratorResult({donw: boolean, value: T})
+  set value(v: T);                                              // set current position value
+  setValue(v: T);                                               // set current position value 
+
+  // next(): T                                                  // definded in Iterator
+  prev?(): IteratorResult<T>                                    // iterator decrement and return IteratorResult({donw: boolean, value: T})
   
-  hasNext(): boolean                // test whether has next element
-  hasPerv?(): boolean               // test whether has previous element
+  hasNext(): boolean                                            // test whether has next element
+  hasPerv?(): boolean                                           // test whether has previous element
 
-  done(): boolean                   // test finished the trave (done === !hasNext())
-  getNode()                         // get position element(some datastruct need get node (eg. map, set...))
-  remove?()                          // erase the position element
+  increment(n?: number, c?: boolean): RandomAccessIterator<T>   // increment n
+  decrement(n?: number, c?: boolean): RandomAccessIterator<T>   // decrement n
+
+  done(): boolean                                               // test finished the trave (done === !hasNext())
+  getNode()                                                     // get position element(some datastruct need get node (eg. map, set...))
+  remove?()                                                     // erase the position element
 
   [Symbol.iterator](): Iterator<T>  // Javascript，iterable object have to implementation「@@iterator」method，Javascript can access the property with [Symbol.iterator]
 }
 
 export function random_itr_distance<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>): number {
-    let n = 0;
-    while(first.hasNext() && first !== last) {
-        n++;
-        first.next()
-    }
+    let n = last.getKey() - first.getKey()
     return n;
 }

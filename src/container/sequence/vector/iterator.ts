@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-12 15:55:04
+ * @LastEditTime: 2022-03-12 17:37:28
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
  * @FilePath: /tstl/src/container/sequence/vector/iterator.ts
@@ -88,6 +88,25 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
     return this.cntr[this.cur]
   }
 
+
+  /**
+   * @description: 
+   * @param {*}
+   * @return {*}
+   */  
+  set value(v: T) {
+    if(this.cntr) this.cntr[this.cur] = v 
+  }
+  
+  /**
+   * @description: 
+   * @param {*}
+   * @return {*}
+   */  
+  setValue(v: T) {
+    if(this.cntr) this.cntr[this.cur] = v 
+  }
+
   /**
    * @description: access node (vector no need this method)
    * @param {*}
@@ -125,8 +144,11 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
    * @param {*}
    * @return {*}
    */
-  private increment(): void {
-    this.cur++
+  increment(n: number = 1, c: boolean = true ): RandomAccessIterator<T> {
+    let cur = this.cur; cur += n; 
+    if(c) { this.cur += n}
+    const itr: unknown = new VCIterator(cur, this.cntr);
+    return (itr as RandomAccessIterator<T>)
   }
 
   /**
@@ -134,8 +156,11 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
    * @param {*}
    * @return {*}
    */
-  private decrement(): void {
-    this.cur--
+  decrement(n: number = 1, c: boolean = true): RandomAccessIterator<T> {
+    let cur = this.cur; cur -= n; 
+    if(c) { this.cur -= n}
+    const itr: unknown = new VCIterator(cur, this.cntr);
+    return (itr as RandomAccessIterator<T>)
   }
 
   /**
@@ -148,7 +173,7 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
     // return this.cntr[this.cur]
     if (this.hasNext()) {
       let node: IteratorResult<T> = { done: false, value: this.getValue() }
-      this.increment()
+      this.cur++
       return node
     } else {
       return { done: true, value: undefined }
@@ -163,7 +188,7 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
   prev(): IteratorResult<T> {
     if (this.hasPrev()) {
       let node: IteratorResult<T> = { done: false, value: this.getValue() }
-      this.decrement()
+      this.cur--
       return node
     } else {
       return { done: true, value: undefined }

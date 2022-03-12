@@ -1,13 +1,18 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-12 10:58:55
- * @LastEditTime: 2022-03-12 11:25:22
+ * @LastEditTime: 2022-03-12 20:03:00
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/src/algorithm/index.ts
  */
-import { makeHeap }  from '@/container/sequence/heap'
+import { makeHeap, popHeap, pushHeap, sortHeap, isHeap, isHeapUntil } from '@/container/sequence/heap'
 
 export {
-    makeHeap
+    makeHeap,
+    popHeap,
+    pushHeap,
+    sortHeap,
+    isHeap,
+    isHeapUntil
 }

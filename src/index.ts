@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2019-01-29 08:32:32
- * @LastEditTime: 2022-03-12 15:59:53
+ * @LastEditTime: 2022-03-12 20:03:17
  * @LastEditors: hzheyuan
  * @Description: TSSTL library main entry
  * @FilePath: /tstl/src/index.ts
@@ -15,11 +15,18 @@ import {
 import {
     Set,
     Map,
-    MultiSet, 
+    MultiSet,
     MultiMap
 } from '@/container/associative/index'
 import { Queue, Stack } from '@/adapter'
-import { makeHeap } from '@/algorithm'
+import {
+    makeHeap,
+    popHeap,
+    pushHeap,
+    sortHeap,
+    isHeap,
+    isHeapUntil
+} from '@/algorithm'
 
 export {
     // sequence container
@@ -38,5 +45,10 @@ export {
     Queue,
 
     // algorithm
-    makeHeap
+    makeHeap,
+    popHeap,
+    pushHeap,
+    sortHeap,
+    isHeap,
+    isHeapUntil
 }
