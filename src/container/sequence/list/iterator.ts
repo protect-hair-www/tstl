@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:24
- * @LastEditTime: 2022-03-12 15:55:40
+ * @LastEditTime: 2022-03-13 16:50:13
  * @LastEditors: hzheyuan
  * @Description: list container iterator 
  * @FilePath: /tstl/src/container/sequence/list/iterator.ts
@@ -56,6 +56,15 @@ export class LinkListIterator<T> implements RandomAccessIterator<T> {
     }
 
     /**
+     * @description: set value
+     * @param {T} v
+     * @return {*}
+     */    
+    setValue(v: T) {
+        this.cur.value = v
+    }
+
+    /**
      * @description: get list element node
      * @param {*}
      * @return {*}
@@ -78,8 +87,18 @@ export class LinkListIterator<T> implements RandomAccessIterator<T> {
      * @param {*}
      * @return {*}
      */    
-    hasPerv(): boolean {
+    hasPrev(): boolean {
         return this.cur.prev.getValue() !== null
+    }
+
+    /**
+     * @description: test two iterator equal
+     * @param {any} first
+     * @param {any} last
+     * @return {*}
+     */    
+    equal(first: any, last: any): boolean {
+        return first === last
     }
 
     /**
@@ -96,8 +115,14 @@ export class LinkListIterator<T> implements RandomAccessIterator<T> {
      * @param {*}
      * @return {*}
      */
-    increment() {
+    increment(n: number, c: boolean = true): RandomAccessIterator<T> {
         this._cur = this._cur.next
+        // let cur = this._cur.next; 
+        // if(c) { 
+        // }
+        const itr: unknown = new LinkListIterator(this.cur);
+        return (itr as RandomAccessIterator<T>)
+
     }
 
     /**
@@ -105,8 +130,13 @@ export class LinkListIterator<T> implements RandomAccessIterator<T> {
      * @param {*}
      * @return {*}
      */
-    decrement() {
+    decrement(n: number = 1, c: boolean = true): RandomAccessIterator<T> {
         this._cur = this._cur.prev
+        // let cur = this._cur.prev; 
+        // if(c) { 
+        // }
+        const itr: unknown = new LinkListIterator(this.cur);
+        return (itr as RandomAccessIterator<T>) 
     }
 
     /**
@@ -119,7 +149,7 @@ export class LinkListIterator<T> implements RandomAccessIterator<T> {
         // return this._cur.getValue()
         if (this.hasNext()) {
             const node = { done: false, value: this.cur.getValue() }
-            this.increment()
+            this._cur = this._cur.next
             return node
         } else {
             return { done: true, value: undefined }
@@ -134,9 +164,9 @@ export class LinkListIterator<T> implements RandomAccessIterator<T> {
     public prev(): IteratorResult<T> {
         // this.decrement()
         // return this._cur.getValue()
-        if (this.hasPerv()) {
+        if (this.hasPrev()) {
             const node = { done: false, value: this._cur.getValue() }
-            this.increment()
+            this._cur = this._cur.prev
             return node
         } else {
             return { done: true, value: undefined }

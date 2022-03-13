@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2019-01-29 08:32:32
- * @LastEditTime: 2022-03-12 20:03:17
+ * @LastEditTime: 2022-03-13 14:54:41
  * @LastEditors: hzheyuan
  * @Description: TSSTL library main entry
  * @FilePath: /tstl/src/index.ts
@@ -18,6 +18,7 @@ import {
     MultiSet,
     MultiMap
 } from '@/container/associative/index'
+import { PriorityQueue }  from '@/container/sequence/'
 import { Queue, Stack } from '@/adapter'
 import {
     makeHeap,
@@ -33,6 +34,7 @@ export {
     Vector,
     List,
     Deque,
+    PriorityQueue,
 
     // asssociative container
     Set,

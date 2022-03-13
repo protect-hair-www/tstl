@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-12 17:37:28
+ * @LastEditTime: 2022-03-13 16:43:24
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
  * @FilePath: /tstl/src/container/sequence/vector/iterator.ts
@@ -130,6 +130,10 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
    */  
   hasPrev(): boolean {
     return this.cur !== 0
+  }
+
+  equal(first: any, last: any): boolean {
+    return first === last
   }
 
   /**

@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2021-12-02 13:22:09
- * @LastEditTime: 2022-03-12 15:08:37
+ * @LastEditTime: 2022-03-13 16:22:42
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/demo/App.vue
@@ -14,10 +14,11 @@
     <!-- <MultiSet /> -->
     <!-- <MultiMap /> -->
     <!-- <Map /> -->
-    <!-- <List/> -->
+    <List/>
     <!-- <Vector/> -->
     <!-- <Deque /> -->
-    <Heap />
+    <!-- <Heap /> -->
+    <!-- <PriorityQueue /> -->
   </div>
 </template>
 
@@ -32,6 +33,7 @@ import List from './List.vue'
 import Vector from './Vector.vue'
 import Deque from './Deque.vue'
 import Heap from './Heap.vue'
+import PriorityQueue from './PriorityQueue.vue'
 </script>
 
 <style>

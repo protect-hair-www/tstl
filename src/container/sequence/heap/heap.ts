@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:28
- * @LastEditTime: 2022-03-12 21:31:27
+ * @LastEditTime: 2022-03-13 09:34:30
  * @LastEditors: hzheyuan
  * @Description: Heap
  * 
@@ -172,8 +172,29 @@ export function sort_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessI
     }
 }
 
-export function is_heap() {
 
+/**
+ * @description: is_heap internally implementation
+ * @param {*}
+ * @return {*}
+ */
+function _is_heap(): boolean;
+function _is_heap() {
+    return true
+}
+
+/**
+ * @description: test if range is heap
+ * Return true if the range [first, last) froms heap, as if constructed with make_heap
+ * The elements are compared using operator < for the first version, and comp for the second 
+ * @param {*}
+ * @return {*}
+ */
+export function is_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = lessComp) {
+    let parent = 0, child = 1, distance = random_itr_distance(first, last)
+    for(; child < distance; ++child) {
+        // if(comp(first.))
+    }
 }
 
 export function is_heap_until() {

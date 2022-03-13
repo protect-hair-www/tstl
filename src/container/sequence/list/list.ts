@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:58:00
- * @LastEditTime: 2022-03-11 18:24:54
+ * @LastEditTime: 2022-03-13 16:47:54
  * @LastEditors: hzheyuan
  * @Description: sequenece container list
  * 
@@ -229,7 +229,7 @@ export class List<T> implements TSTLIterable<T>{
     private _range_erase(first: LinkListIterator<T>, last: LinkListIterator<T>) {
         while (first.getNode() !== last.getNode()) {
             this.erase(first)
-            first.increment();
+            first.increment(1);
         }
         return last
     }
@@ -289,7 +289,7 @@ export class List<T> implements TSTLIterable<T>{
     resize(new_size: number, v: T) {
         let i = this.begin()
         let len = 0
-        for (; !this.isEnd(i) && len < new_size; i.increment(), ++len);
+        for (; !this.isEnd(i) && len < new_size; i.increment(1), ++len);
         if (len === new_size) this.erase(i, this.end())
         else this.insert(this.end(), new_size - len, v)
     }
@@ -401,7 +401,7 @@ export class List<T> implements TSTLIterable<T>{
         while (first.getNode() !== last.getNode()) {
             // let next = first;
             if (v === first.getValue()) this.erase(first)
-            first.increment()
+            first.increment(1)
             // first = next
         }
     }
@@ -418,7 +418,7 @@ export class List<T> implements TSTLIterable<T>{
             // let next = first;
             const value = first.getValue()
             if (fn(value as T)) this.erase(first)
-            first.increment()
+            first.increment(1)
             // first = next
         }
     }
@@ -459,7 +459,7 @@ export class List<T> implements TSTLIterable<T>{
                 this.transfer(first1, fisrt2, next)
                 fisrt2 = next
             } else {
-                first1.increment()
+                first1.increment(1)
             }
         }
         if (fisrt2.getNode() !== last2.getNode()) this.transfer(last1, fisrt2, last2)
@@ -534,7 +534,7 @@ export class List<T> implements TSTLIterable<T>{
      */
     private _assign_fill(n: number, v: T) {
         let i = this.begin()
-        for (; i.getNode() !== this.end().getNode() && n > 0; i.increment(), --n) {
+        for (; i.getNode() !== this.end().getNode() && n > 0; i.increment(1), --n) {
             i.getNode().setValue(v)
         }
         if (n > 0) {
