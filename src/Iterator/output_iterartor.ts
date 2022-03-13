@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 09:44:09
- * @LastEditTime: 2022-03-13 16:39:49
+ * @LastEditTime: 2022-03-13 17:54:20
  * @LastEditors: hzheyuan
  * @Description: Output iterator category
  * Interface to identify the category of an iterator as an output iterator
@@ -26,7 +26,5 @@ export interface OutputIterator<T> extends BaseIterator<T>{
   get key();                                                            // get current key or index(getter)
   getKey();                                                             // get current key or index
 
-  // access
-  get value(): T                                                        // access current position element(getter)
-  getValue(): T                                                         // access current position element
+  setValue(v: T)                                                        // write value operator
 }

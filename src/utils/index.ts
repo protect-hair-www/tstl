@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-05 09:50:29
- * @LastEditTime: 2022-03-12 19:54:23
+ * @LastEditTime: 2022-03-13 17:48:13
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/src/utils/index.ts
@@ -14,5 +14,3 @@ export {
     isPrimitive,
     createInstanceOf,
 }
-// compare functions
-export * from './compare'

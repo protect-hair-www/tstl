@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:28
- * @LastEditTime: 2022-03-13 09:34:30
+ * @LastEditTime: 2022-03-13 17:52:54
  * @LastEditors: hzheyuan
  * @Description: Heap
  * 
@@ -22,7 +22,7 @@
  * @FilePath: /tstl/src/container/sequence/heap/heap.ts
  */
 import { RandomAccessIterator, random_itr_distance } from '@/Iterator'
-import { CompFunType, lessComp } from '@/utils/index'
+import { CompFunType, less } from '@/fanctor'
 
 /**
  * @description: heap heapify
@@ -32,7 +32,7 @@ import { CompFunType, lessComp } from '@/utils/index'
  * @param {function} comp
  * @return {*}
  */
-function heapify<T>(first: RandomAccessIterator<T>, holeIndex: number, len: number, v: T, comp: CompFunType = lessComp) {
+function heapify<T>(first: RandomAccessIterator<T>, holeIndex: number, len: number, v: T, comp: CompFunType = less) {
     // console.log('heapify', first.getKey(), holeIndex, len);
     let topIndex = holeIndex
     let rightChild = (holeIndex << 1) + 2
@@ -67,7 +67,7 @@ function heapify<T>(first: RandomAccessIterator<T>, holeIndex: number, len: numb
  * @param {CompFunType} comp
  * @return {*}
  */
-export function push_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = lessComp) {
+export function push_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     // console.log(first.getKey(), last.getKey(), random_itr_distance(first, last) - 1, last.getValue())
     let value = last.decrement(1, false).getValue(), distanse = random_itr_distance(first, last)
     _push_heap(first, distanse - 1, 0, value, comp)
@@ -82,7 +82,7 @@ export function push_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessI
  * @param {CompFunType} comp
  * @return {*}
  */
-function _push_heap<T>(first: RandomAccessIterator<T>, holeIndex: number, topIndex: number, v: T, comp: CompFunType = lessComp) {
+function _push_heap<T>(first: RandomAccessIterator<T>, holeIndex: number, topIndex: number, v: T, comp: CompFunType = less) {
     let parent = (holeIndex - 1) >> 1
     while(holeIndex > topIndex && comp(first.increment(parent, false).getValue(), v)) {
         let pv = first.increment(parent, false).getValue()
@@ -108,7 +108,7 @@ function _push_heap<T>(first: RandomAccessIterator<T>, holeIndex: number, topInd
  * @param {CompFunType} comp
  * @return {*}
  */
-export function pop_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = lessComp): T {
+export function pop_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less): T {
     return _pop_heap(first, last, comp)
 }
 
@@ -119,7 +119,7 @@ export function pop_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIt
  * @param {CompFunType} comp
  * @return {*}
  */
-function _pop_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = lessComp): T {
+function _pop_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less): T {
     let _last = last.decrement(1, false), res = first.getValue()
     let distance = random_itr_distance(first, _last), value = _last.getValue()
     _last.setValue(res)
@@ -135,7 +135,7 @@ function _pop_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator
  * @param {function} comp
  * @return {*}
  */
-export function make_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = lessComp) {
+export function make_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let len = random_itr_distance(first, last)
     if(len < 2) return
     let parent = (len - 2) >> 1
@@ -165,7 +165,7 @@ export function make_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessI
  * @param {CompFunType} comp
  * @return {*}
  */
-export function sort_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = lessComp) {
+export function sort_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     while(random_itr_distance(first, last) > 1) {
         pop_heap(first, last, comp)
         last.decrement(1)
@@ -190,7 +190,7 @@ function _is_heap() {
  * @param {*}
  * @return {*}
  */
-export function is_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = lessComp) {
+export function is_heap<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let parent = 0, child = 1, distance = random_itr_distance(first, last)
     for(; child < distance; ++child) {
         // if(comp(first.))

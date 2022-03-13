@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2019-01-29 08:32:32
- * @LastEditTime: 2022-03-13 14:54:41
+ * @LastEditTime: 2022-03-13 17:55:22
  * @LastEditors: hzheyuan
  * @Description: TSSTL library main entry
  * @FilePath: /tstl/src/index.ts
@@ -29,6 +29,8 @@ import {
     isHeapUntil
 } from '@/algorithm'
 
+import { less, greater } from '@/fanctor'
+
 export {
     // sequence container
     Vector,
@@ -52,5 +54,9 @@ export {
     pushHeap,
     sortHeap,
     isHeap,
-    isHeapUntil
+    isHeapUntil,
+
+    // functor
+    less,
+    greater
 }

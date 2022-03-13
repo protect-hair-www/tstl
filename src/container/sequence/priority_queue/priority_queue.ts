@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:54
- * @LastEditTime: 2022-03-13 16:16:36
+ * @LastEditTime: 2022-03-13 17:51:13
  * @LastEditors: hzheyuan
  * @Description: Priority queue
  * Priority queues are type of container adapters, specifically designed such that
@@ -22,13 +22,13 @@
  */
 import { makeHeap, pushHeap, popHeap }  from '@/container/sequence/heap/'
 import { Vector }  from '@/container/sequence/vector/'
-import { CompFunType, lessComp } from '@/utils'
+import { CompFunType, less } from '@/fanctor'
 
 export class PriorityQueue<T, C = Vector<T>> {
     cntr 
     compare: CompFunType
 
-    constructor(comp: CompFunType = lessComp, c) { 
+    constructor(comp: CompFunType = less, c) { 
         this.cntr = this.create<T>(c)
         this.compare = comp
         this.init()

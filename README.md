@@ -1,18 +1,98 @@
-# TSTL
-
-## TSTL(Typescript STL)
+# TSTL(Typescript STL)
 类似C++ STL的一个项目，目的是为Javascript引入常见的数据结构和算法
 
 ### 功能概述
-1. 容器：各种数据结构，如 vector, list, map, set等，用来存放数据，主要分为两类：
-    1. 序列式容器：vector, list, deque, slist
-    2. 关联式容器：set, map, multiset, mulitmap, unordered_set, unordered_map
-2. 迭代器：容器与算法之间的胶合剂，比如：begin(), end()等。所有容器都有自己专属的迭代器，因为只有容器设计者才知道如何遍历自己的元素
-3. 算法： 各种常见的算法，如sort，search，copy，erase等
-4. 仿函数（functor）:
-5. 配接器（adapter）:  一种用来修饰容器、仿函数、迭代器的接口的东西。比如，queue，stack等，虽然看似是容器，其实是一种配接器，其底层全部借助deque
-6. 配置器（allocators）: 负责空间配置与管理，js不能自处理，这部分没有对应
+1. **容器**：各种数据结构，如 vector, list, map, set等，用来存放数据，主要分为两类：
+    1. **序列式容器**：vector, list, deque, slist
+    2. **关联式容器**：set, map, multiset, mulitmap, unordered_set, unordered_map
+2. **迭代器**：容器与算法之间的胶合剂，比如：begin(), end()等。所有容器都有自己专属的迭代器，因为只有容器设计者才知道如何遍历自己的元素
+3. **算法**： 各种常见的算法，如sort，search，copy，erase等
+4. **仿函数(functor)**: 函数对象，一个“行为类似函数”的对象。
+5. **配接器(adapter)**:  一种用来修饰容器、仿函数、迭代器的接口的东西。比如，queue，stack等，虽然看似是容器，其实是一种配接器，其底层全部借助deque
+6. **配置器(allocators)**: 负责空间配置与管理，js不能自处理，这部分没有对应
 
+### 目录结构
+```
+TSTL
+|
+|___src 
+|    |  index // main entry
+|    |  
+|    |___adapter
+|    |    |  index // entry
+|    |    |  queue
+|    |    |  stack
+|    |___algorithm
+|    |     |  index // entry
+|    |     |  ...
+|    |     |  heap
+|    |     |  sort
+|    |     |  ...
+|    |___container
+|    |     |  index // entry
+|    |     |___associative // associative containers 
+|    |     |    |   set
+|    |     |    |   map
+|    |     |    |   multiset
+|    |     |    |   multimap
+|    |     |    |   hash_set(todo)
+|    |     |    |   hash_map(todo)
+|    |     |    |   hash_multiset(todo)
+|    |     |    |   hash_mulitmap(todo)
+|    |     |___sequence // sequence containers
+|    |     |    |   vector
+|    |     |    |   list
+|    |     |    |   deque
+|    |     |    |   slist
+|    |     |    |   heap(adapter internaly implementation)
+|    |     |    |   priority_queue
+|    |     |    |   priority_queue
+|    |     |___tree // associative container internally implementation datastruct(red black tree)
+|    |     |    |   index   // entry
+|    |     |    |   RBTNode // tree node
+|    |     |    |   tree    // red black tree implementation
+|    |     |    |   iterator 
+|    |___iterator
+|    |     |  index // 入口
+|    |     |  base_iterator
+|    |     |  input_iterator
+|    |     |  output_iterator
+|    |     |  forward_iterator
+|    |     |  bidirectional_iterator
+|    |     |  random_access_iterator
+|    |     |  iterable
+|    |___functor
+|    |     |  index // entry 
+|    |     |  arithmitic
+|    |     |  relational
+|    |     |  logic(todo)
+|    |     |  identity(todo)
+|    |     |  select(todo)
+|    |     |  identity(todo)
+|    |     |  select(todo)
+|    |___utils // some javascript common tools
+|    |     |  copy
+|    |     |  object // object handler
+|    |     |  jstype // type check
+|    |     |  ...
+|    |___demo // test and visualization the data and algorithm with echarts
+|    |     |  ...
+|    |     |  red_black_tree
+|    |     |  heap
+|    |     |  list
+|    |     |  ...
+|    |___test // test 
+|    |     |  ...
+│___ some preject configs
+│___ ...
+│___ package.json
+│___ tsconfig.json
+│___ tslint.json
+│___ jest.config.js
+│___ vite.config.js
+│___ vue.config.js
+│___ ...
+```
 
 ### 容器
 容器就是数据结构，比如array bst red_black_tree等。任何特定的数据结构都是为了实现特定的算法。根据STL的划分，我们可以把容器分为两大类：
@@ -77,7 +157,10 @@ STL的中心思想在于：将数据容器(containers)和算法(alorithms)分开
 为了能和容器独立开来，STL设计了迭代器，所有STL的算法都作用在由迭代器[first, last)所标示出来的区间上
 
 ### 仿函数
-待写
+1. 算术类仿函数：plus<T>, minus<T>, multiplies<T>, devides<T>, modulus<T>, negate<T>等
+2. 关系类仿函数：equal_to<T>, not_equle_to<T>, greater<T>, greater_equal<T>, less<T>, less_equal<T>
+3. 逻辑运算类仿函数：logical_and<T>, logical_or<T>, logical_not<T>
+4. 认证，选择，投射：identity<T>, project<T>, select<T>
 
 ### 配接器
 配接器也是一种设计模式，其定义为：将一个class的接口转换为另一class的接口，使原本因接口不兼容而不能合作的class，可以一起运作。

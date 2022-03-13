@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-12 12:10:21
- * @LastEditTime: 2022-03-13 16:16:31
+ * @LastEditTime: 2022-03-13 17:51:47
  * @LastEditors: hzheyuan
  * @Description: priority queue
  * @FilePath: /tstl/demo/PriorityQueue.vue
@@ -25,8 +25,7 @@
 <script setup lang="ts">
 import { ref, onMounted, queuePostFlushCb } from 'vue'
 import { Chart } from './chart'
-import { Vector, PriorityQueue } from '../src/index'
-import { lessComp, greaterComp } from '../src/utils'
+import { Vector, PriorityQueue, less, greater } from '../src/index'
 import { testAllIterators, traverseCntr } from './util'
 
 let chart: any = ref(null)
@@ -57,7 +56,8 @@ const test = () => {
     chart = new Chart('priorityqueue-box')
 
     // create a sequence container
-    pq = new PriorityQueue<number, Vector>(lessComp, Vector);
+    // pq = new PriorityQueue<number, Vector>(greater, Vector);
+    pq = new PriorityQueue<number, Vector>(less, Vector);
     pq.push(10)
     pq.push(20)
     pq.push(30)
