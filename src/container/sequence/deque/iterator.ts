@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-12 15:56:00
+ * @LastEditTime: 2022-03-14 17:08:54
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
- * @FilePath: /tstl/src/container/sequence/deque/iterator.ts
+ * @FilePath: \tstl\src\container\sequence\deque\iterator.ts
  */
 import { RandomAccessIterator } from '@/Iterator/'
 
@@ -64,6 +64,25 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
   }
 
   /**
+   * @description: write value
+   * @param {T} v
+   * @return {*}
+   */  
+  public setValue(v: T) {
+    return this._cntr[this.cur] = v
+  }
+
+  /**
+   * @description: test equl
+   * @param {any} first
+   * @param {any} last
+   * @return {*}
+   */  
+  public equal(first: any, last: any): boolean {
+    return true
+  }
+
+  /**
    * @description: access node (vector no need this method)
    * @param {*}
    * @return {*}
@@ -100,8 +119,10 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
    * @param {*}
    * @return {*}
    */
-  increment(): void {
+  increment(n: number = 1, c: boolean = true): RandomAccessIterator<T> {
     this.cur++
+    const itr: unknown = new DequeIterator(this.cur, this.cntr);
+    return (itr as RandomAccessIterator<T>) 
   }
 
   /**
@@ -109,8 +130,10 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
    * @param {*}
    * @return {*}
    */
-  decrement(): void {
+  decrement(n: number = 1, c: boolean = true): RandomAccessIterator<T> {
     this.cur--
+    const itr: unknown = new DequeIterator(this.cur, this.cntr);
+    return (itr as RandomAccessIterator<T>) 
   }
 
   /**

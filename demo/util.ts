@@ -1,11 +1,27 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-20 15:06:15
- * @LastEditTime: 2022-03-11 18:27:47
+ * @LastEditTime: 2022-03-14 13:16:21
  * @LastEditors: hzheyuan
  * @Description: some helper functions
  * @FilePath: \tstl\demo\util.ts
  */
+
+/**
+ * @description: A test class
+ * @param {*}
+ * @return {*}
+ */
+export class Person<T> {
+  name: T
+  constructor(name: T) {
+    this.name = name;
+  }
+  say() {
+    console.log(`I'm ${this.name}`)
+  }
+}
+
 export function randomNum(low, high) {
     const num = Math.floor(Math.random() * (high - low) + low);
     return num;

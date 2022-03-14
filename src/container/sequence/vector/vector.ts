@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-11 18:25:28
+ * @LastEditTime: 2022-03-14 16:25:45
  * @LastEditors: hzheyuan
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
@@ -18,18 +18,46 @@
  * 
  * @FilePath: \tstl\src\container\sequence\vector\vector.ts
  */
+import { InputIterator } from '@/Iterator'
 import { VCIterator } from './iterator'
 import { TSTLIterable } from '@/iterator/Iterable'
 
 export class Vector<T> implements TSTLIterable<T> {
-    cntr: Array<T>
+    private cntr: Array<T>
     start: number = 0
     finish: number = 0
 
-    constructor(p?: number | Iterable<T>) {
-        if (typeof p === 'number' && p) this.cntr = new Array<T>(p)
-        else if (p) this.cntr = new Array(...(p as Iterable<T>))
-        else this.cntr = new Array()
+    /**
+     * @description: Constructor vector
+     * Constructs a vector, initializing its contents depending on the constructor version used:
+     *  (1) empty container constructor(default constructor): constructor an empty container, with no elements.
+     *  (2) fill constructor: constructs a container with n elements. Each element is a copy of v.
+     *  (3) range constructor: constructs a container with many elements as the range [first, last), in same order.
+     *  (4) copy constructor: constructs a container with a copy of each elements in other vector, in same order.
+     * @param {*}
+     * @return {*}
+     */    
+    public constructor()
+    public constructor(vectorLength: number)
+    public constructor(vector: Vector<T>)
+    public constructor(vectorLength: number, v: T)
+    public constructor(first: InputIterator<T>, last: InputIterator<T>)
+    public constructor(...args: Array<any>) {
+        if(args.length === 0) {
+            this.cntr = new Array()
+        } else if (args.length === 1){
+            if(typeof args[0] === 'number') {
+                this.cntr = new Array(args[0])
+            } else {
+                this.cntr = new Array(...args[0])
+            }
+        } else {
+            if(typeof args[0] === 'number') {
+                this.cntr = new Array(args[0], args[1])
+            } else {
+                this.cntr = this.assign(args[0], args[1])
+            }
+        }
     }
 
     /**
@@ -40,6 +68,11 @@ export class Vector<T> implements TSTLIterable<T> {
     begin(): VCIterator<T> {
         return new VCIterator(this.start, this.cntr)
     }
+
+    // cbegin(): VCIterator<T> {
+    //     const cntr = this.cntr
+    //     return new VCIterator(this.start, cntr as const);
+    // }
 
     /**
      * @description: return iterator to end
@@ -74,7 +107,7 @@ export class Vector<T> implements TSTLIterable<T> {
      * @param {*}
      * @return {*}
      */
-    front() {
+    front(): T {
         return this.cntr[0]
     }
 
@@ -83,7 +116,7 @@ export class Vector<T> implements TSTLIterable<T> {
      * @param {*}
      * @return {*}
      */
-    back() {
+    back(): T {
         const len = this.cntr.length
         return this.cntr[len - 1]
     }
@@ -158,6 +191,7 @@ export class Vector<T> implements TSTLIterable<T> {
         } else {
             this._assing_itrabel_cntr(x as Iterable<T>)
         }
+        return this.cntr
     }
 
     /**

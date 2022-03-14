@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:54
- * @LastEditTime: 2022-03-13 17:51:13
+ * @LastEditTime: 2022-03-14 17:02:14
  * @LastEditors: hzheyuan
  * @Description: Priority queue
  * Priority queues are type of container adapters, specifically designed such that
@@ -23,15 +23,39 @@
 import { makeHeap, pushHeap, popHeap }  from '@/container/sequence/heap/'
 import { Vector }  from '@/container/sequence/vector/'
 import { CompFunType, less } from '@/fanctor'
+import { InputIterator } from '@/Iterator'
 
 export class PriorityQueue<T, C = Vector<T>> {
-    cntr 
-    compare: CompFunType
+    private cntr 
+    private compare: CompFunType = less;
 
-    constructor(comp: CompFunType = less, c) { 
-        this.cntr = this.create<T>(c)
-        this.compare = comp
-        this.init()
+    /**
+     * @description: Construct priority queue
+     * Constructs a priority_queue container adaptor object. constructs depending on the constructor version used:
+     *  (1) initialization constructor: 
+     *        The underlying container is a copy of ctnr, sorted by the make_heap algorithm.
+     *  (2) range initialization constructor:
+     *        The underlying container is a copy of ctnr, with the insertion of the elements in the range [first,last), and then sorted by make_heap.
+     *  (3) move-initialization constructor:
+     *        The underlying container acquires the value of ctnr by move-constructing it. The elements are sorted by make_heap.
+     *  (4) move-range initialization constructor:
+     *        The underlying container acquires the value of ctnr by move-constructing. 
+     *        It also inserts the elements in the range [first,last) and then sorts them with make_heap.
+     * @param {*}
+     * @return {*}
+     */    
+    public constructor(c, comp: CompFunType, initialization: boolean)
+    public constructor(c, first: InputIterator<T>, last: InputIterator<T>, comp: CompFunType)
+    public constructor(...args: Array<any>) { 
+        if(args.length === 3) {
+            if(args[2]) {
+                this.cntr = this.create<T>(args[0])
+                if(args[1]) this.compare = args[1]
+                this.init()
+            }
+        } else {
+            // range implementation
+        }
     }
 
     create<T>(c: {new(...args): C}, ...args): C {

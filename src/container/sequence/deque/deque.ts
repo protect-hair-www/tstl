@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-08 21:17:38
- * @LastEditTime: 2022-03-11 20:15:33
+ * @LastEditTime: 2022-03-14 16:39:07
  * @LastEditors: hzheyuan
  * @Description: deque(double ended queue)
  * deque is an irregular acronym of double-ended queue.
@@ -21,9 +21,10 @@
  * @FilePath: /tstl/src/container/sequence/deque/deque.ts
  */
 import { DequeIterator } from './iterator'
+import { Iterator, InputIterator } from '@/Iterator/'
 import { TSTLIterable } from '@/Iterator/Iterable'
 
-export class Deque<T>  implements TSTLIterable<T>{
+export class Deque<T> implements TSTLIterable<T>{
     // the container
     cntr
 
@@ -33,18 +34,43 @@ export class Deque<T>  implements TSTLIterable<T>{
     // iternally iterator to end 
     finish: number = 0
 
-    constructor(p?: T | Iterable<T>) {
-        this.cntr = new Array<T>()
-        if(typeof p === 'number' && p) this.cntr = new Array<T>(p)
-        else if(p) this.cntr = new Array(...(p as Iterable<T>))
-        else this.cntr = new Array()
+    /**
+     * @description: Construct deque
+     * Constructs a deque container object, initializing its contents depending on the constructor version used:
+     *  (1) empty container constructor(default constructor): constructor an empty container, with no elements.
+     *  (2) fill constructor: constructs a container with n elements. Each element is a copy of v.
+     *  (3) range constructor: constructs a container with many elements as the range [first, last), in same order.
+     *  (4) copy constructor: constructs a container with a copy of each elements in other deque, in same order.
+     * @param {*}
+     * @return {*}
+     */
+    public constructor()
+    public constructor(length: number, v: T)
+    public constructor(list: Deque<T>)
+    public constructor(first: InputIterator<T>, last: InputIterator<T>)
+    constructor(...args: Array<any>) {
+        if (args.length === 0) {
+            this.cntr = new Array()
+        } else if (args.length === 1) {
+            if (typeof args[0] === 'number') {
+                this.cntr = new Array(args[0])
+            } else {
+                this.cntr = new Array(...args[0])
+            }
+        } else {
+            if (typeof args[0] === 'number') {
+                this.cntr = new Array(args[0], args[1])
+            } else {
+                this.cntr = this.assign(args[0], args[1])
+            }
+        }
     }
 
     /**
      * @description: return iterator to begining
      * @param {*}
      * @return {*}
-     */    
+     */
     begin() {
         return new DequeIterator<T>(0, this.cntr)
     }
@@ -53,7 +79,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: return iterator to end
      * @param {*}
      * @return {*}
-     */    
+     */
     end() {
         this.finish = this.cntr.length
         return new DequeIterator<T>(this.finish, this.cntr)
@@ -63,7 +89,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: return const iterator to begining
      * @param {*}
      * @return {*}
-     */    
+     */
     cbegin() {
 
     }
@@ -72,7 +98,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: return const iterator to end
      * @param {*}
      * @return {*}
-     */    
+     */
     cend() {
 
     }
@@ -81,7 +107,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: return size
      * @param {*}
      * @return {*}
-     */    
+     */
     size(): number {
         return this.cntr.length
     }
@@ -90,16 +116,16 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: test whether container is empty
      * @param {*}
      * @return {*}
-     */    
+     */
     empty(): boolean {
         return this.cntr.length === 0
-    } 
+    }
 
     /**
      * @description: access element
      * @param {*}
      * @return {*}
-     */    
+     */
     at(x: DequeIterator<T>) {
         return this.cntr.at(x.getKey())
     }
@@ -108,16 +134,16 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: access first element
      * @param {*}
      * @return {*}
-     */    
+     */
     front() {
         return this.cntr[0]
-    } 
+    }
 
     /**
      * @description: access last element
      * @param {*}
      * @return {*}
-     */    
+     */
     back() {
         const len = this.cntr.length
         return this.cntr[len - 1]
@@ -136,7 +162,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: set content data
      * @param {Array} x
      * @return {*}
-     */    
+     */
     set data(x: Array<T>) {
         this.cntr = x
     }
@@ -147,7 +173,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: add element at the end
      * @param {*}
      * @return {*}
-     */    
+     */
     push_back(v: T) {
         this.cntr.push(v)
     }
@@ -156,7 +182,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: insert element at begining
      * @param {*}
      * @return {*}
-     */    
+     */
     push_front(v: T) {
         this.cntr.unshift(v)
     }
@@ -165,7 +191,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: delete last element
      * @param {*}
      * @return {*}
-     */    
+     */
     pop_back() {
         this.cntr.pop()
     }
@@ -174,7 +200,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: delete first element
      * @param {*}
      * @return {*}
-     */    
+     */
     pop_front() {
         this.cntr.shift()
     }
@@ -297,9 +323,9 @@ export class Deque<T>  implements TSTLIterable<T>{
     assign(x: number | Iterable<T>, v?: T);
     assign(first: DequeIterator<T>, last: DequeIterator<T>);
     assign(x: unknown, y: unknown) {
-        if(typeof x === 'number' && y) {
+        if (typeof x === 'number' && y) {
             this._assign_n_elements(x, (y as T))
-        } else if(x instanceof DequeIterator && y instanceof DequeIterator) {
+        } else if (x instanceof DequeIterator && y instanceof DequeIterator) {
             this._assign_range(x, y)
         } else {
             this._assing_itrabel_cntr(x as Iterable<T>)
@@ -312,7 +338,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @param {number} n
      * @param {T} v
      * @return {*}
-     */    
+     */
     private _assign_n_elements(n: number, v: T) {
         this.cntr.length = n
         this.cntr.fill(v)
@@ -324,10 +350,10 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @param {Iterator} firt
      * @param {Iterator} last
      * @return {*}
-     */    
+     */
     private _assign_range(first: DequeIterator<T>, last: DequeIterator<T>) {
         let cur = first, elements: T[] = []
-        while(cur.hasNext() && cur.getKey() !== last.getKey()) {
+        while (cur.hasNext() && cur.getKey() !== last.getKey()) {
             elements.push(cur.getValue());
             cur.next()
         }
@@ -373,7 +399,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: swap content
      * @param {*}
      * @return {*}
-     */    
+     */
     swap(x: Deque<T>) {
         const temp = x.data
         x.data = this.cntr
@@ -396,7 +422,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @param {*}
      * @return {*}
      */
-    emplace<K>(pos: DequeIterator<T>, c: { new(...arg)}, ...arg) {
+    emplace<K>(pos: DequeIterator<T>, c: { new(...arg) }, ...arg) {
         const ins: T = new c(arg)
         this.insert(pos, ins)
     }
@@ -406,7 +432,7 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @param {*}
      * @return {*}
      */
-    emplace_back<K>(c: { new(...arg)}, ...arg) {
+    emplace_back<K>(c: { new(...arg) }, ...arg) {
         const ins: T = new c(arg);
         this.push_back(ins);
     }
@@ -415,8 +441,8 @@ export class Deque<T>  implements TSTLIterable<T>{
      * @description: construct and insert element at begining
      * @param {*}
      * @return {*}
-     */    
-    emplace_front<K>(c: { new(...arg)}, ...arg) {
+     */
+    emplace_front<K>(c: { new(...arg) }, ...arg) {
         const ins: T = new c(arg)
         this.push_front(ins)
     }
@@ -428,11 +454,11 @@ export class Deque<T>  implements TSTLIterable<T>{
      */
     *[Symbol.iterator](): IterableIterator<T> {
         let cur = this.begin()
-        while(cur.hasNext()) {
+        while (cur.hasNext()) {
             try {
                 const value = cur.getValue()
                 cur.next();
-                yield value 
+                yield value
             } catch (error) {
                 console.log(error)
             }

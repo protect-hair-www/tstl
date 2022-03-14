@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-11 17:06:16
- * @LastEditTime: 2022-03-11 17:08:01
+ * @LastEditTime: 2022-03-14 16:26:25
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: \tstl\src\Iterator\types.ts
@@ -33,4 +33,23 @@
 // interface IterableIterator<T> extends Iterator<T> {
 //     [Symbol.iterator](): IterableIterator<T>;
 // }
+
+// interface VectorInterface<T> extends TSTLIterable<T> {
+//     cntr: T[]
+//     start: number
+//     finish: number
+// }
+// interface VectorConstructor {
+//     new(arrayLength?: number): any[];
+//     new <T>(arrayLength: number): T[];
+//     new <T>(...items: T[]): T[];
+//     (arrayLength?: number): any[];
+//     <T>(arrayLength: number): T[];
+//     <T>(...items: T[]): T[];
+//     // isVector(arg: any): arg is any[];
+//     readonly prototype: any[];
+// }
+// function createVector<T>(ctor: VectorConstructor, arrayLength: number): VectorInterface<T> {
+//     return new ctor()
+// } 
 

@@ -1,13 +1,13 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 17:38:58
- * @LastEditTime: 2022-03-13 18:13:41
+ * @LastEditTime: 2022-03-14 14:45:01
  * @LastEditors: hzheyuan
  * @Description: Arithmetic functors (todo)
- * @FilePath: /tstl/src/fanctor/arithmetic.ts
+ * @FilePath: \tstl\src\fanctor\arithmetic.ts
  */
-
-// export const plus = <T>(a: T, b: T): T | Error => {
+type arithmTypes = number | bigint
+// export const plus = <T extends arithmTypes>(a: T, b: T): T | Error => {
 //     if(typeof a === 'number') return a + b
 //     return new Error('unvalid')
 // }

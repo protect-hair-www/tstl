@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-12 15:03:30
+ * @LastEditTime: 2022-03-14 15:46:21
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: /tstl/demo/Vector.vue
+ * @FilePath: \tstl\demo\Vector.vue
 -->
 <template>
   <div class="Vector-test">
@@ -35,13 +35,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { testAllIterators, traverseCntr } from './util'
-
+import { testAllIterators, traverseCntr,  Person} from './util'
 import { Vector } from '../src/index'
+
 import { Chart } from './chart'
 
 let chart: any = ref(null)
-let vec: Vector<string> = ref<any>(null);
+// let vec: Vector<string> = ref<any>(null);
+let vec: Vector<Person<string>> = ref<Vector<Person<string>>>(null);
 
 const onPushBack = (e) => {
   const v = e.target.value
@@ -73,12 +74,37 @@ const onPopBack = (e) => {
   //   chart.updateList(list)
 }
 
-const test = () => {
-  // 可视化整颗树
-  //   chart = new Chart('list-box')
-  //   chart.drawList(list)
-
+const testObject = () => {
+  vec = new Vector<Person<string>>();
   // 创建一个list容器
+  ['nick', 'jack', 'kalai'].forEach(name => {
+    let ins: Person<string> = new Person<string>(name)
+    vec.push_back(ins)
+  })
+  console.log(vec)
+
+  const front = vec.front()
+  const b = vec.begin()
+  console.log(front.say())
+
+  let c = new Array<Person<string>>();
+  ['nick', 'jack', 'kalai'].forEach(name => {
+    let ins = new Person<string>(name)
+    c.push(ins)
+  })
+
+  let d:Vector<Person<string>> = new Vector<Person<string>>();
+  // 创建一个list容器
+  ['nick', 'jack', 'kalai'].forEach(name => {
+    let ins: Person<string> = new Person<string>(name)
+    d.push_back(ins)
+  })
+  let k = d.back()
+  k.say()
+}
+
+// test js primitive type
+const testPrimitive = () => {
   vec = new Vector<string>();
   vec.push_back('1')
   vec.push_back('2')
@@ -161,7 +187,13 @@ const test = () => {
   vec.emplace<String>(vec.begin(), String, '3')
   vec.emplace_back<String>(String, '5')
   traverseCntr(vec, 'emplace')
+}
 
+const test = () => {
+  // 可视化整颗树
+  //   chart = new Chart('list-box')
+  //   chart.drawList(list)
+  testObject()
 }
 
 onMounted(test)

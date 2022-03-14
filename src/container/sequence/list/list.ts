@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:58:00
- * @LastEditTime: 2022-03-13 16:47:54
+ * @LastEditTime: 2022-03-14 17:00:35
  * @LastEditors: hzheyuan
  * @Description: sequenece container list
  * 
@@ -22,15 +22,38 @@
  */
 import { ListNode } from './ListNode'
 import { LinkListIterator } from './iterator'
-import { Iterator } from '@/Iterator/'
+import { Iterator, InputIterator } from '@/Iterator/'
 import { TSTLIterable } from '@/iterator/Iterable'
 
 export class List<T> implements TSTLIterable<T>{
-    _header: ListNode<T>
+    private _header: ListNode<T>
 
-    constructor(data?: Iterable<T>) {
+    /**
+     * @description: Construct list
+     * Constructs a list container object, initializing its contents depending on the constructor version used:
+     *  (1) empty container constructor(default constructor): constructor an empty container, with no elements.
+     *  (2) fill constructor: constructs a container with n elements. Each element is a copy of v.
+     *  (3) range constructor: constructs a container with many elements as the range [first, last), in same order.
+     *  (4) copy constructor: constructs a container with a copy of each elements in other list, in same order.
+     * @param {*}
+     * @return {*}
+     */    
+    public constructor()
+    public constructor(listLength: number, v: T)
+    public constructor(list: List<T>)
+    public constructor(first: InputIterator<T>, last: InputIterator<T>)
+    constructor(...args: Array<any>) {
         this._header = this.createNode()
         this.empty_init()
+        if(args.length === 1) {
+            this._assign_container(args[0])
+        } else if(args.length === 2) {
+            if(typeof args[0] === 'number') {
+                this._assign_fill(args[0], args[1])
+            } else {
+                this._assign_range(args[0], args[1])
+            }
+        }
     }
 
     /**
@@ -559,7 +582,7 @@ export class List<T> implements TSTLIterable<T>{
      * @param {Iterator} last
      * @return {*}
      */
-    private _assign_range(first: Iterator<T>, last: Iterator<T>) {
+    private _assign_range(first: InputIterator<T>, last: InputIterator<T>) {
 
     }
 
@@ -568,7 +591,7 @@ export class List<T> implements TSTLIterable<T>{
      * @param {Iterable} cntr
      * @return {*}
      */
-    private _assign_container(cntr: Iterable<T>) {
+    private _assign_container(list: List<T>) {
 
     }
 
