@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-12-20 11:02:10
- * @LastEditTime: 2022-02-18 16:06:43
+ * @LastEditTime: 2022-03-14 23:44:15
  * @LastEditors: hzheyuan
  * @Description: 歌词基础数据结构Treap测试
- * @FilePath: \tstl\test\datastruct\tree.spec.ts
+ * @FilePath: /tstl/test/datastruct/tree.spec.ts
  */
 import { Tree } from '../../src/container/tree/Tree';
 const array = [1, 5, 3, 2, 4, 8, 6];
@@ -15,7 +15,7 @@ describe("Treap", () => {
 
     // 插入
     // const insertSpy = jest.spyOn(t, 'insert');
-    describe('.insert', () => {
+    // describe('.insert', () => {
     //     test("insert is a function", () => {
     //         expect(typeof t.insert).toBe("function");
     //     })
@@ -24,5 +24,5 @@ describe("Treap", () => {
     //         expect(insertSpy).toHaveBeenCalledWith({val: 1});
     //     })
     //     insertSpy.mockClear();
-    })
+    // })
 })

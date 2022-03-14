@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-12 10:58:55
- * @LastEditTime: 2022-03-14 22:36:23
+ * @LastEditTime: 2022-03-14 23:43:41
  * @LastEditors: hzheyuan
  * @Description: Algorithms
  * 
@@ -15,7 +15,11 @@
  */
 import { makeHeap, popHeap, pushHeap, sortHeap, isHeap, isHeapUntil } from './heap'
 
-import { find }  from './non_modifying_sequence_op'
+import {
+    find, find_end, find_first_of,
+    all_of, any, every,
+    any_of, adjacent_find, count, count_if, mismatch, equal, is_premutation, search, search_n
+} from './non_modifying_sequence_op'
 
 export {
     makeHeap,
@@ -23,5 +27,11 @@ export {
     pushHeap,
     sortHeap,
     isHeap,
-    isHeapUntil
+    isHeapUntil,
+
+    find, find_end, find_first_of,
+    all_of, any, every, any_of,
+    adjacent_find, count, count_if,
+    mismatch, equal, is_premutation,
+    search, search_n
 }
