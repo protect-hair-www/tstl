@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 09:43:54
- * @LastEditTime: 2022-03-13 16:32:25
+ * @LastEditTime: 2022-03-14 23:00:07
  * @LastEditors: hzheyuan
  * @Description: Input Iterator
  * 
@@ -26,4 +26,16 @@ export interface InputIterator<T> extends BaseIterator<T>{
   // access
   get value(): T                                                        // access current position element(getter)
   getValue(): T                                                         // access current position element
+}
+
+export function input_itr_distance<T>(first: InputIterator<T>, last: InputIterator<T>): number {
+    let n = last.getKey() - first.getKey()
+    return n;
+}
+
+export function advance<T>(first: InputIterator<T>, n: number) {
+  let s = 0
+  while(s < n) {
+    first.next(); s++;
+  }
 }
