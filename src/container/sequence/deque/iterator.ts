@@ -59,7 +59,7 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
    * @description: access the element (getter)
    * @return {*}
    */
-  public getValue (): T {
+  public getValue(): T {
     return this._cntr[this.cur]
   }
 
@@ -67,9 +67,9 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
    * @description: write value
    * @param {T} v
    * @return {*}
-   */  
+   */
   public setValue(v: T) {
-    return this._cntr[this.cur] = v
+    return (this._cntr[this.cur] = v)
   }
 
   /**
@@ -77,7 +77,7 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
    * @param {any} first
    * @param {any} last
    * @return {*}
-   */  
+   */
   public equal(first: any, last: any): boolean {
     return true
   }
@@ -102,7 +102,7 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
    * @description: test whether has previous element
    * @param {*}
    * @return {*}
-   */  
+   */
   public hasPrev(): boolean {
     return this.cur !== 0
   }
@@ -121,8 +121,8 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
    */
   increment(n: number = 1, c: boolean = true): RandomAccessIterator<T> {
     this.cur++
-    const itr: unknown = new DequeIterator(this.cur, this.cntr);
-    return (itr as RandomAccessIterator<T>) 
+    const itr: unknown = new DequeIterator(this.cur, this.cntr)
+    return itr as RandomAccessIterator<T>
   }
 
   /**
@@ -132,8 +132,8 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
    */
   decrement(n: number = 1, c: boolean = true): RandomAccessIterator<T> {
     this.cur--
-    const itr: unknown = new DequeIterator(this.cur, this.cntr);
-    return (itr as RandomAccessIterator<T>) 
+    const itr: unknown = new DequeIterator(this.cur, this.cntr)
+    return itr as RandomAccessIterator<T>
   }
 
   /**
@@ -152,7 +152,6 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
       return { done: true, value: undefined }
     }
   }
-
 
   /**
    * @description: iterator increment and return the element
@@ -176,7 +175,8 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
    * @return {*}
    */
   static distance(begin, end) {
-    const f = begin.getKey(), l = end.getKey()
+    const f = begin.getKey(),
+      l = end.getKey()
     return l - f
   }
 
@@ -185,7 +185,7 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
    * @param {*}
    * @return {*}
    */
-  remove() { }
+  remove() {}
 
   /**
    * @description: Javascript iterator protocol
@@ -196,7 +196,7 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
     return {
       next: () => {
         if (this.hasNext()) {
-          let node = { done: false, value: this.cntr[this.cur] }
+          const node = { done: false, value: this.cntr[this.cur] }
           this.increment()
           return node
         } else {
@@ -206,4 +206,3 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
     }
   }
 }
-

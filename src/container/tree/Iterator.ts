@@ -60,17 +60,17 @@ export class RBTIterator<K, V> extends Iterator<K> {
   }
 
   /**
-   * @description 返回迭代器指针指向结点的key值 
-   * @return {*} 
-   */  
+   * @description 返回迭代器指针指向结点的key值
+   * @return {*}
+   */
   key = (): K | boolean => {
     return this.isEnd() ? false : this.cur.getKey()
   }
 
   /**
-   * @description 返回迭代器指针指向结点的key值 
-   * @return {*} 
-   */  
+   * @description 返回迭代器指针指向结点的key值
+   * @return {*}
+   */
   getKey = (): K | boolean => {
     return this.isEnd() ? false : this.cur.getKey()
   }
@@ -124,7 +124,7 @@ export class RBTIterator<K, V> extends Iterator<K> {
    */
   public next() {
     if (this.hasNext()) {
-      let node = { done: false, value: this.cur.getValue() }
+      const node = { done: false, value: this.cur.getValue() }
       this.increment()
       return node
     } else {
@@ -144,7 +144,7 @@ export class RBTIterator<K, V> extends Iterator<K> {
   *_nodes() {
     while (this.hasNext()) {
       try {
-        let entry = this.cur
+        const entry = this.cur
         this.increment()
         yield entry
       } catch (error) {
@@ -161,7 +161,7 @@ export class RBTIterator<K, V> extends Iterator<K> {
   *entries() {
     while (this.hasNext()) {
       try {
-        let entry = { key: this.cur.key, value: this.cur.getValue() }
+        const entry = { key: this.cur.key, value: this.cur.getValue() }
         this.increment()
         yield entry
       } catch (error) {
@@ -178,7 +178,7 @@ export class RBTIterator<K, V> extends Iterator<K> {
   *keys() {
     while (this.hasNext()) {
       try {
-        let key = this.cur.key
+        const key = this.cur.key
         this.increment()
         yield key
       } catch (error) {
@@ -194,7 +194,7 @@ export class RBTIterator<K, V> extends Iterator<K> {
    */
   *values() {
     while (this.hasNext()) {
-      let value = this.cur.getValue()
+      const value = this.cur.getValue()
       this.increment()
       yield value
     }
@@ -252,18 +252,18 @@ export class RBTIterator<K, V> extends Iterator<K> {
    * @param {*} begin
    * @param {*} end
    * @return {*}
-   */  
+   */
   static distance(begin, end) {
-    let n = 0;
-    let first = begin;
-    while(first.hasNext() && first.getNode() !== end.getNode()) {
+    let n = 0
+    const first = begin
+    while (first.hasNext() && first.getNode() !== end.getNode()) {
       first.next()
       n++
     }
     return n
   }
 
-  remove() { }
+  remove() {}
 }
 
 // 测试方法
@@ -272,7 +272,7 @@ export const createRBTItr = (first) => {
     cur: first,
 
     [Symbol.iterator]() {
-      return this;
+      return this
     },
 
     next() {
@@ -289,10 +289,10 @@ export const createRBTItr = (first) => {
     },
 
     keys() {
-      let that = this
+      const that = this
       return {
         [Symbol.iterator]() {
-          return this;
+          return this
         },
         next() {
           that.increment()
@@ -350,6 +350,6 @@ export const createRBTItr = (first) => {
         }
         this.cur = y
       }
-    },
+    }
   }
 }

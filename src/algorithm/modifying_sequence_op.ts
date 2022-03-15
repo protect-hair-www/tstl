@@ -7,11 +7,11 @@
  * TODO
  * @FilePath: \tstl\src\algorithm\modifying_sequence_op.ts
  */
-import { InputIterator, OutputIterator, BidirectionalIterator } from '@/Iterator';
+import { InputIterator, OutputIterator, BidirectionalIterator } from '@/Iterator'
 import { jsCopy } from '@/utils/index'
 
 /**
- * @description: Copy range of elements 
+ * @description: Copy range of elements
  * copies the elements in the range [first, last) into the range beginning at result.
  * the function returns an iterator to the end of the destination range (which points to the element following the last element copied).
  * the range shall not overlap in such way that the result points to an element in the range [first, last). for such cases, use copy_backward.
@@ -20,13 +20,18 @@ import { jsCopy } from '@/utils/index'
  * @param {OutputIterator} result
  * @return {*}
  */
-export function copy<T>(first: InputIterator<T>, last: InputIterator<T>, result: OutputIterator<T>): OutputIterator<T> {
-    while(first !== last) {
-        let copyed_val = jsCopy(first.getValue())
-        result.setValue(copyed_val);
-        result.next; first.next()
-    }
-    return result;
+export function copy<T>(
+  first: InputIterator<T>,
+  last: InputIterator<T>,
+  result: OutputIterator<T>
+): OutputIterator<T> {
+  while (first !== last) {
+    const copyed_val = jsCopy(first.getValue())
+    result.setValue(copyed_val)
+    result.next
+    first.next()
+  }
+  return result
 }
 
 /**
@@ -40,20 +45,29 @@ export function copy<T>(first: InputIterator<T>, last: InputIterator<T>, result:
  * @param {OutputIterator} result
  * @return {*}
  */
-export function copy_n<T>(first: InputIterator<T>, n: number, result: OutputIterator<T>): OutputIterator<T> {
-    return result;
+export function copy_n<T>(
+  first: InputIterator<T>,
+  n: number,
+  result: OutputIterator<T>
+): OutputIterator<T> {
+  return result
 }
 
 /**
- * @description: Copy range of elements 
+ * @description: Copy range of elements
  * copies the elements in the range [first, last) for which fn returns true to the range beginning at result.
  * @param {InputIterator} first
  * @param {InputIterator} last
  * @param {OutputIterator} result
  * @return {*}
  */
-export function copy_if<T>(first: InputIterator<T>, last: InputIterator<T>, result: OutputIterator<T>, fn: (v: T) => boolean): OutputIterator<T> {
-    return result;
+export function copy_if<T>(
+  first: InputIterator<T>,
+  last: InputIterator<T>,
+  result: OutputIterator<T>,
+  fn: (v: T) => boolean
+): OutputIterator<T> {
+  return result
 }
 
 /**
@@ -67,8 +81,12 @@ export function copy_if<T>(first: InputIterator<T>, last: InputIterator<T>, resu
  * @param {BidirectionalIterator} result
  * @return {*}
  */
-export function copy_backward<T>(first: BidirectionalIterator<T>, last: BidirectionalIterator<T>, result: BidirectionalIterator<T>): BidirectionalIterator<T> {
-    return result;
+export function copy_backward<T>(
+  first: BidirectionalIterator<T>,
+  last: BidirectionalIterator<T>,
+  result: BidirectionalIterator<T>
+): BidirectionalIterator<T> {
+  return result
 }
 
 /**
@@ -83,8 +101,12 @@ export function copy_backward<T>(first: BidirectionalIterator<T>, last: Bidirect
  * @param {OutputIterator} result
  * @return {*}
  */
-export function move<T>(first: OutputIterator<T>, last: OutputIterator<T>, result: OutputIterator<T>): OutputIterator<T> {
-    return result;
+export function move<T>(
+  first: OutputIterator<T>,
+  last: OutputIterator<T>,
+  result: OutputIterator<T>
+): OutputIterator<T> {
+  return result
 }
 
 // swap todo
@@ -92,12 +114,11 @@ export function swap() {}
 export function swap_range() {}
 export function iter_swap() {}
 
-
 /**
  * @description: transform range
  * Applies an operation sequentially to the elements of one (1) or two(2) ranges and stores the result
  * in the range that begins at result.
- *  (1) unary operation: applies op to each of the elments in range [first1, last1) 
+ *  (1) unary operation: applies op to each of the elments in range [first1, last1)
  *      and stores the value returned by each operation in the range that begins at result.
  *  (2) binary operation: call binary_op using each of the elements in the range [first1, last1) at first
  *      arguments, and the respective argument in the range that begins at first2 as second argument. the value
@@ -108,9 +129,12 @@ export function iter_swap() {}
  * @param {*} fn
  * @return {*}
  */
-export function transform<T>(first1: InputIterator<T>, last1: InputIterator<T>, result: OutputIterator<T>, fn) {
-
-}
+export function transform<T>(
+  first1: InputIterator<T>,
+  last1: InputIterator<T>,
+  result: OutputIterator<T>,
+  fn
+) {}
 
 export function replace() {}
 export function replace_copy() {}

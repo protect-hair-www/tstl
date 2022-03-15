@@ -11,9 +11,9 @@ import { RandomAccessIterator } from '@/Iterator/'
 
 export class VCIterator<T> implements RandomAccessIterator<T> {
   _cur: number
-  _cntr: Array<T>
+  _cntr: T[]
 
-  constructor(c, cntr: Array<T>) {
+  constructor(c, cntr: T[]) {
     this._cur = c
     this._cntr = cntr
     // return new Proxy(this, {
@@ -88,23 +88,22 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
     return this.cntr[this.cur]
   }
 
+  /**
+   * @description:
+   * @param {*}
+   * @return {*}
+   */
+  set value(v: T) {
+    if (this.cntr) this.cntr[this.cur] = v
+  }
 
   /**
-   * @description: 
+   * @description:
    * @param {*}
    * @return {*}
-   */  
-  set value(v: T) {
-    if(this.cntr) this.cntr[this.cur] = v 
-  }
-  
-  /**
-   * @description: 
-   * @param {*}
-   * @return {*}
-   */  
+   */
   setValue(v: T) {
-    if(this.cntr) this.cntr[this.cur] = v 
+    if (this.cntr) this.cntr[this.cur] = v
   }
 
   /**
@@ -127,7 +126,7 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
    * @description: test whether has previous element
    * @param {*}
    * @return {*}
-   */  
+   */
   hasPrev(): boolean {
     return this.cur !== 0
   }
@@ -148,11 +147,14 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
    * @param {*}
    * @return {*}
    */
-  increment(n: number = 1, c: boolean = true ): RandomAccessIterator<T> {
-    let cur = this.cur; cur += n; 
-    if(c) { this.cur += n}
-    const itr: unknown = new VCIterator(cur, this.cntr);
-    return (itr as RandomAccessIterator<T>)
+  increment(n: number = 1, c: boolean = true): RandomAccessIterator<T> {
+    let cur = this.cur
+    cur += n
+    if (c) {
+      this.cur += n
+    }
+    const itr: unknown = new VCIterator(cur, this.cntr)
+    return itr as RandomAccessIterator<T>
   }
 
   /**
@@ -161,10 +163,13 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
    * @return {*}
    */
   decrement(n: number = 1, c: boolean = true): RandomAccessIterator<T> {
-    let cur = this.cur; cur -= n; 
-    if(c) { this.cur -= n}
-    const itr: unknown = new VCIterator(cur, this.cntr);
-    return (itr as RandomAccessIterator<T>)
+    let cur = this.cur
+    cur -= n
+    if (c) {
+      this.cur -= n
+    }
+    const itr: unknown = new VCIterator(cur, this.cntr)
+    return itr as RandomAccessIterator<T>
   }
 
   /**
@@ -172,11 +177,11 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
    * @param {*}
    * @return {*}
    */
-  next():IteratorResult<T> {
+  next(): IteratorResult<T> {
     // this.cur++
     // return this.cntr[this.cur]
     if (this.hasNext()) {
-      let node: IteratorResult<T> = { done: false, value: this.getValue() }
+      const node: IteratorResult<T> = { done: false, value: this.getValue() }
       this.cur++
       return node
     } else {
@@ -191,7 +196,7 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
    */
   prev(): IteratorResult<T> {
     if (this.hasPrev()) {
-      let node: IteratorResult<T> = { done: false, value: this.getValue() }
+      const node: IteratorResult<T> = { done: false, value: this.getValue() }
       this.cur--
       return node
     } else {
@@ -206,7 +211,8 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
    * @return {*}
    */
   static distance(begin, end) {
-    const f = begin.getKey(), l = end.getKey()
+    const f = begin.getKey(),
+      l = end.getKey()
     return l - f
   }
 
@@ -215,7 +221,7 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
    * @param {*}
    * @return {*}
    */
-  remove() { }
+  remove() {}
 
   /**
    * @description: Javascript iterable implementation

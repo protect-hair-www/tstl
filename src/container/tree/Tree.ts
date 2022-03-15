@@ -5,29 +5,29 @@
  * @LastEditors: hzheyuan
  * @Description: red_black_tree
  *
- * A red-black tree is a binary tree that satisfies the following red-black properties: 
+ * A red-black tree is a binary tree that satisfies the following red-black properties:
  *  1. Every node is either red or black.
  *  2. The root is black.
  *  3. Every leaf (NIL) is black.
  *  4. If a node is red, then both its children are black.
  *  5. For each node, all simple paths from the node to descendant leaves contain the same number of black nodes
- * 
+ *
  * Red-black tree class, designed for use in implementing
  * associative containers (set, multiset, map, and multimap). The
  * insertion and deletion algorithms are based on those in Cormen,
  * Leiserson, and Rivest, Introduction to Algorithms (MIT Press,
  * 1990), except that
- *  
+ *
  * (1) the header cell is maintained with links not only to the root
  * but also to the leftmost node of the tree, to enable constant
  * time begin(), and to the rightmost node of the tree, to enable
  * linear time performance when used with the generic set algorithms
  * (set_union, etc.)
- * 
+ *
  * (2) when a node being deleted has two children its successor node
  * is relinked into its place, rather than copied, so that the only
  * iterators invalidated are those referring to the deleted node.
- * 
+ *
  * 关联式容器基础数据结构红黑树
  * RB-Tree是一棵二叉查找树,并且具备有以下性质:
  * 红黑树的性质：
@@ -43,7 +43,7 @@ import { RBTNode, Color } from './RBTNode'
 import { RBTIterator, createRBTItr } from './Iterator'
 const isNil = RBTNode.isNil
 
-export type RBTOptions<K, V> =  {
+export type RBTOptions<K, V> = {
   getKey?: () => K
   comparator?: (a: K, b: K) => boolean
 }
@@ -69,9 +69,9 @@ export class Tree<K, V> {
   private key_comp: (a: K, b: K) => boolean = (a, b) => a < b
 
   constructor(options?: RBTOptions<K, V>) {
-    if(options) {
+    if (options) {
       if (options.comparator) this.key_comp = options.comparator
-      if(options.getKey)  this.getKey
+      if (options.getKey) this.getKey
     }
     this.createHeader()
   }
@@ -119,7 +119,7 @@ export class Tree<K, V> {
   /**
    * @description: 迭代器
    * @return {*} Iterator
-   */  
+   */
   public iterator = (): RBTIterator<K, V> => {
     return new RBTIterator(this.leftMost)
   }
@@ -128,7 +128,7 @@ export class Tree<K, V> {
    * @description: begin迭代器
    * @param {*} RBTIterator
    * @return {*}
-   */  
+   */
   public begin = (): RBTIterator<K, V> => {
     return new RBTIterator(this.leftMost)
   }
@@ -137,7 +137,7 @@ export class Tree<K, V> {
    * @description: end迭代器
    * @param {*} RBTIterator
    * @return {*}
-   */  
+   */
   public end = (): RBTIterator<K, V> => {
     return new RBTIterator(this.header)
   }
@@ -214,7 +214,7 @@ export class Tree<K, V> {
     y.parent = x.parent
     // if (isNil(x.parent)) {
     //   this.root = y
-    // } 
+    // }
     if (x === this.root) {
       this.root = y
     } else if (x === x.parent.left) {
@@ -260,7 +260,7 @@ export class Tree<K, V> {
     // if (y === this.root) {
     // if (isNil(y.parent)) {
     //   this.root = x
-    // } 
+    // }
     if (y === this.root) {
       this.root = x
     } else if (y === y.parent.right) {
@@ -353,25 +353,26 @@ export class Tree<K, V> {
    * @param {RBTIterator} pos
    * @param {V} v
    * @return {*}
-   */  
-  inset_uniqual_at_position = (pos: RBTIterator<K, V>, k: K, v: V): RBTIterator<K, V> =>{
+   */
+  inset_uniqual_at_position = (pos: RBTIterator<K, V>, k: K, v: V): RBTIterator<K, V> => {
     const n = pos.getNode()
-    if(n === this.header.left) {
-      if(this.size > 0 && this.key_comp(k, n.key)) {
+    if (n === this.header.left) {
+      if (this.size > 0 && this.key_comp(k, n.key)) {
         return this._insert(n, n, k, v)
       } else {
         return this.insert_unique(k, v).iterator
       }
-    } else if(n === this.header) {
-      if(this.key_comp(this.rightMost.key, k)) {
+    } else if (n === this.header) {
+      if (this.key_comp(this.rightMost.key, k)) {
         return this._insert(this.nil, this.rightMost, k, v)
       } else {
         return this.insert_unique(k, v).iterator
       }
     } else {
-      let before = pos.prev(), bn = before.getNode()
-      if(this.key_comp(bn.key, k) && this.key_comp(k, n.key)) {
-        if(isNil(bn)) { 
+      const before = pos.prev(),
+        bn = before.getNode()
+      if (this.key_comp(bn.key, k) && this.key_comp(k, n.key)) {
+        if (isNil(bn)) {
           return this._insert(this.nil, bn, k, v)
         } else {
           return this._insert(n, n, k, v)
@@ -393,7 +394,7 @@ export class Tree<K, V> {
       // while (z.parent.color === Color.RED) {
       if (z.parent === z.parent.parent.left) {
         // 插入结点的叔叔结点
-        let y = z.parent.parent.right
+        const y = z.parent.parent.right
         // case 1: 插入结点z的叔叔结点y是红色的
         if (!isNil(y) && y.color === Color.RED) {
           z.parent.color = Color.BLACK
@@ -412,7 +413,7 @@ export class Tree<K, V> {
           this.rightRotate(z.parent.parent)
         }
       } else {
-        let y = z.parent.parent.left
+        const y = z.parent.parent.left
         if (!isNil(y) && y.color === Color.RED) {
           z.parent.color = Color.BLACK
           y.color = Color.BLACK
@@ -462,7 +463,7 @@ export class Tree<K, V> {
    * @param {v V}
    * @return {iterator: RBTIterator, success: boolean} 返回一个对象,对象的iterator元素为迭代器，指向新增结点，success代表插入是否成功
    */
-  insert_unique = (k: K, v: V): {iterator: RBTIterator<K, V>, success: boolean} => {
+  insert_unique = (k: K, v: V): { iterator: RBTIterator<K, V>; success: boolean } => {
     let y = this.header
     let x = this.root
     let comp: boolean = true
@@ -474,18 +475,18 @@ export class Tree<K, V> {
     let jItr = new RBTIterator<K, V>(y)
     if (comp) {
       if (jItr.getNode() === this.begin().getNode()) {
-        return {iterator: this._insert(x, y, k, v), success: true}
+        return { iterator: this._insert(x, y, k, v), success: true }
       } else {
         jItr = jItr.prev()
       }
-    } 
+    }
     const j = jItr.getNode()
     if (!isNil(j)) {
       if (this.key_comp(j.getKey(), k)) {
-        return {iterator: this._insert(x, y, k, v), success: true}
+        return { iterator: this._insert(x, y, k, v), success: true }
       }
     }
-    return {iterator: jItr, success: false}
+    return { iterator: jItr, success: false }
   }
 
   /**
@@ -587,7 +588,10 @@ export class Tree<K, V> {
           this.leftRotate(x.parent)
           w = x.parent.right
         }
-        if ((isNil(w.left) || w.left.color === Color.BLACK) && (isNil(w.right) || w.right.color === Color.BLACK)) {
+        if (
+          (isNil(w.left) || w.left.color === Color.BLACK) &&
+          (isNil(w.right) || w.right.color === Color.BLACK)
+        ) {
           // case 2: x的兄弟结点w是黑色的， 并且w的两个子结点都是黑色的
           w.color = Color.RED
           x = x.parent
@@ -726,14 +730,17 @@ export class Tree<K, V> {
             this.leftRotate(x_p)
             w = x_p.right
           }
-          if ((isNil(w.left) || w.left.color === Color.BLACK) && (isNil(w.right) || w.right.color === Color.BLACK)) {
+          if (
+            (isNil(w.left) || w.left.color === Color.BLACK) &&
+            (isNil(w.right) || w.right.color === Color.BLACK)
+          ) {
             // case 2: x的兄弟结点w是黑色的， 并且w的两个子结点都是黑色的
             w.color = Color.RED
             x = x_p
             x_p = x_p.parent
           } else {
             if (isNil(w.right) || w.right.color === Color.BLACK) {
-              if(!isNil(w.left)) w.left.color = Color.BLACK
+              if (!isNil(w.left)) w.left.color = Color.BLACK
               // case 3: x的兄弟结点w是黑色的， w的左孩子是红色的，w的右孩子是黑色的
               // w.left.color = Color.BLACK
               w.color = Color.RED
@@ -743,9 +750,9 @@ export class Tree<K, V> {
             // case 4: x的兄弟结点w是黑色的， 并且w的孩子是红色的
             w.color = x_p.color
             w.parent.color = Color.BLACK
-            if(!isNil(w.right)) w.right.color = Color.BLACK
+            if (!isNil(w.right)) w.right.color = Color.BLACK
             this.leftRotate(x_p)
-            break;
+            break
             // x = this.root
           }
         } else {
@@ -757,26 +764,29 @@ export class Tree<K, V> {
             this.rightRotate(x_p)
             w = x_p.left
           }
-          if ((isNil(w.right) || w.right.color === Color.BLACK) && (isNil(w.left) || w.left.color === Color.BLACK)) {
+          if (
+            (isNil(w.right) || w.right.color === Color.BLACK) &&
+            (isNil(w.left) || w.left.color === Color.BLACK)
+          ) {
             w.color = Color.RED
             x = x_p
             x_p = x_p.parent
           } else {
             if (isNil(w.left) || w.left.color === Color.BLACK) {
-              if(!isNil(w.right)) w.right.color = Color.BLACK
+              if (!isNil(w.right)) w.right.color = Color.BLACK
               w.color = Color.RED
               this.leftRotate(w)
               w = x_p.left
             }
             w.color = x_p.color
             w.parent.color = Color.BLACK
-            if(!isNil(w.left)) w.left.color = Color.BLACK
+            if (!isNil(w.left)) w.left.color = Color.BLACK
             this.rightRotate(x_p)
             break
           }
         }
       }
-      if(!isNil(x)) x.color = Color.BLACK
+      if (!isNil(x)) x.color = Color.BLACK
     }
     return y
   }
@@ -788,16 +798,15 @@ export class Tree<K, V> {
    */
   public erase = (x: K): RBTIterator<K, V> => {
     const z = this.find(x).getNode()
-    if(z !== this.end().getNode()) return new RBTIterator(this._erase(z))
-    else return this.end() 
+    if (z !== this.end().getNode()) return new RBTIterator(this._erase(z))
+    else return this.end()
   }
-
 
   /**
    * @description: 键值为k的元素的数量
    * @param {K} k
    * @return {*}
-   */  
+   */
   count(k: K) {
     const [first, last] = this.equal_range(k)
     return RBTIterator.distance(first, last)
@@ -872,16 +881,18 @@ export class Tree<K, V> {
    * @description: 查询结点，迭代版本
    * @param {K} k
    * @return {*}
-   */  
+   */
   private _find = (k: K): RBTIterator<K, V> => {
     let y = this.header
     let x = this.root
-    while(!isNil(x)) {
-      if(!this.key_comp(x.key, k)) y = x, x = x.left
+    while (!isNil(x)) {
+      if (!this.key_comp(x.key, k)) (y = x), (x = x.left)
       else x = x.right
     }
-    let j = new RBTIterator<K, V>(y);
-    return (j.getNode() === this.end().getNode() || this.key_comp(k, j.getNode().getKey())) ? this.end() : j
+    const j = new RBTIterator<K, V>(y)
+    return j.getNode() === this.end().getNode() || this.key_comp(k, j.getNode().getKey())
+      ? this.end()
+      : j
   }
 
   /**
@@ -959,7 +970,7 @@ export class Tree<K, V> {
    */
   lower_bound(k: K): RBTIterator<K, V> {
     let y = this.header // last node which is less than k
-    let x = this.root   // current node
+    let x = this.root // current node
 
     while (!isNil(x)) {
       if (!this.key_comp(x.key, k)) (y = x), (x = x.left)
@@ -977,7 +988,7 @@ export class Tree<K, V> {
    */
   upper_bound(k: K): RBTIterator<K, V> {
     let y = this.header // last node which is greater than k
-    let x = this.root   // current node
+    let x = this.root // current node
 
     while (!isNil(x)) {
       if (this.key_comp(k, x.key)) (y = x), (x = x.left)
@@ -1001,19 +1012,19 @@ export class Tree<K, V> {
    * @param {*}
    * @return {*}
    */
-  swap() { }
+  swap() {}
 
   /**
    * @description: 以x为根结点的子树黑结点数量（用来判断是否是一颗红黑树）
    * @param {RBTNode} x
    * @param {*} V
    * @return {*}
-   */  
+   */
   private _black_size = (x, root): number => {
-    if(isNil(x)) return 0
+    if (isNil(x)) return 0
     else {
-      let bs = x.color === Color.BLACK ? 1 : 0
-      if(x === root) return bs
+      const bs = x.color === Color.BLACK ? 1 : 0
+      if (x === root) return bs
       else return bs + this._black_size(x.parent, root)
     }
   }
@@ -1022,25 +1033,33 @@ export class Tree<K, V> {
    * @description: 检查是否为红黑树（内部调试使用）
    * @param {*}
    * @return {boolean}
-   */  
+   */
   _verify = (): boolean => {
-    if(this.size === 0 || this.begin().getNode() === this.end().getNode()) {
-      return this.size === 0 && this.begin().getNode() === this.end().getNode() && this.header.left === this.header && this.header.right === this.header
+    if (this.size === 0 || this.begin().getNode() === this.end().getNode()) {
+      return (
+        this.size === 0 &&
+        this.begin().getNode() === this.end().getNode() &&
+        this.header.left === this.header &&
+        this.header.right === this.header
+      )
     }
-    let len = this._black_size(this.leftMost, this.root)
-    let beginItr = this.begin();
-    for(let it of beginItr._nodes()) {
-      let x = it, l = x.left, r = x.right
-      if(x.color === Color.RED) {
-        if((!isNil(l) && l.color === Color.RED) || (!isNil(r) && r.color === Color.RED)) return false
+    const len = this._black_size(this.leftMost, this.root)
+    const beginItr = this.begin()
+    for (const it of beginItr._nodes()) {
+      const x = it,
+        l = x.left,
+        r = x.right
+      if (x.color === Color.RED) {
+        if ((!isNil(l) && l.color === Color.RED) || (!isNil(r) && r.color === Color.RED))
+          return false
       }
-      if(!isNil(l) && this.key_comp(x.key, l.key)) return false
-      if(!isNil(r) && this.key_comp(r.key, x.key)) return false
-      if(isNil(l) && isNil(r) && this._black_size(x, this.root) !== len) return false
+      if (!isNil(l) && this.key_comp(x.key, l.key)) return false
+      if (!isNil(r) && this.key_comp(r.key, x.key)) return false
+      if (isNil(l) && isNil(r) && this._black_size(x, this.root) !== len) return false
     }
 
-    if(this.leftMost !== this.minimum(this.root)) return false
-    if(this.rightMost !== this.maximum(this.root)) return false
+    if (this.leftMost !== this.minimum(this.root)) return false
+    if (this.rightMost !== this.maximum(this.root)) return false
     return true
   }
 

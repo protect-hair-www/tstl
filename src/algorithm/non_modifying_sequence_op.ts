@@ -16,12 +16,16 @@ import { InputIterator, ForwardIterator, input_itr_distance, advance } from '@/I
  * @param {function} fn
  * @return {*}
  */
-export function all_of<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (v: T) => boolean): boolean {
-    while (first !== last) {
-        if (!fn(first.getValue())) return false
-        first.next()
-    }
-    return true
+export function all_of<T>(
+  first: InputIterator<T>,
+  last: InputIterator<T>,
+  fn: (v: T) => boolean
+): boolean {
+  while (first !== last) {
+    if (!fn(first.getValue())) return false
+    first.next()
+  }
+  return true
 }
 
 /**
@@ -32,7 +36,7 @@ export function all_of<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (
  * @return {*}
  */
 export function every<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (v: T) => boolean) {
-    return all_of(first, last, fn)
+  return all_of(first, last, fn)
 }
 
 /**
@@ -44,12 +48,16 @@ export function every<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (v
  * @param {function} fn
  * @return {*}
  */
-export function any_of<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (v: T) => boolean): boolean {
-    while (first !== last) {
-        if (fn(first.getValue())) return true
-        first.next()
-    }
-    return false
+export function any_of<T>(
+  first: InputIterator<T>,
+  last: InputIterator<T>,
+  fn: (v: T) => boolean
+): boolean {
+  while (first !== last) {
+    if (fn(first.getValue())) return true
+    first.next()
+  }
+  return false
 }
 
 /**
@@ -59,8 +67,12 @@ export function any_of<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (
  * @param {function} fn
  * @return {*}
  */
-export function any<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (v: T) => boolean): boolean {
-    return any_of(first, last, fn)
+export function any<T>(
+  first: InputIterator<T>,
+  last: InputIterator<T>,
+  fn: (v: T) => boolean
+): boolean {
+  return any_of(first, last, fn)
 }
 
 /**
@@ -71,40 +83,46 @@ export function any<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (v: 
  * @param {function} fn
  * @return {*}
  */
-export function none_of<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (v: T) => boolean): boolean {
-    while (first !== last) {
-        if (fn(first.getValue())) return false
-        first.next()
-    }
-    return true
+export function none_of<T>(
+  first: InputIterator<T>,
+  last: InputIterator<T>,
+  fn: (v: T) => boolean
+): boolean {
+  while (first !== last) {
+    if (fn(first.getValue())) return false
+    first.next()
+  }
+  return true
 }
 
 /**
  * @description: find value in range
- * return the first element in the range[first, last) that compares euqal to val. if no such element is found, return last. 
+ * return the first element in the range[first, last) that compares euqal to val. if no such element is found, return last.
  * @param {InputIterator} first
  * @param {InputIterator} last
  * @param {T} val
  * @return {*}
  */
 export function find<T>(first: InputIterator<T>, last: InputIterator<T>, val: T): T {
-    while (first !== last && first.getValue() !== val)
-        first.next()
-    return first.getValue()
+  while (first !== last && first.getValue() !== val) first.next()
+  return first.getValue()
 }
 
 /**
  * @description: find value in range
- * return the first element in the range[first, last) that fn return true. if no such element is found, return last. 
+ * return the first element in the range[first, last) that fn return true. if no such element is found, return last.
  * @param {InputIterator} first
  * @param {InputIterator} last
  * @param {function} fn
  * @return {*}
  */
-export function find_if<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (v: T) => boolean): T {
-    while (first !== last && fn(first.getValue()))
-        first.next()
-    return first.getValue()
+export function find_if<T>(
+  first: InputIterator<T>,
+  last: InputIterator<T>,
+  fn: (v: T) => boolean
+): T {
+  while (first !== last && fn(first.getValue())) first.next()
+  return first.getValue()
 }
 
 /**
@@ -115,67 +133,79 @@ export function find_if<T>(first: InputIterator<T>, last: InputIterator<T>, fn: 
  * @param {function} fn
  * @return {*}
  */
-export function find_if_not<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (v: T) => boolean): T {
-    while (first !== last && fn(first.getValue())) {
-        if (!fn(first.getValue())) return first.getValue()
-    }
-    return last.getValue()
+export function find_if_not<T>(
+  first: InputIterator<T>,
+  last: InputIterator<T>,
+  fn: (v: T) => boolean
+): T {
+  while (first !== last && fn(first.getValue())) {
+    if (!fn(first.getValue())) return first.getValue()
+  }
+  return last.getValue()
 }
-
 
 /**
  * @description: find last subsequence in range
  * searches the range [first1, last2) for the last occurrence of the sequence difined by [first2, last2), and returns
  * its first element, or last1 if no occurrence are found.
- * 
+ *
  * the elements in both ranges are compared sequentially using fn: a subsequence of [first1, last1) is considered a match
  * only when this is true for all elements of [first2, last2).
- * 
+ *
  * this function returns the last of such occurrence. For an algorithm that return this first instead.
  * @param {*}
  * @return {*}
  */
 export function find_end<T>(
-    first1: ForwardIterator<T>, last1: ForwardIterator<T>,
-    first2: ForwardIterator<T>, last2: ForwardIterator<T>,
-    fn: (x: T, y: T) => boolean): T {
-
-    if (first2 === last2) return last1.getValue()
-    let ret = last1;
-    while (first1 !== last1) {
-        let it1 = first1, it2 = first2;
-        while (fn(it1.getValue(), it2.getValue())) {
-            it1.next(), it2.next();
-            if (it2 === last2) { ret = first1; break };
-            if (it1 == last1) return ret.getValue();
-        }
-        first1.next()
+  first1: ForwardIterator<T>,
+  last1: ForwardIterator<T>,
+  first2: ForwardIterator<T>,
+  last2: ForwardIterator<T>,
+  fn: (x: T, y: T) => boolean
+): T {
+  if (first2 === last2) return last1.getValue()
+  let ret = last1
+  while (first1 !== last1) {
+    const it1 = first1,
+      it2 = first2
+    while (fn(it1.getValue(), it2.getValue())) {
+      it1.next(), it2.next()
+      if (it2 === last2) {
+        ret = first1
+        break
+      }
+      if (it1 == last1) return ret.getValue()
     }
-    return ret.getValue();
+    first1.next()
+  }
+  return ret.getValue()
 }
 
 /**
  * @description: find element from set in range
- * 
+ *
  * return the first element in the range [first1, last1) that match any of the element in [first2, last2).
  * if no such element if found, the function returns last1.
- * 
+ *
  * the elements in [first1, last1) are sequentially compared to each of the values in [first2, last2) using
  * fn, util a pair matches.
- * 
+ *
  * @param {*}
  * @return {*}
  */
 export function find_first_of<T>(
-    first1: ForwardIterator<T>, last1: ForwardIterator<T>,
-    first2: ForwardIterator<T>, last2: ForwardIterator<T>,
-    fn: (x: T, y: T) => boolean): T {
-    while (first1 !== last1) {
-        for (let it = first2; it !== last2; it.next()) {
-            if (fn(it.getValue(), first1.getValue())) return first1.getValue()
-        }
+  first1: ForwardIterator<T>,
+  last1: ForwardIterator<T>,
+  first2: ForwardIterator<T>,
+  last2: ForwardIterator<T>,
+  fn: (x: T, y: T) => boolean
+): T {
+  while (first1 !== last1) {
+    for (const it = first2; it !== last2; it.next()) {
+      if (fn(it.getValue(), first1.getValue())) return first1.getValue()
     }
-    return last1.getValue()
+  }
+  return last1.getValue()
 }
 
 /**
@@ -188,15 +218,21 @@ export function find_first_of<T>(
  * @param {function} fn
  * @return {*}
  */
-export function adjacent_find<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, fn: (a:T, b: T) => boolean): T {
-    if(first !== last) {
-        let next = first; next.next()
-        while(next !== last) {
-            if(fn(first.getValue(), next.getValue())) return first.getValue()
-            first.next(); next.next();
-        }
+export function adjacent_find<T>(
+  first: ForwardIterator<T>,
+  last: ForwardIterator<T>,
+  fn: (a: T, b: T) => boolean
+): T {
+  if (first !== last) {
+    const next = first
+    next.next()
+    while (next !== last) {
+      if (fn(first.getValue(), next.getValue())) return first.getValue()
+      first.next()
+      next.next()
     }
-    return last.getValue()
+  }
+  return last.getValue()
 }
 
 /**
@@ -208,12 +244,12 @@ export function adjacent_find<T>(first: ForwardIterator<T>, last: ForwardIterato
  * @return {*}
  */
 export function count<T>(first: InputIterator<T>, last: InputIterator<T>, val: T): number {
-    let ret = 0;
-    while(first !== last) {
-        if(first.getValue() === val) ret++
-        first.next()
-    }
-    return ret;
+  let ret = 0
+  while (first !== last) {
+    if (first.getValue() === val) ret++
+    first.next()
+  }
+  return ret
 }
 
 /**
@@ -224,15 +260,18 @@ export function count<T>(first: InputIterator<T>, last: InputIterator<T>, val: T
  * @param {function} fn
  * @return {*}
  */
-export function count_if<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (val: T) => boolean): number {
-    let ret = 0;
-    while(first !== last) {
-        if(fn(first.getValue())) ret++
-        first.next()
-    }
-    return ret;
+export function count_if<T>(
+  first: InputIterator<T>,
+  last: InputIterator<T>,
+  fn: (val: T) => boolean
+): number {
+  let ret = 0
+  while (first !== last) {
+    if (fn(first.getValue())) ret++
+    first.next()
+  }
+  return ret
 }
-
 
 /**
  * @description: return first position where two ranges differ
@@ -243,14 +282,17 @@ export function count_if<T>(first: InputIterator<T>, last: InputIterator<T>, fn:
  * @return {*}
  */
 export function mismatch<T>(
-    first1: InputIterator<T>, last1: InputIterator<T>,
-    first2: InputIterator<T>, last2: InputIterator<T>): [T, T] {
-    while (first1.getValue() !== last1.getValue() && first1.getValue() !== last2.getValue()) {
-        first1.next(); first2.next()
-    }
-    return [first1.getValue(), first2.getValue()]
+  first1: InputIterator<T>,
+  last1: InputIterator<T>,
+  first2: InputIterator<T>,
+  last2: InputIterator<T>
+): [T, T] {
+  while (first1.getValue() !== last1.getValue() && first1.getValue() !== last2.getValue()) {
+    first1.next()
+    first2.next()
+  }
+  return [first1.getValue(), first2.getValue()]
 }
-
 
 /**
  * @description: test whether the elements in two ranges are equal
@@ -261,18 +303,23 @@ export function mismatch<T>(
  * @param {InputIterator} first2
  * @return {*}
  */
-export function equal<T>(first1: InputIterator<T>, last1: InputIterator<T>, first2: InputIterator<T>, fn: (a: T, b: T)=> boolean): boolean {
-    while(first1 !== last1) {
-        if(!fn(first1.getValue(), first2.getValue())) return false;
-        first1.next(); first2.next();
-    }
-    return true;
+export function equal<T>(
+  first1: InputIterator<T>,
+  last1: InputIterator<T>,
+  first2: InputIterator<T>,
+  fn: (a: T, b: T) => boolean
+): boolean {
+  while (first1 !== last1) {
+    if (!fn(first1.getValue(), first2.getValue())) return false
+    first1.next()
+    first2.next()
+  }
+  return true
 }
-
 
 /**
  * @description: test whether range is premutation of another
- * compares the elements in the range [first1, last1) with those in the range beginning at first2, 
+ * compares the elements in the range [first1, last1) with those in the range beginning at first2,
  * and returns true if all of the elements in both ranges match, even in a diffrent order.
  * @param {InputIterator} first1
  * @param {InputIterator} last1
@@ -280,26 +327,32 @@ export function equal<T>(first1: InputIterator<T>, last1: InputIterator<T>, firs
  * @param {function} fn
  * @return {*}
  */
-export function is_premutation<T>(first1: InputIterator<T>, last1: InputIterator<T>, first2: InputIterator<T>, fn: (a: T, b: T)=> boolean): boolean {
-    if(first1 === last1) return true
-    let last2 = first2; let dis = input_itr_distance(first1, last1);
-    advance(last2, dis);
-    for(let it1 = first1; it1 != last1; it1.next()) {
-        if(find(first1, it1, it1.getValue()) === it1.getValue()) {
-            let n = count(first2, last2, it1.getValue());
-            if(n == 0 || count(it1, last1, it1.getValue()) !== n) return false 
-        } 
+export function is_premutation<T>(
+  first1: InputIterator<T>,
+  last1: InputIterator<T>,
+  first2: InputIterator<T>,
+  fn: (a: T, b: T) => boolean
+): boolean {
+  if (first1 === last1) return true
+  const last2 = first2
+  const dis = input_itr_distance(first1, last1)
+  advance(last2, dis)
+  for (const it1 = first1; it1 != last1; it1.next()) {
+    if (find(first1, it1, it1.getValue()) === it1.getValue()) {
+      const n = count(first2, last2, it1.getValue())
+      if (n == 0 || count(it1, last1, it1.getValue()) !== n) return false
     }
-    return true;
+  }
+  return true
 }
 
 /**
  * @description: searches the range [first1, last1) for the first occurrence of the sequence defined by [first2, last2),
  * and return the first element, or last1 if no occurrences are found.
- * 
- * the element in both ranges are compared sequentially use operator === (or fn): A subsequence of [first1, last1) 
+ *
+ * the element in both ranges are compared sequentially use operator === (or fn): A subsequence of [first1, last1)
  * in considered a match only when this is true for all the elements of [first2, last2).
- * 
+ *
  * this function return the first of such occurrences.
  * @param {ForwardIterator} first1
  * @param {ForwardIterator} last1
@@ -307,18 +360,25 @@ export function is_premutation<T>(first1: InputIterator<T>, last1: InputIterator
  * @param {ForwardIterator} last2
  * @return {*}
  */
-export function search<T>(first1: ForwardIterator<T>, last1: ForwardIterator<T>, first2: ForwardIterator<T>, last2: ForwardIterator<T>): T {
-    if(first2 === last2) return first1.getValue();
-    while(first1 !== last2) {
-        let it1 = first1, it2 = first2;
-        while(it1.getValue() === it2.getValue()) {
-            it1.next(); it2.next();
-            if(it1 === last1) return last1.getValue();
-            if(it2 === last2) return first1.getValue();
-        }
-        first1.next()
+export function search<T>(
+  first1: ForwardIterator<T>,
+  last1: ForwardIterator<T>,
+  first2: ForwardIterator<T>,
+  last2: ForwardIterator<T>
+): T {
+  if (first2 === last2) return first1.getValue()
+  while (first1 !== last2) {
+    const it1 = first1,
+      it2 = first2
+    while (it1.getValue() === it2.getValue()) {
+      it1.next()
+      it2.next()
+      if (it1 === last1) return last1.getValue()
+      if (it2 === last2) return first1.getValue()
     }
-    return last1.getValue()
+    first1.next()
+  }
+  return last1.getValue()
 }
 
 /**
@@ -331,17 +391,25 @@ export function search<T>(first1: ForwardIterator<T>, last1: ForwardIterator<T>,
  * @param {T} val
  * @return {*}
  */
-export function search_n<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, count: number, val: T): ForwardIterator<T> {
-    let it, limit, i; limit = first; 
+export function search_n<T>(
+  first: ForwardIterator<T>,
+  last: ForwardIterator<T>,
+  count: number,
+  val: T
+): ForwardIterator<T> {
+  let it, limit, i
+  limit = first
 
-    let dis = input_itr_distance(first, last);
-    advance(limit, dis);
-    while(first !== limit) {
-        it = first; i = 0;
-        while(it.getValue() === val) {
-            it.next(); if(++i === count) return first;
-        }
-        first.next()
+  const dis = input_itr_distance(first, last)
+  advance(limit, dis)
+  while (first !== limit) {
+    it = first
+    i = 0
+    while (it.getValue() === val) {
+      it.next()
+      if (++i === count) return first
     }
-    return last;
+    first.next()
+  }
+  return last
 }

@@ -8,9 +8,6 @@
  */
 
 import { Deque } from './deque'
-import { DequeIterator }  from './iterator'
+import { DequeIterator } from './iterator'
 
-export {
-    Deque,
-    DequeIterator
-}
+export { Deque, DequeIterator }

@@ -19,9 +19,9 @@
     "declarationDir": "./types",
     "outDir": "build",
     "baseUrl":".",
-    "paths": {"@/*": ["src/*"]}
+    "paths": {"@/*": ["src/*", "types/*"]}
   },
-  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.d.ts", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
   "exclude": ["node_modules", "dist"],
   "typedocOptions": {
     "entryPoints": ["./src/index.ts", "./src/type.ts"],

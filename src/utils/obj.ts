@@ -3,7 +3,7 @@
  * @Date: 2022-03-11 15:30:24
  * @LastEditTime: 2022-03-11 15:31:33
  * @LastEditors: hzheyuan
- * @Description: 
+ * @Description:
  * @FilePath: \tstl\src\utils\obj.ts
  */
 
@@ -14,5 +14,5 @@
  * @return {*}
  */
 export function getObjProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
-    return obj[key];
+  return obj[key]
 }

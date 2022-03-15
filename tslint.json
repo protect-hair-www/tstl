@@ -5,7 +5,8 @@
     "prettier": true,
     "no-console": false,
     "no-any": false,
-    "no-unused-variable": false
+    "no-unused-variable": false,
+    "no-implicit-dependencies": false
   },
   "linterOptions": {
     "exclude": [

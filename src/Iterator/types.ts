@@ -3,7 +3,7 @@
  * @Date: 2022-03-11 17:06:16
  * @LastEditTime: 2022-03-14 16:26:25
  * @LastEditors: hzheyuan
- * @Description: 
+ * @Description:
  * @FilePath: \tstl\src\Iterator\types.ts
  */
 
@@ -51,5 +51,4 @@
 // }
 // function createVector<T>(ctor: VectorConstructor, arrayLength: number): VectorInterface<T> {
 //     return new ctor()
-// } 
-
+// }

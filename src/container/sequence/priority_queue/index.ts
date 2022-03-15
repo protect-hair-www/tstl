@@ -6,8 +6,6 @@
  * @Description: sequence container priority_queue entry
  * @FilePath: /tstl/src/container/sequence/priority_queue/index.ts
  */
-import { PriorityQueue }  from './priority_queue'
+import { PriorityQueue } from './priority_queue'
 
-export {
-    PriorityQueue
-}
+export { PriorityQueue }

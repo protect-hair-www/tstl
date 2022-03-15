@@ -7,56 +7,36 @@
  * @FilePath: /tstl/src/index.ts
  */
 
-import {
-    Vector,
-    List,
-    Deque
-} from '@/container/sequence/index'
-import {
-    Set,
-    Map,
-    MultiSet,
-    MultiMap
-} from '@/container/associative/index'
-import { PriorityQueue }  from '@/container/sequence/'
+import { Vector, List, Deque } from '@/container/sequence/index'
+import { Set, Map, MultiSet, MultiMap } from '@/container/associative/index'
+import { PriorityQueue } from '@/container/sequence/'
 import { Queue, Stack } from '@/adapter'
-import {
-    makeHeap,
-    popHeap,
-    pushHeap,
-    sortHeap,
-    isHeap,
-    isHeapUntil
-} from '@/algorithm'
+import { makeHeap, popHeap, pushHeap, sortHeap, isHeap, isHeapUntil } from '@/algorithm'
 
 import { less, greater } from '@/fanctor'
 
 export {
-    // sequence container
-    Vector,
-    List,
-    Deque,
-    PriorityQueue,
-
-    // asssociative container
-    Set,
-    Map,
-    MultiSet,
-    MultiMap,
-
-    // adapter
-    Stack,
-    Queue,
-
-    // algorithm
-    makeHeap,
-    popHeap,
-    pushHeap,
-    sortHeap,
-    isHeap,
-    isHeapUntil,
-
-    // functor
-    less,
-    greater
+  // sequence container
+  Vector,
+  List,
+  Deque,
+  PriorityQueue,
+  // asssociative container
+  Set,
+  Map,
+  MultiSet,
+  MultiMap,
+  // adapter
+  Stack,
+  Queue,
+  // algorithm
+  makeHeap,
+  popHeap,
+  pushHeap,
+  sortHeap,
+  isHeap,
+  isHeapUntil,
+  // functor
+  less,
+  greater
 }

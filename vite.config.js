@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-11-30 15:12:10
- * @LastEditTime: 2022-02-17 15:48:39
+ * @LastEditTime: 2022-03-15 23:07:23
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\vite.config.js
+ * @FilePath: /tstl/vite.config.js
  */
 const path = require('path')
 import { defineConfig } from 'vite';
@@ -55,7 +55,7 @@ export default defineConfig(({ mode, command }) => {
       plugins: [vue()],
       resolve: {
         alias: {
-           '@': path.resolve(__dirname, './src'),
+           '@': path.resolve(__dirname, './src')
         }
       },
       define: {

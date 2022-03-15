@@ -4,22 +4,22 @@
  * @LastEditTime: 2022-03-09 18:25:23
  * @LastEditors: hzheyuan
  * @Description: associative container map
- * 
- * map is a sorted associative container that contains key-value pairs with unique keys. 
- * 
- * In a map, the key values are generally used to sort an uniquely identify the elements, 
+ *
+ * map is a sorted associative container that contains key-value pairs with unique keys.
+ *
+ * In a map, the key values are generally used to sort an uniquely identify the elements,
  * while the mapped values store the content associated this key. the types of key and mapped
  * value may differ.
- * 
- * Interally, the elements in a map are always sorted by its key following a specific strict 
+ *
+ * Interally, the elements in a map are always sorted by its key following a specific strict
  * weak ordering criterion indicated by its internal comparation function
- * 
+ *
  * map containers are generally slower than unordred_map containers to access individual elements by their key
  * but they allow direct iteration on subsets based on their order.
- * 
- * Search removal, and insertion operations have logarithmic complexity. 
+ *
+ * Search removal, and insertion operations have logarithmic complexity.
  * Maps are usually implemented as red-black trees
- * 
+ *
  * @FilePath: \tstl\src\container\associative\map.ts
  */
 import { Tree } from '../tree/index'
@@ -36,19 +36,20 @@ export class Map<K, V> {
 
     // 代理当前对象，实现map['propKey'] = 'value'写法
     return new Proxy(this, {
-      get: function (target, prop, receiver) {
+      get(target, prop, receiver) {
         // console.log('get', target, prop, Reflect.has(target, prop), receiver);
         if (Reflect.has(target, prop)) return Reflect.get(target, prop, receiver)
         return target.find(prop).get()
       },
-      set: function (target, prop, value, receiver) {
+      set(target, prop, value, receiver) {
         // console.log(`set: `, target, prop, value, Reflect.has(target, prop));
-        if(Reflect.has(target, prop)) Reflect.set(target, prop, value, receiver);
+        if (Reflect.has(target, prop)) Reflect.set(target, prop, value, receiver)
         else {
           const propKey: unknown | K = prop
-          const lb = target.lower_bound((propKey as K)), n = lb.getNode();
+          const lb = target.lower_bound(propKey as K),
+            n = lb.getNode()
           // 如果不存在就新插入一个结点
-          if(n === target.end().getNode() || target.key_comp((propKey as K), n.getKey())) {
+          if (n === target.end().getNode() || target.key_comp(propKey as K, n.getKey())) {
             target.insert_position(lb, prop, value)
           } else {
             // 否则修改结点的value属性即可
@@ -104,7 +105,7 @@ export class Map<K, V> {
 
   /**
    * @description: insett elements
-   * @param {*} 
+   * @param {*}
    * @return {*}
    */
   public insert(k: K, v: V) {
@@ -117,7 +118,7 @@ export class Map<K, V> {
    * @param {*} k
    * @param {*} v
    * @return {*}
-   */  
+   */
   public insert_position(i, k, v) {
     return this._t.inset_uniqual_at_position(i, k, v)
   }
@@ -137,7 +138,7 @@ export class Map<K, V> {
    * @return {*}
    */
   public erase(x) {
-    let r = this._t.erase(x).get()
+    const r = this._t.erase(x).get()
     return r === this._t.end().get() ? false : r
   }
 
@@ -165,27 +166,23 @@ export class Map<K, V> {
    * @return {*}
    */
   public equal_range(x: K) {
-    const r = this._t.equal_range(x);
+    const r = this._t.equal_range(x)
     return [r[0].get(), r[1].get()]
   }
-  
+
   /**
    * @description: swap content(todo)
    * @param {*}
    * @return {*}
-   */  
-  public swap() {
-
-  }
+   */
+  public swap() {}
 
   /**
    * @description: access element(todo)
    * @param {*}
    * @return {*}
-   */  
-  public at() {
-
-  }
+   */
+  public at() {}
 
   /**
    * @description: clean content
@@ -196,4 +193,3 @@ export class Map<K, V> {
     this._t.clear()
   }
 }
-

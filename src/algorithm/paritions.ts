@@ -7,8 +7,8 @@
  * TODO
  * @FilePath: /tstl/src/algorithm/paritions.ts
  */
-export function is_partitioned() {} 
-export function partitioned() {} 
-export function stable_partition() {} 
-export function partition_copy() {} 
-export function partition_point() {} 
+export function is_partitioned() {}
+export function partitioned() {}
+export function stable_partition() {}
+export function partition_copy() {}
+export function partition_point() {}

@@ -8,9 +8,6 @@
  */
 
 import { List } from './list'
-import { LinkListIterator }  from './iterator'
+import { LinkListIterator } from './iterator'
 
-export {
-    List,
-    LinkListIterator
-}
+export { List, LinkListIterator }

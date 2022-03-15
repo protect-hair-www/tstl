@@ -4,22 +4,22 @@
  * @LastEditTime: 2022-03-06 23:10:18
  * @LastEditors: hzheyuan
  * @Description: associative container multimap
- * Multimaps are associative containers that store elements formed by a combination of a key value and a mapped value, 
+ * Multimaps are associative containers that store elements formed by a combination of a key value and a mapped value,
  * following a specific order, and where multiple elements can have equivalent keys.
- * 
- * In a multimap, the key values are generally used to sort an uniquely identify the elements, 
+ *
+ * In a multimap, the key values are generally used to sort an uniquely identify the elements,
  * while the mapped values store the content associated this key. the types of key and mapped
  * value may differ.
- * 
- * Interally, the elements in a multimap are always sorted by its key following a specific strict 
+ *
+ * Interally, the elements in a multimap are always sorted by its key following a specific strict
  * weak ordering criterion indicated by its internal comparation function
- * 
+ *
  * multimap containers are generally slower than unordred_multimap containers to access individual elements by their key
  * but they allow direct iteration on subsets based on their order.
- * 
- * Search removal, and insertion operations have logarithmic complexity. 
+ *
+ * Search removal, and insertion operations have logarithmic complexity.
  * multimaps are usually implemented as red-black trees
- * 
+ *
  * @FilePath: \tstl\src\container\associative\multimap.ts
  */
 import { Tree } from '../tree/index'
@@ -125,7 +125,7 @@ export class MultiMap<K, V> {
    * @return {*}
    */
   public erase(x) {
-    let r = this._t.erase(x).get()
+    const r = this._t.erase(x).get()
     return r === this._t.end().get() ? false : r
   }
 
@@ -153,7 +153,7 @@ export class MultiMap<K, V> {
    * @return {*}
    */
   public equal_range(x: K) {
-    const r = this._t.equal_range(x);
+    const r = this._t.equal_range(x)
     return [r[0].get(), r[1].get()]
   }
 
@@ -166,4 +166,3 @@ export class MultiMap<K, V> {
     this._t.clear()
   }
 }
-

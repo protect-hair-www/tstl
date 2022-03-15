@@ -4,7 +4,7 @@
  * @LastEditTime: 2022-03-14 23:36:11
  * @LastEditors: hzheyuan
  * @Description: merge
- * todo 
+ * todo
  * @FilePath: /tstl/src/algorithm/merge.ts
  */
 export function merge() {}

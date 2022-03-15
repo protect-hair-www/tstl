@@ -7,6 +7,4 @@
  * @FilePath: \tstl\src\adapter\queue\index.ts
  */
 import { Queue } from './queue'
-export {
-    Queue
-}
+export { Queue }

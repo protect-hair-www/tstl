@@ -5,16 +5,16 @@
  * @LastEditors: hzheyuan
  * @Description: base iterator
  * Interface identify the category of an iterator as an base iterator
- * 
+ *
  * @FilePath: /tstl/src/Iterator/base_iterator.ts
  */
-export interface BaseIterator<T> extends Iterator<T>{
-  _cur                                                                  // current position
+export interface BaseIterator<T> extends Iterator<T> {
+  _cur // current position
 
   // next and hasNext(next identify in Iterator)
-  hasNext(): boolean                                                    // test whether has next element
+  hasNext(): boolean // test whether has next element
 
   // compare
-  equal(first, last): boolean                                           // compare operator
-  [Symbol.iterator](): Iterator<T>                                      // Javascript，iterable object have to implementation「@@iterator」method，Javascript can access the property with [Symbol.iterator]
+  equal(first, last): boolean // compare operator
+  [Symbol.iterator](): Iterator<T> // Javascript，iterable object have to implementation「@@iterator」method，Javascript can access the property with [Symbol.iterator]
 }

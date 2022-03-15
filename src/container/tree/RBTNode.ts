@@ -24,8 +24,8 @@ export class RBTNode<K, V> extends Entry<K, V> {
   static readonly nilNode: RBTNode<any, any> = new (class extends RBTNode<unknown, unknown> {
     constructor() {
       super(Symbol.for('nil'), Symbol.for('nil'))
-      this._left = this._right = this;
-      (this._parent as any) = null;
+      this._left = this._right = this
+      ;(this._parent as any) = null
       this._color = Color.BLACK
       this._size = 0
     }
@@ -82,5 +82,4 @@ export class RBTNode<K, V> extends Entry<K, V> {
   set size(sz) {
     this._size = sz
   }
-
 }

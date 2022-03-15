@@ -1,10 +1,10 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-14 15:46:21
+ * @LastEditTime: 2022-03-15 23:00:01
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\demo\Vector.vue
+ * @FilePath: /tstl/demo/Vector.vue
 -->
 <template>
   <div class="Vector-test">
@@ -75,15 +75,17 @@ const onPopBack = (e) => {
 }
 
 const testObject = () => {
-  vec = new Vector<Person<string>>();
+  // let vec: Vector<Person<string>> = new Vector<Person<string>>();
+  let vec: Vector<string> = new Vector<string>();
   // 创建一个list容器
   ['nick', 'jack', 'kalai'].forEach(name => {
-    let ins: Person<string> = new Person<string>(name)
-    vec.push_back(ins)
+    // let ins: Person<string> = new Person<string>(name)
+    vec.push_back(name)
   })
   console.log(vec)
 
   const front = vec.front()
+  // vec.resize()
   const b = vec.begin()
   console.log(front.say())
 

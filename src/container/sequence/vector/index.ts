@@ -9,7 +9,4 @@
 import { Vector } from './vector'
 import { VCIterator } from './iterator'
 
-export {
-    Vector,
-    VCIterator
-}
+export { Vector, VCIterator }
