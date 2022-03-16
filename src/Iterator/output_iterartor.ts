@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 09:44:09
- * @LastEditTime: 2022-03-13 17:54:20
+ * @LastEditTime: 2022-03-16 21:15:15
  * @LastEditors: hzheyuan
  * @Description: Output iterator category
  * Interface to identify the category of an iterator as an output iterator

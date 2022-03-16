@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-03-13 11:35:13
+ * @LastEditTime: 2022-03-16 23:38:17
  * @LastEditors: hzheyuan
  * @Description: iterator definitions
  *
@@ -44,6 +44,8 @@
  * @FilePath: /tstl/src/Iterator/index.ts
  */
 
+import { InputIterator } from './input_iterator'
+import { BidirectionalIterator } from './bidirectional_iterator'
 // old version(will be delete)
 export abstract class Iterator<T> {
   _cur
@@ -60,6 +62,12 @@ export abstract class Iterator<T> {
   // abstract getKey()        // 获取键值，如果有的话
   abstract remove() // 通过迭代器删除
 }
+
+export function itr_move<T>(itr: InputIterator<T>): T {
+  return itr.getValue()
+}
+
+export function itr_swap<T>(first: BidirectionalIterator<T>, last: BidirectionalIterator<T>) {}
 
 export * from './Iterable'
 export * from './input_iterator'

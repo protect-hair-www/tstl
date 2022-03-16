@@ -1,7 +1,7 @@
 <!--
  * @Author: hzheyuan
  * @Date: 2022-03-04 17:01:41
- * @LastEditTime: 2022-03-15 23:00:01
+ * @LastEditTime: 2022-03-16 22:26:18
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/demo/Vector.vue
@@ -87,7 +87,7 @@ const testObject = () => {
   const front = vec.front()
   // vec.resize()
   const b = vec.begin()
-  console.log(front.say())
+  // console.log(front.say())
 
   let c = new Array<Person<string>>();
   ['nick', 'jack', 'kalai'].forEach(name => {
@@ -102,7 +102,7 @@ const testObject = () => {
     d.push_back(ins)
   })
   let k = d.back()
-  k.say()
+  // k.say()
 }
 
 // test js primitive type

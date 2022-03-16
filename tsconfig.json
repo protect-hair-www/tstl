@@ -3,7 +3,12 @@
     "target": "ES6",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": ["ESNext", "DOM", "ES5", "ES2015.Promise"],
+    "lib": [
+      "ESNext",
+      "DOM",
+      "ES5",
+      "ES2015.Promise"
+    ],
     "moduleResolution": "Node",
     "strict": true,
     "sourceMap": true,
@@ -14,17 +19,34 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noImplicitAny": false,
-    "allowJs": true,
+    "isolatedModules": true,
+    "allowJs": false,
     "declaration": true,
     "declarationDir": "./types",
-    "outDir": "build",
-    "baseUrl":".",
-    "paths": {"@/*": ["src/*", "types/*"]}
+    "outDir": "./build",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
-  "exclude": ["node_modules", "dist"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "demo/env.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build"
+  ],
   "typedocOptions": {
-    "entryPoints": ["./src/index.ts", "./src/type.ts"],
+    "entryPoints": [
+      "./src/index.ts",
+      "./src/type.ts"
+    ],
     "out": "docs/adapter"
   }
 }
