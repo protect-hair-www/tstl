@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:28
- * @LastEditTime: 2022-03-17 15:28:09
+ * @LastEditTime: 2022-03-17 21:52:58
  * @LastEditors: hzheyuan
  * @Description: Heap
  *
@@ -21,8 +21,8 @@
  *
  * @FilePath: /tstl/src/container/sequence/heap/heap.ts
  */
-import { RandomAccessIterator, random_itr_distance } from '../../../Iterator'
-import { CompFunType, less } from '../../../fanctor'
+import { RandomAccessIterator, random_itr_distance } from '../../../iterator'
+import { CompFunType, less } from '../../../functor'
 
 /**
  * @description: heap heapify

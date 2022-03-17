@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:54
- * @LastEditTime: 2022-03-17 15:28:46
+ * @LastEditTime: 2022-03-17 21:53:02
  * @LastEditors: hzheyuan
  * @Description: Priority queue
  * Priority queues are type of container adapters, specifically designed such that
@@ -22,8 +22,8 @@
  */
 import { makeHeap, pushHeap, popHeap } from '../../../container/sequence/heap/'
 import { Vector } from '../../../container/sequence/vector/'
-import { CompFunType, less } from '../../../fanctor'
-import { InputIterator } from '../../../Iterator'
+import { CompFunType, less } from '../../../functor'
+import { InputIterator } from '../../../iterator'
 
 export class PriorityQueue<T, C = Vector<T>> {
   private cntr

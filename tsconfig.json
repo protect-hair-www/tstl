@@ -23,7 +23,7 @@
       "@container/*": ["src/container/*"],
       "@adapter/*": ["src/adapter/*"],
       "@iterator/*": ["src/iterator/*"],
-      "@fanctor/*": ["src/fanctor/*"],
+      "@fanctor/*": ["src/functor/*"],
       "@algorithm/*": ["src/algorithm/*"],
       "@utils/*": ["src/utils/*"],
     }

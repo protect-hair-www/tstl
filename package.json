@@ -5,7 +5,7 @@
   "description": "",
   "main": "build/tstl.cjs.js",
   "module": "build/tstl.es.js",
-  "types": "build/tstl.d.ts",
+  "types": "build/types/index.d.ts",
   "files": [
     "build"
   ],

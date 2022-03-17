@@ -1,12 +1,12 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-03-09 18:55:43
+ * @LastEditTime: 2022-03-17 21:53:05
  * @LastEditors: hzheyuan
  * @Description: 红黑树对应的迭代器
- * @FilePath: \tstl\src\container\tree\Iterator.ts
+ * @FilePath: /tstl/src/container/tree/Iterator.ts
  */
-import { Iterator } from '../../Iterator/index'
+import { Iterator } from '../../iterator/index'
 import { RBTNode, Color } from './RBTNode'
 const isNil = RBTNode.isNil
 

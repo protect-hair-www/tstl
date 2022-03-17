@@ -11,16 +11,10 @@ const step = (msg) => console.log(chalk.cyan(msg));
 
 const currentVersion = pkg.version;
 const preId = semver.prerelease(currentVersion) && semver.prerelease(currentVersion)[0];
-const incrementVersions = [
-  'patch',
-  'minor',
-  'major',
-  // https://stackoverflow.com/questions/44908159/how-to-define-an-array-with-conditional-elements
-  ...preId ? ['prepatch', 'preminor', 'premajor', 'prerelease'] : []
-];
+const incrementVersions = ['patch','minor','major', ...preId ? ['prepatch', 'preminor', 'premajor', 'prerelease'] : []];
+
 const resolve = (...args) => path.resolve(__dirname, '../', ...args);
 const dryRun = args.dryRun;
-const npmRegistry = 'https://registry.npmjs.org';
 const run = (cmd, args, options) => execa(cmd, args, { stdio: 'inherit', ...options });
 
 const ifDryRun = (cmd, args, options) => dryRun ? console.log(`${cmd} ${args.join(' ')}`) : run(cmd, args, options);
@@ -33,6 +27,8 @@ const commitChanges = async (version) => {
     await ifDryRun(`git`, ['commit', '-m', `chore(release): release v${version}`]);
   }
 };
+
+// typescript extractor
 const rollupTypes = async () => {
   const extractorConfig = ExtractorConfig.loadFileAndPrepare(resolve('api-extractor.json'));
   // Invoke API Extractor
@@ -49,6 +45,8 @@ const rollupTypes = async () => {
     process.exitCode = 1;
   }
 };
+
+// build process
 const build = async () => {
   await fs.rm(resolve('build'), { force: true, recursive: true });
   await ifDryRun('npm', ['run', 'build']);
@@ -56,6 +54,9 @@ const build = async () => {
     await rollupTypes();
   }
 };
+
+// release process
+// include: update version, changelog, publish, push
 const doRelease = async (version) => {
   step('\nBuild package...');
   await build();
@@ -66,6 +67,8 @@ const doRelease = async (version) => {
   await ifDryRun('npm', ['run', 'genlog']);
   await commitChanges(version);
 
+  /* temporarity cancel publish process */
+  // const npmRegistry = 'https://registry.npmjs.org';
   // step('\nPublish package to npm...');
   // await ifDryRun('npm', ['publish', '--reg', npmRegistry]);
 
@@ -74,6 +77,8 @@ const doRelease = async (version) => {
   // await ifDryRun(`git`, ['push', 'origin', `v${version}`]);
   console.log(chalk.green(`Release successfully ${pkg.name}@${version}`));
 };
+
+// main entry
 const main = async () => {
   const answer = await enquirer.prompt(
     {
@@ -110,6 +115,8 @@ const main = async () => {
     await doRelease(newVersion);
   }
 };
+
+// prefrom main task
 main().catch((err) => {
   console.log('error', err);
 });
