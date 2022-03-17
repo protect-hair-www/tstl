@@ -8,4 +8,9 @@ dist-ssr
 cert.config.js
 .vscode/
 types/
+
 # docs/
+.cache/
+.temp/
+**/.cache/
+**/.temp/
