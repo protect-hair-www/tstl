@@ -1,12 +1,12 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:22
- * @LastEditTime: 2022-03-14 23:16:53
+ * @LastEditTime: 2022-03-17 15:27:32
  * @LastEditors: hzheyuan
  * @Description: non modifying sequence operations
- * @FilePath: /tstl/src/algorithm/non_modifying_sequence_op.ts
+ * @FilePath: \tstl\src\algorithm\non_modifying_sequence_op.ts
  */
-import { InputIterator, ForwardIterator, input_itr_distance, advance } from '@/Iterator'
+import { InputIterator, ForwardIterator, input_itr_distance, advance } from '../Iterator'
 
 /**
  * @description: test condition on all elements in range

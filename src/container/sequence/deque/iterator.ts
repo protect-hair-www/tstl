@@ -1,12 +1,12 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-14 17:08:54
+ * @LastEditTime: 2022-03-17 15:27:57
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
  * @FilePath: \tstl\src\container\sequence\deque\iterator.ts
  */
-import { RandomAccessIterator } from '@/Iterator/'
+import { RandomAccessIterator } from '../../../Iterator/'
 
 export class DequeIterator<T> implements RandomAccessIterator<T> {
   _cur: number

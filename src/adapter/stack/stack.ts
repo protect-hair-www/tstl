@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:09:40
- * @LastEditTime: 2022-03-11 13:29:20
+ * @LastEditTime: 2022-03-17 15:29:16
  * @LastEditors: hzheyuan
  * @Description: Stacks are type of containr, specifically desingned to operate in a LIFO context(last-in-firt-out),
  * where elements are inserted into one end of container end extracted from the other.
@@ -23,8 +23,8 @@
  *
  * @FilePath: \tstl\src\adapter\queue\queue.ts
  */
-import { Deque } from '@/container/sequence/deque/index'
-import { List } from '@/container/sequence/list/index'
+import { Deque } from '../../container/sequence/deque/index'
+import { List } from '../../container/sequence/list/index'
 type QueueCntrType<T> = Deque<T> | List<T>
 
 export class Stack<T> {
@@ -32,7 +32,7 @@ export class Stack<T> {
 
   constructor(p?: number | Iterable<T>, cntrType?: QueueCntrType<T>) {
     if (typeof p === 'number' && p) this._cntr = new Deque<T>()
-    else if (p) this._cntr = new Deque(...(p as Iterable<T>))
+    // else if (p) this._cntr = new Deque(...(p as Iterable<T>))
     else this._cntr = new Deque()
   }
 

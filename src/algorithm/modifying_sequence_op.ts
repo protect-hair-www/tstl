@@ -1,11 +1,11 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:40
- * @LastEditTime: 2022-03-16 23:55:49
+ * @LastEditTime: 2022-03-17 15:27:25
  * @LastEditors: hzheyuan
  * @Description: Modifying sequence operations
  * TODO
- * @FilePath: /tstl/src/algorithm/modifying_sequence_op.ts
+ * @FilePath: \tstl\src\algorithm\modifying_sequence_op.ts
  */
 import {
   InputIterator,
@@ -14,9 +14,9 @@ import {
   ForwardIterator,
   itr_move,
   itr_swap
-} from '@/Iterator'
+} from '../Iterator'
 import { RandomAccessIterator, random_itr_distance } from './../Iterator/random_access_iterator'
-import { jsCopy } from '@/utils/index'
+import { jsCopy } from '../utils/index'
 
 /**
  * @description: Copy range of elements

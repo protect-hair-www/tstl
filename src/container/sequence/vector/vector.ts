@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-15 22:22:25
+ * @LastEditTime: 2022-03-17 15:28:59
  * @LastEditors: hzheyuan
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
@@ -18,9 +18,9 @@
  *
  * @FilePath: \tstl\src\container\sequence\vector\vector.ts
  */
-import { InputIterator } from '@/Iterator'
+import { InputIterator } from '../../../Iterator'
 import { VCIterator } from './iterator'
-import { TSTLIterable } from '@/iterator/Iterable'
+import { TSTLIterable } from '../../../iterator/Iterable'
 
 export class Vector<T> implements TSTLIterable<T> {
   private cntr: T[]

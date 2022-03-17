@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-08 21:17:38
- * @LastEditTime: 2022-03-14 16:39:07
+ * @LastEditTime: 2022-03-17 15:27:50
  * @LastEditors: hzheyuan
  * @Description: deque(double ended queue)
  * deque is an irregular acronym of double-ended queue.
@@ -21,8 +21,8 @@
  * @FilePath: /tstl/src/container/sequence/deque/deque.ts
  */
 import { DequeIterator } from './iterator'
-import { Iterator, InputIterator } from '@/Iterator/'
-import { TSTLIterable } from '@/Iterator/Iterable'
+import { Iterator, InputIterator } from '../../../Iterator/'
+import { TSTLIterable } from '../../../Iterator/Iterable'
 
 export class Deque<T> implements TSTLIterable<T> {
   // the container

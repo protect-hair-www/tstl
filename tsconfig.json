@@ -1,52 +1,40 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": [
       "ESNext",
-      "DOM",
       "ES5",
       "ES2015.Promise"
     ],
-    "moduleResolution": "Node",
     "strict": true,
-    "sourceMap": true,
-    "resolveJsonModule": true,
     "esModuleInterop": true,
-    "noEmit": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
+    "skipLibCheck": true,
+    "moduleResolution": "Node",
     "noImplicitAny": false,
-    "isolatedModules": true,
     "allowJs": false,
+    "sourceMap": true,
+    "isolatedModules": true,
     "declaration": true,
-    "declarationDir": "./types",
+    "declarationDir": "build/types",
     "outDir": "./build",
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@container/*": ["src/container/*"],
+      "@adapter/*": ["src/adapter/*"],
+      "@iterator/*": ["src/iterator/*"],
+      "@fanctor/*": ["src/fanctor/*"],
+      "@algorithm/*": ["src/algorithm/*"],
+      "@utils/*": ["src/utils/*"],
     }
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.vue",
-    "demo/env.d.ts"
+    "src/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",
     "dist",
     "build"
   ],
-  "typedocOptions": {
-    "entryPoints": [
-      "./src/index.ts",
-      "./src/type.ts"
-    ],
-    "out": "docs/adapter"
-  }
 }

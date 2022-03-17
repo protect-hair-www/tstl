@@ -1,73 +1,76 @@
 {
   "name": "tstl",
-  "version": "0.0.1",
+  "version": "0.0.3",
+  "private": false,
+  "description": "",
+  "main": "build/tstl.cjs.js",
+  "module": "build/tstl.es.js",
+  "types": "build/tstl.d.ts",
   "files": [
-    "dist",
-    "src",
-    "types"
+    "build"
   ],
-  "main": "./dist/tstl.es.js",
-  "module": "./dist/tstl.umd.js",
-  "types": "./types/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/tstl.es.js",
-      "require": "./dist/tstl.umd.js"
-    }
-  },
   "scripts": {
-    "dev": "vite --mode web",
-    "serve": "vite preview",
-    "cz": "cz",
-    "release": "standard-version",
-    "lint:script": "tslint \"src/**/*.ts\" --fix",
-    "prettier": "prettier --write \"src/**/*.ts\" --loglevel warn",
-    "fix": "npm run prettier & npm run lint:script",
-    "test": "jest",
-    "build": "npm run fix & tsc & vite build",
-    "build:demo": "npm run fix & tsc & vite build --mode demo",
-    "build:doc": "npm run build & npm run doc",
     "prepare": "husky install",
-    "doc:core": "typedoc --out docs/core src/core/doc.ts src/core/types.ts --cleanOutputDir true",
-    "doc:adapter": "typedoc --cleanOutputDir true",
-    "look:doc": "anywhere -d ./docs",
-    "look:doc:core": "anywhere -d ./docs/core",
-    "look:doc:adapter": "anywhere -d ./docs/adapter"
+    "cz": "cz",
+    "dev": "rollup -w -c rollup.config.ts --environment MODE:dev",
+    "build": "rollup -c rollup.config.ts --environment MODE:prod",
+    "genlog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "release": "node scripts/release.js",
+    "test": "jest --coverage=false",
+    "test:coverage": "jest"
+  },
+  "keywords": [
+    "typescript",
+    "STL",
+    "DataStruct",
+    "Algorithm"
+  ],
+  "author": "kalai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/protect-hair-www/tstl.git"
+  },
+  "homepage": "https://github.com/protect-hair-www/tstl",
+  "bugs": {
+    "url": "https://github.com/protect-hair-www/tstl/issues"
+  },
+  "license": "MIT",
+  "lint-staged": {
+    "lib/**/*.{ts,js}": [
+      "prettier --write",
+      "eslint"
+    ]
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/preset-env": "^7.16.0",
-    "@babel/preset-typescript": "^7.16.0",
-    "@commitlint/cli": "^15.0.0",
-    "@commitlint/config-conventional": "^15.0.0",
-    "@johmun/vue-tags-input": "^2.1.0",
-    "@types/jest": "^27.0.2",
-    "@vitejs/plugin-vue": "^1.10.2",
-    "@vue/compiler-sfc": "^3.2.23",
-    "babel-jest": "^27.3.1",
+    "@commitlint/cli": "^16.0.2",
+    "@commitlint/config-conventional": "^16.0.0",
+    "@microsoft/api-extractor": "^7.19.4",
+    "@rollup/plugin-alias": "^3.1.9",
+    "@types/jest": "^27.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/parser": "^5.9.0",
+    "chalk": "^4.1.2",
     "commitizen": "^4.2.4",
-    "cz-conventional-changelog": "^3.3.0",
-    "husky": "^7.0.0",
-    "jest": "^27.3.1",
-    "prettier": "^2.4.1",
-    "prettier-tslint": "^0.4.2",
-    "standard-version": "^9.3.2",
-    "ts-jest": "^27.0.7",
-    "tslint": "^6.1.3",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-plugin-prettier": "^2.3.0",
-    "typedoc": "^0.22.9",
-    "typescript": "^4.5.5",
-    "vite": "^2.6.4",
-    "vite-jest": "^0.1.4",
-    "vue-tsc": "^0.32.0"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
-  "dependencies": {
-    "vue": "^3.2.23"
+    "conventional-changelog-cli": "^2.2.2",
+    "enquirer": "^2.3.6",
+    "eslint": "^8.6.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.3.0",
+    "execa": "^5.1.1",
+    "husky": "^7.0.4",
+    "jest": "^27.4.7",
+    "lint-staged": "^12.1.7",
+    "minimist": "^1.2.5",
+    "module-alias": "^2.2.2",
+    "prettier": "2.5.1",
+    "rollup": "^2.63.0",
+    "rollup-plugin-typescript2": "^0.31.2",
+    "semver": "^7.3.5",
+    "ts-jest": "^27.1.2",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.4",
+    "vitepress": "^0.21.4"
   }
 }

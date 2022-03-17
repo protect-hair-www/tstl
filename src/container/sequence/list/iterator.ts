@@ -1,13 +1,13 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:24
- * @LastEditTime: 2022-03-13 16:50:13
+ * @LastEditTime: 2022-03-17 15:28:17
  * @LastEditors: hzheyuan
  * @Description: list container iterator
- * @FilePath: /tstl/src/container/sequence/list/iterator.ts
+ * @FilePath: \tstl\src\container\sequence\list\iterator.ts
  */
 import { ListNode } from './ListNode'
-import { RandomAccessIterator } from '@/Iterator/'
+import { RandomAccessIterator } from '../../../Iterator/'
 
 export class LinkListIterator<T> implements RandomAccessIterator<T> {
   _cur: ListNode<T>

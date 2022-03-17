@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:58:00
- * @LastEditTime: 2022-03-14 17:00:35
+ * @LastEditTime: 2022-03-17 15:28:27
  * @LastEditors: hzheyuan
  * @Description: sequenece container list
  *
@@ -22,8 +22,8 @@
  */
 import { ListNode } from './ListNode'
 import { LinkListIterator } from './iterator'
-import { Iterator, InputIterator } from '@/Iterator/'
-import { TSTLIterable } from '@/iterator/Iterable'
+import { Iterator, InputIterator } from '../../../Iterator/'
+import { TSTLIterable } from '../../../iterator/Iterable'
 
 export class List<T> implements TSTLIterable<T> {
   private _header: ListNode<T>
