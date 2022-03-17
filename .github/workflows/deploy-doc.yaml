@@ -19,8 +19,8 @@ jobs:
       - name: Init new repo in dist folder and commit generated files
         run: |
           cd docs/.vitepress/dist
-          git config --global user.email "1162486176@qq.com"
-          git config --global user.name "wangkaiwd"
+          git config --global user.email "heyuanjiayou@gmail.com"
+          git config --global user.name "kalai"
           git init
           git add .
           git commit -m 'chore(docs): update docs'
