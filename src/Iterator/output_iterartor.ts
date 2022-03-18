@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 09:44:09
- * @LastEditTime: 2022-03-16 21:15:15
+ * @LastEditTime: 2022-03-18 17:30:39
  * @LastEditors: hzheyuan
  * @Description: Output iterator category
  * Interface to identify the category of an iterator as an output iterator
@@ -13,18 +13,18 @@
  *
  * There is not a single type of output iterator: Each container may define its own specific iterator type able to
  * iterate through it and access its elements. But all output iterators support at least the following operations:
- *  (1) Write value (write only)
- *  (2) Increment (+1)
- *  (3) Compare
+ *  (1) Access 
+ *  (2) Write (write only)
+ *  (3) Next (+1)
+ *  (4) Compare
  * @FilePath: /tstl/src/Iterator/output_iterartor.ts
  */
 import { BaseIterator } from './base_iterator'
 
 export interface OutputIterator<T> extends BaseIterator<T> {
-  _cur // current position
-
   get key() // get current key or index(getter)
   getKey() // get current key or index
 
+  set value(v: T)
   setValue(v: T) // write value operator
 }

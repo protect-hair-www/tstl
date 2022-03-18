@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-12 11:03:38
- * @LastEditTime: 2022-03-13 16:32:05
+ * @LastEditTime: 2022-03-18 17:51:01
  * @LastEditors: hzheyuan
  * @Description: Forward iterator category
  * Inteface to identify the category of an iterator as a forward iterator:
@@ -24,12 +24,5 @@
  */
 import { InputIterator } from './input_iterator'
 import { OutputIterator } from './output_iterartor'
-
-export interface ForwardIterator<T> extends InputIterator<T>, OutputIterator<T> {
-  _cur // current position
-
-  hasNext(): boolean // test whether have next element
-
-  remove?() // erase the position element
-  [Symbol.iterator](): Iterator<T> // Javascript，iterable object have to implementation「@@iterator」method，Javascript can access the property with [Symbol.iterator]
-}
+type InputAndOutputItreator<T> = InputIterator<T> & OutputIterator<T>
+export interface ForwardIterator<T> extends InputAndOutputItreator<T> {}

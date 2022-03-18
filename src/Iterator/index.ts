@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-03-16 23:38:17
+ * @LastEditTime: 2022-03-18 17:07:02
  * @LastEditors: hzheyuan
  * @Description: iterator definitions
  *
@@ -44,8 +44,13 @@
  * @FilePath: /tstl/src/Iterator/index.ts
  */
 
+import { BaseIterator } from './base_iterator';
 import { InputIterator } from './input_iterator'
-import { BidirectionalIterator } from './bidirectional_iterator'
+import { OutputIterator } from './output_iterartor'
+import { ForwardIterator } from './forward_iterator';
+import { BidirectionalIterator } from './bidirectional_iterator';
+import { RandomAccessIterator } from './random_access_iterator'
+
 // old version(will be delete)
 export abstract class Iterator<T> {
   _cur
@@ -61,6 +66,35 @@ export abstract class Iterator<T> {
   abstract getValue() // 获取值
   // abstract getKey()        // 获取键值，如果有的话
   abstract remove() // 通过迭代器删除
+}
+
+type TypeName<T> = T extends string 
+? 'string'
+: T extends number
+? 'number'
+: T extends boolean
+? 'boolean'
+: T extends undefined
+? 'undefined'
+: T extends Function
+? 'function'
+: 'object'
+
+type IteratorTypes<T> = BaseIterator<T> | InputIterator<T> | OutputIterator<T> | ForwardIterator<T> | BidirectionalIterator<T> | RandomAccessIterator<T>;
+type EqualIteratorInputType<T> = T extends IteratorTypes<T> ? T: never;
+// type PickEqualsMethod<T> = Pick<T, "equals">;
+export function equals<T>(first: EqualIteratorInputType<T>, last: EqualIteratorInputType<T>): boolean;
+export function equals<T>(first: EqualIteratorInputType<T>, last: EqualIteratorInputType<T>): boolean {
+  let firstVal = first.value, lastVal = last.value;
+  let type: TypeName<T>;
+
+  return firstVal === lastVal;
+}
+
+
+function distance<T>(first: T extends Iterator<T> ? T : never, last): number;
+function distance<InputIterator>(first, last) {
+  return first.getIndex() - last.getIndx();
 }
 
 export function itr_move<T>(itr: InputIterator<T>): T {

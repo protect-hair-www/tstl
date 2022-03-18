@@ -7,9 +7,9 @@
  * @FilePath: \tstl\src\container\sequence\vector\iterator.ts
  */
 // import { Iterator } from '../../../Iterator/index'
-import { RandomAccessIterator } from '../../../iterator'
+import { RandomAccessIterator, ForwardIterator } from '../../../iterator'
 
-export class VCIterator<T> implements RandomAccessIterator<T> {
+export class VCIterator<T> implements ForwardIterator<T> {
   _cur: number
   _cntr: T[]
 

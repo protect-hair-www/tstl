@@ -1,11 +1,11 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:40
- * @LastEditTime: 2022-03-17 21:52:47
+ * @LastEditTime: 2022-03-18 15:52:53
  * @LastEditors: hzheyuan
  * @Description: Modifying sequence operations
  * TODO
- * @FilePath: /tstl/src/algorithm/modifying_sequence_op.ts
+ * @FilePath: \tstl\src\algorithm\modifying_sequence_op.ts
  */
 import {
   InputIterator,
@@ -34,8 +34,9 @@ export function copy<T>(
   result: OutputIterator<T>
 ): OutputIterator<T> {
   while (first !== last) {
-    const copyed_val = jsCopy(first.getValue())
-    result.setValue(copyed_val)
+    const copyed_val = jsCopy(first.value)
+    result.value = copyed_val
+    // result.setValue(copyed_val)
     result.next
     first.next()
   }

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 09:43:54
- * @LastEditTime: 2022-03-14 23:00:07
+ * @LastEditTime: 2022-03-18 17:30:30
  * @LastEditors: hzheyuan
  * @Description: Input Iterator
  *
@@ -18,18 +18,18 @@
  */
 import { BaseIterator } from './base_iterator'
 export interface InputIterator<T> extends BaseIterator<T> {
-  _cur // current position
+  // get key() // get current key or index(getter)
+  // getKey() // get current key or index
 
-  get key() // get current key or index(getter)
-  getKey() // get current key or index
-
-  // access
-  get value(): T // access current position element(getter)
-  getValue(): T // access current position element
+  readonly index?: number
+  getIndex?(): number
 }
 
 export function input_itr_distance<T>(first: InputIterator<T>, last: InputIterator<T>): number {
-  const n = last.getKey() - first.getKey()
+  let n = 0
+  if(last.index && first.index) {
+    n = last.index - first.index
+  }
   return n
 }
 
