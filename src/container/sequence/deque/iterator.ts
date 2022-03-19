@@ -1,19 +1,22 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-17 21:52:51
+ * @LastEditTime: 2022-03-19 16:19:26
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
  * @FilePath: /tstl/src/container/sequence/deque/iterator.ts
  */
-import { RandomAccessIterator } from '../../../iterator'
+import { BaseIterator, IteratorTags, RandomAccessIterator } from '../../../iterator'
 
 export class DequeIterator<T> implements RandomAccessIterator<T> {
+  readonly tag: IteratorTags = IteratorTags.RANDOM_ACCESS_ITERATOR
   _cur: number
   _cntr
+  index: number; 
 
   constructor(c, cntr) {
     this._cur = c
+    this.index = c
     this._cntr = cntr
   }
 
@@ -27,6 +30,11 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
 
   private get cntr() {
     return this._cntr
+  }
+
+  equals<I extends BaseIterator<T>>(itr: I): boolean {
+    if(itr.value === this.getValue()) return true;
+    return false;
   }
 
   /**
@@ -45,6 +53,10 @@ export class DequeIterator<T> implements RandomAccessIterator<T> {
    */
   public getKey() {
     return this.cur
+  }
+
+  at(index) {
+    return this._cntr[index]
   }
 
   /**

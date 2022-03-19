@@ -1,13 +1,43 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-03-17 21:53:05
+ * @LastEditTime: 2022-03-19 15:21:36
  * @LastEditors: hzheyuan
  * @Description: 红黑树对应的迭代器
  * @FilePath: /tstl/src/container/tree/Iterator.ts
  */
-import { Iterator } from '../../iterator/index'
+
 import { RBTNode, Color } from './RBTNode'
+// old version(will be delete)
+export abstract class Iterator<T> {
+  _cur
+
+  // 迭代器指针操作
+  abstract prev() // 迭代器前移，并返回迭代器所指向的元素
+  abstract next() // 迭代器后移，并返回迭代器所指向的元素
+  abstract done(): boolean // 是否遍历完
+  abstract hasNext(): boolean // 同上done
+
+  abstract getNode() // 获取迭代器结点
+  abstract get() // 迭代器成员访问方法
+  abstract getValue() // 获取值
+  // abstract getKey()        // 获取键值，如果有的话
+  abstract remove() // 通过迭代器删除
+}
+
+// import { RandomAccessIterator, BidirectionalIterator, IteratorTags } from '../../iterator'
+// export interface RbIterator<T> extends BidirectionalIterator<T> {
+//   // 迭代器指针操作
+//   prev() // 迭代器前移，并返回迭代器所指向的元素
+//   next() // 迭代器后移，并返回迭代器所指向的元素
+//   done(): boolean // 是否遍历完
+//   getNode() // 获取迭代器结点
+//   get() // 迭代器成员访问方法
+//   getValue() // 获取值
+//   // abstract getKey()        // 获取键值，如果有的话
+//   remove() // 通过迭代器删除
+// }
+
 const isNil = RBTNode.isNil
 
 export class RBTIterator<K, V> extends Iterator<K> {

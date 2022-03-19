@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 09:44:09
- * @LastEditTime: 2022-03-18 17:30:39
+ * @LastEditTime: 2022-03-19 14:43:53
  * @LastEditors: hzheyuan
  * @Description: Output iterator category
  * Interface to identify the category of an iterator as an output iterator
@@ -19,6 +19,7 @@
  *  (4) Compare
  * @FilePath: /tstl/src/Iterator/output_iterartor.ts
  */
+
 import { BaseIterator } from './base_iterator'
 
 export interface OutputIterator<T> extends BaseIterator<T> {

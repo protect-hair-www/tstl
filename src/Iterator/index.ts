@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-03-18 17:07:02
+ * @LastEditTime: 2022-03-19 17:08:37
  * @LastEditors: hzheyuan
  * @Description: iterator definitions
  *
@@ -43,7 +43,14 @@
  * =======================
  * @FilePath: /tstl/src/Iterator/index.ts
  */
-
+export enum IteratorTags {
+  BASE,
+  INPUT_ITERATOR,
+  OUTPUT_ITERATOR,
+  FORWARD_ITERATOR,
+  BIDIRECTIONAL_ITERATOR,
+  RANDOM_ACCESS_ITERATOR
+};
 import { BaseIterator } from './base_iterator';
 import { InputIterator } from './input_iterator'
 import { OutputIterator } from './output_iterartor'
@@ -51,50 +58,33 @@ import { ForwardIterator } from './forward_iterator';
 import { BidirectionalIterator } from './bidirectional_iterator';
 import { RandomAccessIterator } from './random_access_iterator'
 
-// old version(will be delete)
-export abstract class Iterator<T> {
-  _cur
+type IteratorTypes<T> = InputIterator<T> | OutputIterator<T> | ForwardIterator<T> | BidirectionalIterator<T> | RandomAccessIterator<T>;
+// export function advance<T>(i: IteratorTypes<T>, n: number): void;
+export function advance<T>(i: IteratorTypes<T>, n: number): void;
+export function advance<T>(i: IteratorTypes<T>, n: number) {
+  if(i.tag === IteratorTags.INPUT_ITERATOR || i.tag === IteratorTags.OUTPUT_ITERATOR || i.tag === IteratorTags.FORWARD_ITERATOR) {
+    while(n) {i.next(); --n;}
+  } else if(i.tag === IteratorTags.BIDIRECTIONAL_ITERATOR) {
+    if(n >= 0) { while(n--) {i.next()}}
+    else { while(n++) {(i as BidirectionalIterator<T>).prev()} }
+  } else {
+    (i as RandomAccessIterator<T>).increment(n);
+  }
+};
 
-  // 迭代器指针操作
-  abstract prev() // 迭代器前移，并返回迭代器所指向的元素
-  abstract next() // 迭代器后移，并返回迭代器所指向的元素
-  abstract done(): boolean // 是否遍历完
-  abstract hasNext(): boolean // 同上done
-
-  abstract getNode() // 获取迭代器结点
-  abstract get() // 迭代器成员访问方法
-  abstract getValue() // 获取值
-  // abstract getKey()        // 获取键值，如果有的话
-  abstract remove() // 通过迭代器删除
-}
-
-type TypeName<T> = T extends string 
-? 'string'
-: T extends number
-? 'number'
-: T extends boolean
-? 'boolean'
-: T extends undefined
-? 'undefined'
-: T extends Function
-? 'function'
-: 'object'
-
-type IteratorTypes<T> = BaseIterator<T> | InputIterator<T> | OutputIterator<T> | ForwardIterator<T> | BidirectionalIterator<T> | RandomAccessIterator<T>;
-type EqualIteratorInputType<T> = T extends IteratorTypes<T> ? T: never;
-// type PickEqualsMethod<T> = Pick<T, "equals">;
-export function equals<T>(first: EqualIteratorInputType<T>, last: EqualIteratorInputType<T>): boolean;
-export function equals<T>(first: EqualIteratorInputType<T>, last: EqualIteratorInputType<T>): boolean {
+// export function equals<T>(first: T, last: T): boolean;
+export function equals<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): boolean {
   let firstVal = first.value, lastVal = last.value;
-  let type: TypeName<T>;
-
   return firstVal === lastVal;
 }
 
-
-function distance<T>(first: T extends Iterator<T> ? T : never, last): number;
-function distance<InputIterator>(first, last) {
-  return first.getIndex() - last.getIndx();
+function distance<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): number;
+function distance<T>(first, last): number {
+  if(first.tag === IteratorTags.RANDOM_ACCESS_ITERATOR) {
+    return first.getIndex() - last.getIndx();
+  } else {
+    return 1
+  }
 }
 
 export function itr_move<T>(itr: InputIterator<T>): T {
@@ -103,6 +93,7 @@ export function itr_move<T>(itr: InputIterator<T>): T {
 
 export function itr_swap<T>(first: BidirectionalIterator<T>, last: BidirectionalIterator<T>) {}
 
+export * from './base_iterator'
 export * from './Iterable'
 export * from './input_iterator'
 export * from './output_iterartor'

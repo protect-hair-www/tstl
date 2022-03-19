@@ -1,15 +1,16 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:24
- * @LastEditTime: 2022-03-17 21:52:24
+ * @LastEditTime: 2022-03-19 16:19:19
  * @LastEditors: hzheyuan
  * @Description: list container iterator
  * @FilePath: /tstl/src/container/sequence/list/iterator.ts
  */
 import { ListNode } from './ListNode'
-import { RandomAccessIterator } from '../../../iterator'
+import { BaseIterator, RandomAccessIterator, BidirectionalIterator, IteratorTags } from '../../../iterator'
 
-export class LinkListIterator<T> implements RandomAccessIterator<T> {
+export class LinkListIterator<T> implements BidirectionalIterator<T> {
+  readonly tag: IteratorTags = IteratorTags.BIDIRECTIONAL_ITERATOR
   _cur: ListNode<T>
 
   constructor(cur) {
@@ -22,6 +23,11 @@ export class LinkListIterator<T> implements RandomAccessIterator<T> {
 
   set cur(x) {
     this._cur = x
+  }
+
+  equals<I extends BaseIterator<T>>(itr: I): boolean {
+    if(itr.value === this.getValue()) return true;
+    return false;
   }
 
   /**

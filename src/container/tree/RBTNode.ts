@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 14:10:10
- * @LastEditTime: 2022-03-03 11:42:24
+ * @LastEditTime: 2022-03-19 15:15:08
  * @LastEditors: hzheyuan
  * @Description: 关联容器基础数据结构红黑树的结点类
- * @FilePath: \tstl\src\container\tree\RBTNode.ts
+ * @FilePath: /tstl/src/container/tree/RBTNode.ts
  */
 import { Entry } from './Entry'
 

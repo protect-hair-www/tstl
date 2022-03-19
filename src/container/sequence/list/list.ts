@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:58:00
- * @LastEditTime: 2022-03-17 21:52:28
+ * @LastEditTime: 2022-03-19 15:25:36
  * @LastEditors: hzheyuan
  * @Description: sequenece container list
  *
@@ -22,7 +22,7 @@
  */
 import { ListNode } from './ListNode'
 import { LinkListIterator } from './iterator'
-import { Iterator, InputIterator } from '../../../iterator'
+import { InputIterator } from '../../../iterator'
 import { TSTLIterable } from '../../../iterator/Iterable'
 
 export class List<T> implements TSTLIterable<T> {
@@ -192,8 +192,8 @@ export class List<T> implements TSTLIterable<T> {
    * @param {LinkListIterator} last
    * @return {*}
    */
-  private _range_insert(pos: LinkListIterator<T>, first: Iterator<T>, last: Iterator<T>) {
-    for (; first.getNode() !== last.getNode(); first.next()) {
+  private _range_insert(pos: LinkListIterator<T>, first: InputIterator<T>, last: InputIterator<T>) {
+    for (; first.equals(last); first.next()) {
       this.insert(pos, first.getValue())
     }
   }

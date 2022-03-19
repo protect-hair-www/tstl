@@ -1,21 +1,24 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-18 10:55:23
+ * @LastEditTime: 2022-03-19 17:56:00
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
- * @FilePath: \tstl\src\container\sequence\vector\iterator.ts
+ * @FilePath: /tstl/src/container/sequence/vector/iterator.ts
  */
 // import { Iterator } from '../../../Iterator/index'
-import { RandomAccessIterator } from '../../../iterator'
+import { RandomAccessIterator, IteratorTags, BaseIterator, equals } from '../../../iterator'
 
 export class VCIterator<T> implements RandomAccessIterator<T> {
+  readonly tag: IteratorTags = IteratorTags.BIDIRECTIONAL_ITERATOR
   _cur: number
   _cntr: T[]
+  index: number 
 
   constructor(c, cntr: T[]) {
     this._cur = c
     this._cntr = cntr
+    this.index = c
     // return new Proxy(this, {
     //   get: function (target, prop, receiver) {
     //     console.log('get', target, prop, Reflect.has(target, prop), receiver);
@@ -52,6 +55,14 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
 
   private get cntr() {
     return this._cntr
+  }
+
+  at(): T {
+    return this.cntr[this.index]
+  }
+
+  equals<I extends BaseIterator<T>>(itr: I): boolean {
+    return equals(this, itr)
   }
 
   /**

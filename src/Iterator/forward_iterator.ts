@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-12 11:03:38
- * @LastEditTime: 2022-03-18 17:51:01
+ * @LastEditTime: 2022-03-19 16:56:21
  * @LastEditors: hzheyuan
  * @Description: Forward iterator category
  * Inteface to identify the category of an iterator as a forward iterator:
@@ -22,7 +22,12 @@
  *  (3) Next (+1)
  * @FilePath: /tstl/src/Iterator/forward_iterator.ts
  */
+import { IteratorTags } from './index';
 import { InputIterator } from './input_iterator'
 import { OutputIterator } from './output_iterartor'
 type InputAndOutputItreator<T> = InputIterator<T> & OutputIterator<T>
-export interface ForwardIterator<T> extends InputAndOutputItreator<T> {}
+// test
+// type I = InputAndOutputItreator<string>
+// let k: I;
+export interface ForwardIterator<T> extends InputAndOutputItreator<T> {
+}

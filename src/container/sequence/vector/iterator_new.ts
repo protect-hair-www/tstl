@@ -1,13 +1,33 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-18 10:55:23
+ * @LastEditTime: 2022-03-19 18:08:23
  * @LastEditors: hzheyuan
  * @Description: vector容器迭代器
- * @FilePath: \tstl\src\container\sequence\vector\iterator.ts
+ * @FilePath: /tstl/src/container/sequence/vector/iterator_new.ts
  */
 // import { Iterator } from '../../../Iterator/index'
-import { RandomAccessIterator, ForwardIterator } from '../../../iterator'
+// import { RandomAccessIterator, ForwardIterator } from '../../../iterator'
+
+import { IteratorTags, BaseIterator, equals } from '../../../iterator'
+
+interface ForwardIterator {
+  readonly tag: IteratorTags
+  _cur
+  
+  /** base opreator access value */
+  get value() // getter
+  getValue()
+
+  /** next and hasNext(next identify in Iterator) */
+  hasNext(): boolean // test whether has next element
+
+  /** Comparable */
+  equals(itr): boolean
+
+  /** Javascript，iterable object have to implementation「@@iterator」method，Javascript can access the property with [Symbol.iterator]  */
+  // [Symbol.iterator](): Iterator<T> 
+}
 
 export class VCIterator<T> implements ForwardIterator<T> {
   _cur: number
