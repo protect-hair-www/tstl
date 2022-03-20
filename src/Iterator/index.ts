@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-03-19 17:08:37
+ * @LastEditTime: 2022-03-20 16:38:47
  * @LastEditors: hzheyuan
  * @Description: iterator definitions
  *
@@ -59,6 +59,20 @@ import { BidirectionalIterator } from './bidirectional_iterator';
 import { RandomAccessIterator } from './random_access_iterator'
 
 type IteratorTypes<T> = InputIterator<T> | OutputIterator<T> | ForwardIterator<T> | BidirectionalIterator<T> | RandomAccessIterator<T>;
+// type PickIteratorTag<A, T> = T extends IteratorTags ? A[T] : never;
+type T2<T> = IteratorTypes<T>['tag']
+
+type T0<T> = Pick<IteratorTypes<T>, 'tag'>[]
+// type T = T0<>
+
+type A = typeof IteratorTags
+
+
+// export function equals<T>(first: T, last: T): boolean;
+export function equals<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): boolean {
+  let firstVal = first.value, lastVal = last.value;
+  return firstVal === lastVal;
+}
 // export function advance<T>(i: IteratorTypes<T>, n: number): void;
 export function advance<T>(i: IteratorTypes<T>, n: number): void;
 export function advance<T>(i: IteratorTypes<T>, n: number) {
@@ -72,19 +86,17 @@ export function advance<T>(i: IteratorTypes<T>, n: number) {
   }
 };
 
-// export function equals<T>(first: T, last: T): boolean;
-export function equals<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): boolean {
-  let firstVal = first.value, lastVal = last.value;
-  return firstVal === lastVal;
-}
-
-function distance<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): number;
-function distance<T>(first, last): number {
-  if(first.tag === IteratorTags.RANDOM_ACCESS_ITERATOR) {
-    return first.getIndex() - last.getIndx();
+export function distance<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): number;
+export function distance<T>(first, last): number {
+  let n = 0
+  if(first.tag === IteratorTags.INPUT_ITERATOR || first.tag === IteratorTags.OUTPUT_ITERATOR || first.tag === IteratorTags.FORWARD_ITERATOR) {
+    while(!equals(first, last)) {first.next(); ++n;}
+  } else if(first.tag === IteratorTags.BIDIRECTIONAL_ITERATOR) {
+    while(!equals(first, last)) {first.next(); ++n;}
   } else {
-    return 1
+    n = first.index - last.index;
   }
+  return n
 }
 
 export function itr_move<T>(itr: InputIterator<T>): T {

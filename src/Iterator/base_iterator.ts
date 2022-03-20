@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 14:17:51
- * @LastEditTime: 2022-03-19 17:01:43
+ * @LastEditTime: 2022-03-20 16:11:46
  * @LastEditors: hzheyuan
  * @Description: base iterator
  * Interface identify the category of an iterator as an base iterator.
