@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-12 10:58:55
- * @LastEditTime: 2022-03-21 15:14:57
+ * @LastEditTime: 2022-03-21 22:35:59
  * @LastEditors: hzheyuan
  * @Description: Algorithms
  *
@@ -11,9 +11,16 @@
  * through iterators directly on the values, not affecting in any way the structure of any possible
  * container (it never affects the size or storage allocation of the container).
  *
- * @FilePath: \tstl\src\algorithm\index.ts
+ * @FilePath: /tstl/src/algorithm/index.ts
  */
-import { makeHeap, popHeap, pushHeap, sortHeap, isHeap, isHeapUntil } from './heap'
+import { 
+  makeHeap, 
+  popHeap,
+  pushHeap,
+  sortHeap,
+  isHeap,
+  isHeapUntil
+} from './heap'
 
 import {
   find,
@@ -76,6 +83,14 @@ import {
   equal_range,
   binaray_search
 } from './binary_search'
+
+import {
+  min,
+  max,
+  min_element,
+  max_element,
+  minmax_element
+} from './min_max'
 
 export {
   // heap
@@ -142,5 +157,12 @@ export {
   lower_bound,
   upper_bound,
   equal_range,
-  binaray_search
+  binaray_search,
+
+  // minmax
+  min,
+  max,
+  min_element,
+  max_element,
+  minmax_element
 }

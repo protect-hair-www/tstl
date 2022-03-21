@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-08 21:17:38
- * @LastEditTime: 2022-03-19 15:22:18
+ * @LastEditTime: 2022-03-21 21:01:58
  * @LastEditors: hzheyuan
  * @Description: deque(double ended queue)
  * deque is an irregular acronym of double-ended queue.
@@ -122,8 +122,8 @@ export class Deque<T> implements TSTLIterable<T> {
    * @param {*}
    * @return {*}
    */
-  at(x: DequeIterator<T>) {
-    return this.cntr.at(x.getKey())
+  at(x: number) {
+    return this.cntr[x]
   }
 
   /**
