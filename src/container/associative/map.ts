@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:17
- * @LastEditTime: 2022-03-09 18:25:23
+ * @LastEditTime: 2022-03-21 11:46:14
  * @LastEditors: hzheyuan
  * @Description: associative container map
  *
@@ -39,7 +39,7 @@ export class Map<K, V> {
       get(target, prop, receiver) {
         // console.log('get', target, prop, Reflect.has(target, prop), receiver);
         if (Reflect.has(target, prop)) return Reflect.get(target, prop, receiver)
-        return target.find(prop).get()
+        return target.find(prop).getValue()
       },
       set(target, prop, value, receiver) {
         // console.log(`set: `, target, prop, value, Reflect.has(target, prop));
@@ -100,7 +100,7 @@ export class Map<K, V> {
    * @return {*}
    */
   public count(x: K) {
-    return this._t.find(x).get() === this._t.end().get() ? 0 : 1
+    return this._t.find(x).getValue() === this._t.end().getValue() ? 0 : 1
   }
 
   /**
@@ -138,8 +138,8 @@ export class Map<K, V> {
    * @return {*}
    */
   public erase(x) {
-    const r = this._t.erase(x).get()
-    return r === this._t.end().get() ? false : r
+    const r = this._t.erase(x).getValue()
+    return r === this._t.end().getValue() ? false : r
   }
 
   /**
@@ -167,7 +167,7 @@ export class Map<K, V> {
    */
   public equal_range(x: K) {
     const r = this._t.equal_range(x)
-    return [r[0].get(), r[1].get()]
+    return [r[0].getValue(), r[1].getValue()]
   }
 
   /**

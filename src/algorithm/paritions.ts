@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:58
- * @LastEditTime: 2022-03-17 23:21:09
+ * @LastEditTime: 2022-03-21 15:11:11
  * @LastEditors: hzheyuan
  * @Description: Partition
- * @FilePath: /tstl/src/algorithm/paritions.ts
+ * @FilePath: \tstl\src\algorithm\paritions.ts
  */
 import { InputIterator } from './../iterator/input_iterator';
 import { BidirectionalIterator } from './../iterator/bidirectional_iterator';
@@ -42,7 +42,7 @@ export function is_partitioned<T>(first: InputIterator<T>, last: InputIterator<T
  * @param {function} fn
  * @return {*}
  */
-export function partitioned<T>(first: BidirectionalIterator<T>, last: BidirectionalIterator<T>, fn: (v: T) => boolean): BidirectionalIterator<T> {
+export function partition<T>(first: BidirectionalIterator<T>, last: BidirectionalIterator<T>, fn: (v: T) => boolean): BidirectionalIterator<T> {
     while (first !== last) {
         while (fn(first.getValue())) {
             first.next();

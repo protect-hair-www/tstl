@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:48
- * @LastEditTime: 2022-03-06 23:10:18
+ * @LastEditTime: 2022-03-21 11:47:03
  * @LastEditors: hzheyuan
  * @Description: associative container multimap
  * Multimaps are associative containers that store elements formed by a combination of a key value and a mapped value,
@@ -125,8 +125,8 @@ export class MultiMap<K, V> {
    * @return {*}
    */
   public erase(x) {
-    const r = this._t.erase(x).get()
-    return r === this._t.end().get() ? false : r
+    const r = this._t.erase(x).getValue()
+    return r === this._t.end().getValue() ? false : r
   }
 
   /**
@@ -154,7 +154,7 @@ export class MultiMap<K, V> {
    */
   public equal_range(x: K) {
     const r = this._t.equal_range(x)
-    return [r[0].get(), r[1].get()]
+    return [r[0].getValue(), r[1].getValue()]
   }
 
   /**

@@ -1,14 +1,14 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 14:17:51
- * @LastEditTime: 2022-03-20 16:11:46
+ * @LastEditTime: 2022-03-21 11:31:16
  * @LastEditors: hzheyuan
  * @Description: base iterator
  * Interface identify the category of an iterator as an base iterator.
  * Every iterator has a next method defined in Iterator.
  * Every iterator has a hasNext method method to test whether iteratro point to the end position.
  * Every iterator has a getValue method access the value.
- * @FilePath: /tstl/src/iterator/base_iterator.ts
+ * @FilePath: \tstl\src\Iterator\base_iterator.ts
  */
 import { IteratorTags } from './index'
 export interface BaseIterator<T> extends Iterator<T> {

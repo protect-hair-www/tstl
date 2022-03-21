@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:40
- * @LastEditTime: 2022-03-18 15:52:53
+ * @LastEditTime: 2022-03-21 16:17:07
  * @LastEditors: hzheyuan
  * @Description: Modifying sequence operations
  * TODO
@@ -12,6 +12,7 @@ import {
   OutputIterator,
   BidirectionalIterator,
   ForwardIterator,
+  advance,
   itr_move,
   itr_swap
 } from '../iterator'

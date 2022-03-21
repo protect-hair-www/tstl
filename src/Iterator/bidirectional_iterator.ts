@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-12 11:02:28
- * @LastEditTime: 2022-03-19 14:46:52
+ * @LastEditTime: 2022-03-21 11:11:15
  * @LastEditors: hzheyuan
  * @Description: Bidirectional iterator
  * Inteface to identify the category of an iterator as a bidirectional iterator
@@ -24,5 +24,5 @@
 import { ForwardIterator } from './forward_iterator'
 export interface BidirectionalIterator<T> extends ForwardIterator<T> {
   hasPrev(): boolean // test whether has previous element
-  prev(): IteratorResult<T> // iterator decrement and return IteratorResult({donw: boolean, value: T})
+  prev(...args: any): IteratorResult<T> // iterator decrement and return IteratorResult({donw: boolean, value: T})
 }

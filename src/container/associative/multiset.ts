@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:39
- * @LastEditTime: 2022-03-06 23:13:36
+ * @LastEditTime: 2022-03-21 11:46:32
  * @LastEditors: hzheyuan
  * @Description: associative containers multiset
  *
@@ -101,8 +101,8 @@ export class MultiSet<K> {
    * @return {*}
    */
   public erase(x) {
-    const r = this._t.erase(x).get()
-    return r === this._t.end().get() ? false : r
+    const r = this._t.erase(x).getValue()
+    return r === this._t.end().getValue() ? false : r
   }
 
   /**
@@ -130,7 +130,7 @@ export class MultiSet<K> {
    */
   public equal_range(x: K) {
     const r = this._t.equal_range(x)
-    return [r[0].get(), r[1].get()]
+    return [r[0].getValue(), r[1].getValue()]
   }
 
   /**

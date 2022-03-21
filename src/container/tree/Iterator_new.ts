@@ -1,51 +1,21 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-03-21 11:03:20
+ * @LastEditTime: 2022-03-21 15:32:04
  * @LastEditors: hzheyuan
  * @Description: 红黑树对应的迭代器
- * @FilePath: \tstl\src\container\tree\Iterator.ts
+ * @FilePath: \tstl\src\container\tree\Iterator_new.ts
  */
 
 import { RBTNode, Color } from './RBTNode'
-// old version(will be delete)
-export abstract class Iterator<T> {
-  _cur
-
-  // 迭代器指针操作
-  abstract prev() // 迭代器前移，并返回迭代器所指向的元素
-  abstract next() // 迭代器后移，并返回迭代器所指向的元素
-  abstract done(): boolean // 是否遍历完
-  abstract hasNext(): boolean // 同上done
-
-  abstract getNode() // 获取迭代器结点
-  abstract get() // 迭代器成员访问方法
-  abstract getValue() // 获取值
-  // abstract getKey()        // 获取键值，如果有的话
-  abstract remove() // 通过迭代器删除
-}
-import { BidirectionalIterator } from './../../Iterator/';
-
-// import { RandomAccessIterator, BidirectionalIterator, IteratorTags } from '../../iterator'
-// export interface RbIterator<T> extends BidirectionalIterator<T> {
-//   // 迭代器指针操作
-//   prev() // 迭代器前移，并返回迭代器所指向的元素
-//   next() // 迭代器后移，并返回迭代器所指向的元素
-//   done(): boolean // 是否遍历完
-//   getNode() // 获取迭代器结点
-//   get() // 迭代器成员访问方法
-//   getValue() // 获取值
-//   // abstract getKey()        // 获取键值，如果有的话
-//   remove() // 通过迭代器删除
-// }
-
+import { BaseIterator, BidirectionalIterator, IteratorTags } from '../../iterator';
 const isNil = RBTNode.isNil
 
-export class RBTIterator<K, V> extends Iterator<K> {
+export class RBTIterator<K, V> implements BidirectionalIterator<V> {
+  tag: IteratorTags = IteratorTags.BIDIRECTIONAL_ITERATOR
   _cur: RBTNode<K, V>
 
   constructor(c) {
-    super()
     this._cur = c
   }
 
@@ -70,32 +40,44 @@ export class RBTIterator<K, V> extends Iterator<K> {
    * @description: 获取迭代器指向成员，对外接口，返回结点值
    * @return {*}
    */
-  get = (): V | boolean => {
-    return this.isEnd() ? false : this.cur.getValue()
+  // get = (): V | boolean => {
+  //   return this.isEnd() ? false : this.cur.getValue()
+  // }
+
+  /**
+   * @description: 获取迭代器指向成员，对外接口，返回结点值
+   * @return {*}
+   */
+  get value() {
+    return this.cur.getValue()
   }
 
   /**
    * @description: 获取迭代器指向成员，对外接口，返回结点值
    * @return {*}
    */
-  value = (): V | boolean => {
-    return this.isEnd() ? false : this.cur.getValue()
+  getValue = (): V  => {
+    return this.cur.getValue()
   }
 
-  /**
-   * @description: 获取迭代器指向成员，对外接口，返回结点值
-   * @return {*}
-   */
-  getValue = (): V | boolean => {
-    return this.isEnd() ? false : this.cur.getValue()
+  setValue(v: V) {
+    
   }
+
+  equals<I extends BaseIterator<V>>(itr: I): boolean {
+    return false
+  }
+
+  // value = (): V => {
+  //   return this.cur.getValue()
+  // }
 
   /**
    * @description 返回迭代器指针指向结点的key值
    * @return {*}
    */
   key = (): K | boolean => {
-    return this.isEnd() ? false : this.cur.getKey()
+    return !this.hasNext() ? false : this.cur.getKey()
   }
 
   /**
@@ -103,29 +85,33 @@ export class RBTIterator<K, V> extends Iterator<K> {
    * @return {*}
    */
   getKey = (): K | boolean => {
-    return this.isEnd() ? false : this.cur.getKey()
-  }
-
-  /**
-   * @description: 迭代器是否位于end位置
-   * @return {*}
-   */
-  private isEnd() {
-    return (this.cur.key as any) === Symbol.for('header')
+    return !this.hasNext() ? false : this.cur.getKey()
   }
 
   /**
    * @description: 同下done方法，jdk方法
    */
   hasNext(): boolean {
-    return !this.isEnd()
+    return (this.cur.key as any) !== Symbol.for('header')
   }
 
   /**
-   * @description: 迭代结束条件
-   */
-  done(): boolean {
-    return !this.isEnd()
+   * @description: internally 
+   * @param {*}
+   * @return {*}
+   */  
+  hasPrev(): boolean {
+    return true
+  }
+
+  /**
+   * @description: internally use
+   * @param {*}
+   * @return {*}
+   */  
+  _prev() {
+    this.decrement()
+    return this;
   }
 
   /**
@@ -133,19 +119,15 @@ export class RBTIterator<K, V> extends Iterator<K> {
    * @param {*}
    * @return {*}
    */
-  prev() {
-    this.decrement()
-    return this
-  }
-
-  /**
-   * @description: 测试next方法
-   * @param {*}
-   * @return {*}
-   */
-  private _next() {
-    this.increment()
-    return this
+  prev(): IteratorResult<V> {
+    if(this.hasPrev()) {
+      const node: IteratorResult<V> = { done: false, value: this.cur.getValue() }
+      this.decrement()
+      return node
+    } else {
+      const node: IteratorResult<V> = { done: true, value: this.cur.getValue() }
+      return node;
+    }
   }
 
   /**
@@ -153,7 +135,7 @@ export class RBTIterator<K, V> extends Iterator<K> {
    * @param {*}
    * @return {*}
    */
-  public next() {
+  public next(): IteratorResult<V> {
     if (this.hasNext()) {
       const node = { done: false, value: this.cur.getValue() }
       this.increment()

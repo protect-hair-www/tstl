@@ -1,20 +1,16 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-05 09:51:39
- * @LastEditTime: 2022-03-05 09:56:47
+ * @LastEditTime: 2022-03-21 15:20:05
  * @LastEditors: hzheyuan
  * @Description:
- * @FilePath: /tstl/src/utils/jstype.ts
+ * @FilePath: \tstl\src\utils\jstype.ts
  */
 
 // 获取实例类型
 export function getTypeOf(target) {
-  if (target === window) {
-    return 'Global'
-  } else {
-    const tn = Object.prototype.toString.call(target).match(/\s([a-z|A-Z]+)/)
-    return tn ? tn[1] : 'Null'
-  }
+  const tn = Object.prototype.toString.call(target).match(/\s([a-z|A-Z]+)/)
+  return tn ? tn[1] : 'Null'
 }
 
 export function isPrimitive(target) {

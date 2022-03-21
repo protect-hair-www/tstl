@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-18 13:49:01
+ * @LastEditTime: 2022-03-21 15:50:30
  * @LastEditors: hzheyuan
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
@@ -166,7 +166,7 @@ export class Vector<T> implements TSTLIterable<T> {
    * @return {*}
    */
   at(pos: number) {
-    return this.cntr.at(pos)
+    return this.cntr[pos]
   }
 
   /**

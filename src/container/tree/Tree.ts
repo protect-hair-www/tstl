@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-03-06 22:51:58
+ * @LastEditTime: 2022-03-21 11:40:25
  * @LastEditors: hzheyuan
  * @Description: red_black_tree
  *
@@ -40,7 +40,7 @@
  * @FilePath: \tstl\src\container\tree\Tree.ts
  */
 import { RBTNode, Color } from './RBTNode'
-import { RBTIterator, createRBTItr } from './Iterator'
+import { RBTIterator, createRBTItr } from './Iterator_new'
 const isNil = RBTNode.isNil
 
 export type RBTOptions<K, V> = {
@@ -369,7 +369,7 @@ export class Tree<K, V> {
         return this.insert_unique(k, v).iterator
       }
     } else {
-      const before = pos.prev(),
+      const before = pos._prev(),
         bn = before.getNode()
       if (this.key_comp(bn.key, k) && this.key_comp(k, n.key)) {
         if (isNil(bn)) {
@@ -477,7 +477,7 @@ export class Tree<K, V> {
       if (jItr.getNode() === this.begin().getNode()) {
         return { iterator: this._insert(x, y, k, v), success: true }
       } else {
-        jItr = jItr.prev()
+        jItr = jItr._prev()
       }
     }
     const j = jItr.getNode()

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-03-20 16:38:47
+ * @LastEditTime: 2022-03-21 16:15:32
  * @LastEditors: hzheyuan
  * @Description: iterator definitions
  *
@@ -59,20 +59,7 @@ import { BidirectionalIterator } from './bidirectional_iterator';
 import { RandomAccessIterator } from './random_access_iterator'
 
 type IteratorTypes<T> = InputIterator<T> | OutputIterator<T> | ForwardIterator<T> | BidirectionalIterator<T> | RandomAccessIterator<T>;
-// type PickIteratorTag<A, T> = T extends IteratorTags ? A[T] : never;
-type T2<T> = IteratorTypes<T>['tag']
 
-type T0<T> = Pick<IteratorTypes<T>, 'tag'>[]
-// type T = T0<>
-
-type A = typeof IteratorTags
-
-
-// export function equals<T>(first: T, last: T): boolean;
-export function equals<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): boolean {
-  let firstVal = first.value, lastVal = last.value;
-  return firstVal === lastVal;
-}
 // export function advance<T>(i: IteratorTypes<T>, n: number): void;
 export function advance<T>(i: IteratorTypes<T>, n: number): void;
 export function advance<T>(i: IteratorTypes<T>, n: number) {
@@ -85,6 +72,17 @@ export function advance<T>(i: IteratorTypes<T>, n: number) {
     (i as RandomAccessIterator<T>).increment(n);
   }
 };
+
+// export function equals<T>(first: T, last: T): boolean;
+export function equals<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): boolean {
+  let tag = first.tag;
+  let firstVal = first.value, lastVal = last.value;
+  if(typeof first._cur === 'number') {
+    return first._cur === last._cur
+  } else {
+    return first._cur === last._cur
+  }
+}
 
 export function distance<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): number;
 export function distance<T>(first, last): number {
