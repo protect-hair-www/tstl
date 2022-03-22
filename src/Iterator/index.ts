@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-03-21 16:15:32
+ * @LastEditTime: 2022-03-22 23:04:06
  * @LastEditors: hzheyuan
  * @Description: iterator definitions
  *
@@ -51,29 +51,105 @@ export enum IteratorTags {
   BIDIRECTIONAL_ITERATOR,
   RANDOM_ACCESS_ITERATOR
 };
-import { BaseIterator } from './base_iterator';
 import { InputIterator } from './input_iterator'
 import { OutputIterator } from './output_iterartor'
 import { ForwardIterator } from './forward_iterator';
 import { BidirectionalIterator } from './bidirectional_iterator';
 import { RandomAccessIterator } from './random_access_iterator'
 
-type IteratorTypes<T> = InputIterator<T> | OutputIterator<T> | ForwardIterator<T> | BidirectionalIterator<T> | RandomAccessIterator<T>;
+interface IteratorMap<T> {
+  inputIterator: InputIterator<T>
+  outputIterator: OutputIterator<T>
+  forwardIterator: ForwardIterator<T>
+  bidirectionalIterator: BidirectionalIterator<T>
+  randomAccessIterator: RandomAccessIterator<T>
+}
 
-// export function advance<T>(i: IteratorTypes<T>, n: number): void;
-export function advance<T>(i: IteratorTypes<T>, n: number): void;
-export function advance<T>(i: IteratorTypes<T>, n: number) {
-  if(i.tag === IteratorTags.INPUT_ITERATOR || i.tag === IteratorTags.OUTPUT_ITERATOR || i.tag === IteratorTags.FORWARD_ITERATOR) {
+type IteratorTypes<T> = InputIterator<T> | OutputIterator<T> | ForwardIterator<T> | BidirectionalIterator<T> | RandomAccessIterator<T>;
+type LimitIteratorKeys = 'inputIterator' | 'outputIterator' | 'forwardIterator'; 
+type bidirectionalIteratorKeys = 'bidirectionalIterator'; 
+type randomAccessIteratorKey = 'randomAccessIterator'
+
+type FilterKeys<T, U> = {[P in keyof T]: P extends U ? P : never};
+type RelevantLimitKeys<T> = FilterKeys<IteratorMap<T>, LimitIteratorKeys>[keyof IteratorMap<T>] & keyof IteratorMap<T>;
+type LimitIteratorMap<T> = Pick<IteratorMap<T>, LimitIteratorKeys>
+type BidirectionalIteratorIteratorMap<T> = Pick<IteratorMap<T>, bidirectionalIteratorKeys> 
+type RandomAccessIteratorMap<T> = Pick<IteratorMap<T>, randomAccessIteratorKey> 
+
+/**
+ * @description: advance for input|output|forward three kinds of iterators
+ * @param {K} i
+ * @param {number} n
+ * @return {*}
+ */
+export function _advance_of_limited_iter<T, K extends LimitIteratorMap<T>[keyof LimitIteratorMap<T>]>(i: K, n: number) {
     while(n) {i.next(); --n;}
-  } else if(i.tag === IteratorTags.BIDIRECTIONAL_ITERATOR) {
+}
+
+/**
+ * @description: advance for bidirectionaly iterator
+ * @param {K} i
+ * @param {number} n
+ * @return {*}
+ */
+export function _advance_for_bidirectional_iter<T, K extends BidirectionalIteratorIteratorMap<T>[keyof BidirectionalIteratorIteratorMap<T>]>(i: K, n: number) {
     if(n >= 0) { while(n--) {i.next()}}
     else { while(n++) {(i as BidirectionalIterator<T>).prev()} }
+}
+
+/**
+ * @description: advance for randomaccess iterator
+ * @param {K} i
+ * @param {number} n
+ * @return {*}
+ */
+export function _advance_for_randomaccess_iter<T, K extends RandomAccessIteratorMap<T>[keyof RandomAccessIteratorMap<T>]>(i: K, n: number) {
+    i.increment(n);
+}
+
+/**
+ * @description: public method for user
+ * @param {*}
+ * @return {*}
+ */
+export function advance<T, K extends IteratorMap<T>[keyof IteratorMap<T>]>(i: K, n: number): void;
+export function advance<T, K extends IteratorMap<T>[keyof IteratorMap<T>]>(i: K, n: number) {
+  if(i.tag === IteratorTags.INPUT_ITERATOR || i.tag === IteratorTags.OUTPUT_ITERATOR || i.tag === IteratorTags.FORWARD_ITERATOR) {
+    _advance_of_limited_iter(i, n);
+  } else if(i.tag === IteratorTags.BIDIRECTIONAL_ITERATOR) {
+    _advance_for_bidirectional_iter<T, BidirectionalIterator<T>>(i as BidirectionalIterator<T> , n);
   } else {
-    (i as RandomAccessIterator<T>).increment(n);
+    _advance_for_randomaccess_iter<T, RandomAccessIterator<T>>(i as RandomAccessIterator<T>, n)
   }
 };
 
-// export function equals<T>(first: T, last: T): boolean;
+/**
+ * @description: get distance of [first, last) for randomaccess iterators
+ * @param {K} first
+ * @param {K} last
+ * @return {*}
+ */
+export function _distance_for_randomaccess_iter<T, K extends RandomAccessIteratorMap<T>[keyof RandomAccessIteratorMap<T>]>(first: K, last: K) {
+  let n = first.index - last.index;
+  return n;
+}
+
+/**
+ * @description: get distance of [first, last), public method for user
+ * @param {IteratorTypes} first
+ * @param {IteratorTypes} last
+ * @return {*}
+ */
+export function distance<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): number {
+  let n = 0
+  if(first.tag === IteratorTags.RANDOM_ACCESS_ITERATOR) {
+   n = _distance_for_randomaccess_iter(first as RandomAccessIterator<T>, last as RandomAccessIterator<T>)
+  } else {
+    while(!equals(first, last)) {first.next(); ++n;}
+  }
+  return n
+}
+
 export function equals<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): boolean {
   let tag = first.tag;
   let firstVal = first.value, lastVal = last.value;
@@ -84,18 +160,6 @@ export function equals<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): bool
   }
 }
 
-export function distance<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): number;
-export function distance<T>(first, last): number {
-  let n = 0
-  if(first.tag === IteratorTags.INPUT_ITERATOR || first.tag === IteratorTags.OUTPUT_ITERATOR || first.tag === IteratorTags.FORWARD_ITERATOR) {
-    while(!equals(first, last)) {first.next(); ++n;}
-  } else if(first.tag === IteratorTags.BIDIRECTIONAL_ITERATOR) {
-    while(!equals(first, last)) {first.next(); ++n;}
-  } else {
-    n = first.index - last.index;
-  }
-  return n
-}
 
 export function itr_move<T>(itr: InputIterator<T>): T {
   return itr.getValue()
