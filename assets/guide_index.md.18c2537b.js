@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as a}from"./app.6e84a6ab.js";const f='{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"guide/index.md","lastUpdated":1647944976183}',r={};function o(n,s,c,d,i,p){return a(),t("div")}var l=e(r,[["render",o]]);export{f as __pageData,l as default};
