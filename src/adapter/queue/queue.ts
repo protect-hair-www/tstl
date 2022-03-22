@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:09:40
- * @LastEditTime: 2022-03-17 15:26:49
+ * @LastEditTime: 2022-03-22 15:00:14
  * @LastEditors: hzheyuan
  * @Description: queues are type of containr, specifically desingned to operate in a FIFO context(first-in-firt-out),
  * where elements are inserted into one end of container end extracted from the other.
@@ -27,7 +27,7 @@
 import { Deque } from '../../container/sequence/deque/index'
 import { List } from '../../container/sequence/list/index'
 
-type QueueCntrType<T> = Deque<T> | List<T>
+type QueueCntrType<T> = Deque<T> // | List<T>
 
 export class Queue<T> {
   _cntr: QueueCntrType<T>
@@ -35,11 +35,11 @@ export class Queue<T> {
   constructor(p?: number | Iterable<T>, cntrType?: QueueCntrType<T>) {
     if (typeof p === 'number' && p) this._cntr = new Deque<T>()
     // else if (p) this._cntr = new Deque(...(p as Iterable<T>))
-    else this._cntr = new Deque()
+    else this._cntr = new Deque<T>()
   }
 
   get cntr() {
-    return this.cntr
+    return this._cntr
   }
 
   set cntr(cntr) {
@@ -83,6 +83,15 @@ export class Queue<T> {
   }
 
   /**
+   * @description: test method will be removed
+   * @param {number} pos
+   * @return {*}
+   */  
+  public at(pos: number) {
+    return this.cntr.at(pos);
+  }
+
+  /**
    * @description: insert element
    * @param {T} v
    * @return {*}
@@ -97,7 +106,7 @@ export class Queue<T> {
    * @return {*}
    */
   public emplace(v: T) {
-    this.cntr.emplace(v)
+    // this.cntr.emplace(v)
   }
 
   /**
@@ -106,7 +115,7 @@ export class Queue<T> {
    * @return {*}
    */
   public pop() {
-    this.cntr.pop()
+    this.cntr.pop_front()
   }
 
   /**
@@ -115,6 +124,6 @@ export class Queue<T> {
    * @return {*}
    */
   public swap(x: QueueCntrType<T>) {
-    this.cntr.swap(x)
+    // this.cntr.swap(x)
   }
 }

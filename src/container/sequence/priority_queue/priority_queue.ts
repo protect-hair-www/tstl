@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:54
- * @LastEditTime: 2022-03-17 21:53:02
+ * @LastEditTime: 2022-03-22 15:22:08
  * @LastEditors: hzheyuan
  * @Description: Priority queue
  * Priority queues are type of container adapters, specifically designed such that
@@ -98,6 +98,15 @@ export class PriorityQueue<T, C = Vector<T>> {
    */
   top() {
     return this.cntr.front()
+  }
+
+  /**
+   * @description: test method will be removed
+   * @param {number} pos
+   * @return {*}
+   */  
+  public at(pos: number) {
+    return this.cntr.at(pos);
   }
 
   /**

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:09:40
- * @LastEditTime: 2022-03-17 15:29:16
+ * @LastEditTime: 2022-03-22 15:02:06
  * @LastEditors: hzheyuan
  * @Description: Stacks are type of containr, specifically desingned to operate in a LIFO context(last-in-firt-out),
  * where elements are inserted into one end of container end extracted from the other.
@@ -25,7 +25,7 @@
  */
 import { Deque } from '../../container/sequence/deque/index'
 import { List } from '../../container/sequence/list/index'
-type QueueCntrType<T> = Deque<T> | List<T>
+type QueueCntrType<T> = Deque<T> // | List<T>
 
 export class Stack<T> {
   _cntr: QueueCntrType<T>
@@ -37,7 +37,7 @@ export class Stack<T> {
   }
 
   get cntr() {
-    return this.cntr
+    return this._cntr
   }
 
   set cntr(cntr) {
@@ -63,16 +63,34 @@ export class Stack<T> {
   }
 
   /**
-   * @description: access last element
+   * @description: test method will be removed
+   * @param {number} pos
+   * @return {*}
+   */  
+  public at(pos: number) {
+    return this.cntr.at(pos);
+  }
+  
+  /**
+   * @description: access top element
    * @param {*}
    * @return {*}
    */
-  public back(): T {
+  public top(): T {
     return this.cntr.back()
   }
 
   /**
-   * @description: insert element
+   * @description: pop top element 
+   * @param {*}
+   * @return {*}
+   */
+  public pop() {
+    return this.cntr.pop_back()
+  }
+
+  /**
+   * @description: push element
    * @param {T} v
    * @return {*}
    */
@@ -86,16 +104,7 @@ export class Stack<T> {
    * @return {*}
    */
   public emplace(v: T) {
-    this.cntr.emplace(v)
-  }
-
-  /**
-   * @description: remove next element
-   * @param {*}
-   * @return {*}
-   */
-  public pop() {
-    this.cntr.pop()
+    // this.cntr.emplace(v)
   }
 
   /**

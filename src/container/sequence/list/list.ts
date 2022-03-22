@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:58:00
- * @LastEditTime: 2022-03-19 15:25:36
+ * @LastEditTime: 2022-03-22 14:25:30
  * @LastEditors: hzheyuan
  * @Description: sequenece container list
  *
@@ -612,6 +612,27 @@ export class List<T> implements TSTLIterable<T> {
    * @return {*}
    */
   private _assign_container(list: List<T>) {}
+
+
+    /**
+   * @description: construct and insert element
+   * @param {*}
+   * @return {*}
+   */
+  emplace<K>(pos: LinkListIterator<T>, c: { new (...arg) }, ...arg) {
+    const ins: T = new c(arg)
+    this.insert(pos, ins)
+  }
+
+  /**
+   * @description: construct and insert element at the end
+   * @param {*}
+   * @return {*}
+   */
+  emplace_back<K>(c: { new (...arg) }, ...arg) {
+    const ins: T = new c(arg)
+    this.push_back(ins)
+  }
 
   /**
    * @description: js iterator protocol
