@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-08 21:17:38
- * @LastEditTime: 2022-03-21 21:01:58
+ * @LastEditTime: 2022-03-23 13:31:35
  * @LastEditors: hzheyuan
  * @Description: deque(double ended queue)
  * deque is an irregular acronym of double-ended queue.
@@ -20,8 +20,8 @@
  *
  * @FilePath: /tstl/src/container/sequence/deque/deque.ts
  */
-import { DequeIterator } from './iterator'
-import { InputIterator } from '../../../iterator'
+// import { DequeIterator } from './iterator'
+import { InputIterator, LinearIterator } from '../../../iterator'
 import { TSTLIterable } from '../../../iterator/Iterable'
 
 export class Deque<T> implements TSTLIterable<T> {
@@ -72,7 +72,7 @@ export class Deque<T> implements TSTLIterable<T> {
    * @return {*}
    */
   begin() {
-    return new DequeIterator<T>(0, this.cntr)
+    return new LinearIterator<T>(0, this.cntr)
   }
 
   /**
@@ -82,7 +82,7 @@ export class Deque<T> implements TSTLIterable<T> {
    */
   end() {
     this.finish = this.cntr.length
-    return new DequeIterator<T>(this.finish, this.cntr)
+    return new LinearIterator<T>(this.finish, this.cntr)
   }
 
   /**
@@ -213,11 +213,11 @@ export class Deque<T> implements TSTLIterable<T> {
    * @param {*}
    * @return {*}
    */
-  insert(pos: DequeIterator<T>, x: T | number | DequeIterator<T>, last?: T | DequeIterator<T>) {
+  insert(pos: LinearIterator<T>, x: T | number | LinearIterator<T>, last?: T | LinearIterator<T>) {
     if (typeof x === 'number' && last) {
       this._insert_fill(pos, x, last as T)
-    } else if (x instanceof DequeIterator && last instanceof DequeIterator) {
-      this._insert_range(pos, x as DequeIterator<T>, last as DequeIterator<T>)
+    } else if (x instanceof LinearIterator && last instanceof LinearIterator) {
+      this._insert_range(pos, x as LinearIterator<T>, last as LinearIterator<T>)
     } else {
       this._insert_pos(pos, x as T)
     }
@@ -225,27 +225,27 @@ export class Deque<T> implements TSTLIterable<T> {
 
   /**
    * @description: insert at a specificed pos (internally implementation)
-   * @param {DequeIterator} pos
+   * @param {LinearIterator} pos
    * @param {T} x
    * @return {*}
    */
-  private _insert_pos(pos: DequeIterator<T>, val: T) {
-    this.cntr.splice(pos.getKey(), 0, val)
+  private _insert_pos(pos: LinearIterator<T>, val: T) {
+    this.cntr.splice(pos.index, 0, val)
     this.finish++
   }
 
   /**
    * @description: Number of elements to insert. Each element is initialized to a copy of val (internally implementation)
-   * @param {DequeIterator} pos
+   * @param {LinearIterator} pos
    * @param {number} n
    * @param {T} x
    * @return {*}
    */
-  private _insert_fill(pos: DequeIterator<T>, n: number, val: T) {
+  private _insert_fill(pos: LinearIterator<T>, n: number, val: T) {
     if (n !== 0) {
       const added = new Array<T>(n)
       added.fill(val)
-      this.cntr.splice(pos.getKey(), 0, ...added)
+      this.cntr.splice(pos.index, 0, ...added)
       this.finish += n
     }
   }
@@ -253,21 +253,21 @@ export class Deque<T> implements TSTLIterable<T> {
   /**
    * @description: Iterators specifying a range of elements.
    * Copies of the elements in the range [first,last) are inserted at position in the same order (internally implementation)
-   * @param {DequeIterator} pos
-   * @param {DequeIterator} first
-   * @param {DequeIterator} last
+   * @param {LinearIterator} pos
+   * @param {LinearIterator} first
+   * @param {LinearIterator} last
    * @return {*}
    */
-  private _insert_range(pos: DequeIterator<T>, first: DequeIterator<T>, last: DequeIterator<T>) {
+  private _insert_range(pos: LinearIterator<T>, first: LinearIterator<T>, last: LinearIterator<T>) {
     const added = new Array<T>()
     let cur = first,
       n = 0
-    while (cur.hasNext() && cur.getKey() !== last.getKey()) {
+    while (cur.hasNext() && cur.index !== last.index) {
       added.push(cur.getValue() as T)
       cur.next()
       n++
     }
-    this.cntr.splice(pos.getKey(), 0, ...added)
+    this.cntr.splice(pos.index, 0, ...added)
     this.finish += n
   }
 
@@ -277,7 +277,7 @@ export class Deque<T> implements TSTLIterable<T> {
    * @param {*}
    * @return {*}
    */
-  erase(pos: DequeIterator<T>, last?: DequeIterator<T>) {
+  erase(pos: LinearIterator<T>, last?: LinearIterator<T>) {
     if (!last) this._erase_position(pos)
     else this._erase_range(pos, last)
   }
@@ -287,8 +287,8 @@ export class Deque<T> implements TSTLIterable<T> {
    * @param {VCIterator} pos
    * @return {*}
    */
-  private _erase_position(pos: DequeIterator<T>) {
-    this.cntr.splice(pos.getKey(), 1)
+  private _erase_position(pos: LinearIterator<T>) {
+    this.cntr.splice(pos.index, 1)
   }
 
   /**
@@ -297,9 +297,9 @@ export class Deque<T> implements TSTLIterable<T> {
    * @param {VCIterator} last
    * @return {*}
    */
-  private _erase_range(first: DequeIterator<T>, last: DequeIterator<T>) {
-    const count = last.getKey() - first.getKey()
-    this.cntr.splice(first.getKey(), count)
+  private _erase_range(first: LinearIterator<T>, last: LinearIterator<T>) {
+    const count = last.index - first.index
+    this.cntr.splice(first.index, count)
     this.finish = this.finish - count
   }
 
@@ -316,11 +316,11 @@ export class Deque<T> implements TSTLIterable<T> {
    * @return {*}
    */
   assign(x: number | Iterable<T>, v?: T)
-  assign(first: DequeIterator<T>, last: DequeIterator<T>)
+  assign(first: LinearIterator<T>, last: LinearIterator<T>)
   assign(x: unknown, y: unknown) {
     if (typeof x === 'number' && y) {
       this._assign_n_elements(x, y as T)
-    } else if (x instanceof DequeIterator && y instanceof DequeIterator) {
+    } else if (x instanceof LinearIterator && y instanceof LinearIterator) {
       this._assign_range(x, y)
     } else {
       this._assing_itrabel_cntr(x as Iterable<T>)
@@ -346,10 +346,10 @@ export class Deque<T> implements TSTLIterable<T> {
    * @param {Iterator} last
    * @return {*}
    */
-  private _assign_range(first: DequeIterator<T>, last: DequeIterator<T>) {
+  private _assign_range(first: LinearIterator<T>, last: LinearIterator<T>) {
     const cur = first,
       elements: T[] = []
-    while (cur.hasNext() && cur.getKey() !== last.getKey()) {
+    while (cur.hasNext() && cur.index !== last.index) {
       elements.push(cur.getValue())
       cur.next()
     }
@@ -386,7 +386,7 @@ export class Deque<T> implements TSTLIterable<T> {
   resize(n: number)
   resize(n: number, v: T)
   resize(n: number, v?: T) {
-    const first = new DequeIterator<T>(this.begin().getKey() + n, this.cntr)
+    const first = new LinearIterator<T>(this.begin().index + n, this.cntr)
     if (n < this.size()) this.erase(first, this.end())
     else this.insert(this.end(), n - this.size(), v)
   }
@@ -418,7 +418,7 @@ export class Deque<T> implements TSTLIterable<T> {
    * @param {*}
    * @return {*}
    */
-  emplace<K>(pos: DequeIterator<T>, c: { new (...arg) }, ...arg) {
+  emplace<K>(pos: LinearIterator<T>, c: { new (...arg) }, ...arg) {
     const ins: T = new c(arg)
     this.insert(pos, ins)
   }

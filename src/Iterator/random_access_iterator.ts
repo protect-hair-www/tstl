@@ -2,7 +2,7 @@ import { IteratorTags } from './index';
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-12 11:00:45
- * @LastEditTime: 2022-03-19 16:56:32
+ * @LastEditTime: 2022-03-23 13:16:09
  * @LastEditors: hzheyuan
  * @Description: interface identify the category of an iteratro as a random-access iterator
  *
@@ -27,17 +27,20 @@ import { IteratorTags } from './index';
 import { BidirectionalIterator } from './bidirectional_iterator'
 
 export interface RandomAccessIterator<T> extends BidirectionalIterator<T> {
-  index: number;
-  at(index: number): T;
   increment(n?: number, c?: boolean): RandomAccessIterator<T> // increment n
   decrement(n?: number, c?: boolean): RandomAccessIterator<T> // decrement n
-  getNode() // get position element(some datastruct need get node (eg. map, set...))
+
+  get index(): number;
+  getIndex(): number;
+  at(index: number): T;
+
+  getNode?() // get position element(some datastruct need get node (eg. map, set...))
 }
 
 export function random_itr_distance<T>(
   first: RandomAccessIterator<T>,
   last: RandomAccessIterator<T>
 ): number {
-  const n = last.getKey() - first.getKey()
+  const n = last.index - first.index
   return n
 }

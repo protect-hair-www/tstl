@@ -1,24 +1,21 @@
 /*
  * @Author: hzheyuan
- * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-19 17:56:00
+ * @Date: 2022-03-23 13:04:12
+ * @LastEditTime: 2022-03-23 16:14:32
  * @LastEditors: hzheyuan
- * @Description: vector容器迭代器
- * @FilePath: /tstl/src/container/sequence/vector/iterator.ts
+ * @Description: abstract class implemetation for linear iterator
+ * @FilePath: \tstl\src\Iterator\impls\LinearIteratorBase.ts
  */
-// import { Iterator } from '../../../Iterator/index'
-import { RandomAccessIterator, IteratorTags, BaseIterator, equals } from '../../../iterator'
+import { RandomAccessIterator, IteratorTags, IteratorTypes, BaseIterator, equals } from '../index'
 
-export class VCIterator<T> implements RandomAccessIterator<T> {
-  readonly tag: IteratorTags = IteratorTags.BIDIRECTIONAL_ITERATOR
+export abstract class LinearIteratorBase<T> implements RandomAccessIterator<T> {
+  readonly tag: IteratorTags = IteratorTags.RANDOM_ACCESS_ITERATOR
   _cur: number
   _cntr: T[]
-  index: number 
 
   constructor(c, cntr: T[]) {
     this._cur = c
     this._cntr = cntr
-    this.index = c
     // return new Proxy(this, {
     //   get: function (target, prop, receiver) {
     //     console.log('get', target, prop, Reflect.has(target, prop), receiver);
@@ -41,46 +38,24 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
     // })
   }
 
-  // valueOf() {
-  //   return this._cur
-  // }
-
-  private get cur() {
+  get cur() {
     return this._cur
   }
 
-  private set cur(val) {
+  set cur(val) {
     this._cur = val
   }
 
-  private get cntr() {
+  protected get cntr() {
     return this._cntr
   }
 
-  at(): T {
-    return this.cntr[this.index]
+  get index() {
+      return this.cur
   }
 
-  equals<I extends BaseIterator<T>>(itr: I): boolean {
-    return equals(this, itr)
-  }
-
-  /**
-   * @description: access the index (getter)
-   * @param {*}
-   * @return {*}
-   */
-  get key() {
-    return this.cur
-  }
-
-  /**
-   * @description: return index
-   * @param {*}
-   * @return {*}
-   */
-  getKey() {
-    return this.cur
+  getIndex() {
+      return this.cur
   }
 
   /**
@@ -118,12 +93,21 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
   }
 
   /**
-   * @description: access node (vector no need this method)
-   * @param {*}
+   * @description: 
+   * @param {number} idx
+   * @return {*}
+   */  
+  at(idx: number): T {
+    return this.cntr[idx]
+  }
+
+  /**
+   * @description: 
+   * @param {I} itr
    * @return {*}
    */
-  getNode(): number {
-    return this.cur
+  equals<T, I extends IteratorTypes<T>>(itr: I) {
+      return this.cur == itr.cur
   }
 
   /**
@@ -142,45 +126,33 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
     return this.cur !== 0
   }
 
-  equal(first: any, last: any): boolean {
-    return first === last
-  }
-
-  /**
-   * @description: same with has next (like jdk hasnext method)
-   */
-  done(): boolean {
-    return !this.hasNext()
-  }
-
   /**
    * @description: 迭代器后移，具体实现
    * @param {*}
    * @return {*}
    */
-  increment(n: number = 1, c: boolean = true): RandomAccessIterator<T> {
-    let cur = this.cur
-    cur += n
-    if (c) {
-      this.cur += n
-    }
-    const itr: unknown = new VCIterator(cur, this.cntr)
-    return itr as RandomAccessIterator<T>
-  }
+  abstract increment(n: number, c: boolean): RandomAccessIterator<T>;
 
   /**
    * @description: 迭代器前移具体实现
    * @param {*}
    * @return {*}
    */
-  decrement(n: number = 1, c: boolean = true): RandomAccessIterator<T> {
-    let cur = this.cur
-    cur -= n
-    if (c) {
-      this.cur -= n
+  abstract decrement(n: number, c: boolean): RandomAccessIterator<T>;
+
+  /**
+   * @description: 迭代器前移接口
+   * @param {*}
+   * @return {*}
+   */
+  prev(): IteratorResult<T> {
+    if (this.hasPrev()) {
+      const node: IteratorResult<T> = { done: false, value: this.getValue() }
+      this.cur--
+      return node
+    } else {
+      return { done: true, value: undefined }
     }
-    const itr: unknown = new VCIterator(cur, this.cntr)
-    return itr as RandomAccessIterator<T>
   }
 
   /**
@@ -201,40 +173,6 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
   }
 
   /**
-   * @description: 迭代器前移接口
-   * @param {*}
-   * @return {*}
-   */
-  prev(): IteratorResult<T> {
-    if (this.hasPrev()) {
-      const node: IteratorResult<T> = { done: false, value: this.getValue() }
-      this.cur--
-      return node
-    } else {
-      return { done: true, value: undefined }
-    }
-  }
-
-  /**
-   * @description: distance of two interator
-   * @param {*} begin
-   * @param {*} end
-   * @return {*}
-   */
-  static distance(begin, end) {
-    const f = begin.getKey(),
-      l = end.getKey()
-    return l - f
-  }
-
-  /**
-   * @description: erase the element by iterator
-   * @param {*}
-   * @return {*}
-   */
-  remove() {}
-
-  /**
    * @description: Javascript iterable implementation
    * @param {*}
    * @return {*}
@@ -243,3 +181,4 @@ export class VCIterator<T> implements RandomAccessIterator<T> {
     return this
   }
 }
+

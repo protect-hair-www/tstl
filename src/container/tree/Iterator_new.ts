@@ -1,14 +1,14 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-03-21 15:32:04
+ * @LastEditTime: 2022-03-23 16:17:40
  * @LastEditors: hzheyuan
  * @Description: 红黑树对应的迭代器
  * @FilePath: \tstl\src\container\tree\Iterator_new.ts
  */
 
 import { RBTNode, Color } from './RBTNode'
-import { BaseIterator, BidirectionalIterator, IteratorTags } from '../../iterator';
+import { BaseIterator, BidirectionalIterator, IteratorTags, IteratorTypes } from '../../iterator';
 const isNil = RBTNode.isNil
 
 export class RBTIterator<K, V> implements BidirectionalIterator<V> {
@@ -19,11 +19,11 @@ export class RBTIterator<K, V> implements BidirectionalIterator<V> {
     this._cur = c
   }
 
-  private get cur() {
+  get cur() {
     return this._cur
   }
 
-  private set cur(val) {
+  set cur(val) {
     this._cur = val
   }
 
@@ -64,8 +64,13 @@ export class RBTIterator<K, V> implements BidirectionalIterator<V> {
     
   }
 
-  equals<I extends BaseIterator<V>>(itr: I): boolean {
-    return false
+  /**
+   * @description: test whether two pointer is equal
+   * @param {I} itr
+   * @return {*}
+   */  
+  equals<V, I extends IteratorTypes<V>>(itr: I): boolean {
+    return this.cur === itr.cur
   }
 
   // value = (): V => {

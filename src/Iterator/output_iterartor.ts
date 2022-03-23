@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 09:44:09
- * @LastEditTime: 2022-03-19 14:43:53
+ * @LastEditTime: 2022-03-23 11:47:51
  * @LastEditors: hzheyuan
  * @Description: Output iterator category
  * Interface to identify the category of an iterator as an output iterator
@@ -23,9 +23,8 @@
 import { BaseIterator } from './base_iterator'
 
 export interface OutputIterator<T> extends BaseIterator<T> {
-  get key() // get current key or index(getter)
-  getKey() // get current key or index
-
+  // get key() // get current key or index(getter)
+  // getKey() // get current key or index
   set value(v: T)
   setValue(v: T) // write value operator
 }

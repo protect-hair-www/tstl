@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-21 15:50:30
+ * @LastEditTime: 2022-03-23 13:19:51
  * @LastEditors: hzheyuan
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
@@ -18,8 +18,8 @@
  *
  * @FilePath: \tstl\src\container\sequence\vector\vector.ts
  */
-import { InputIterator } from '../../../iterator'
-import { VCIterator } from './iterator'
+import { InputIterator, LinearIterator } from '../../../iterator'
+// import { VCIterator } from './iterator'
 import { TSTLIterable } from '../../../iterator/Iterable'
 
 export class Vector<T> implements TSTLIterable<T> {
@@ -65,8 +65,8 @@ export class Vector<T> implements TSTLIterable<T> {
    * @param {*}
    * @return {*}
    */
-  begin(): VCIterator<T> {
-    return new VCIterator(this.start, this.cntr)
+  begin(): LinearIterator<T> {
+    return new LinearIterator(this.start, this.cntr)
   }
 
   // cbegin(): VCIterator<T> {
@@ -79,9 +79,9 @@ export class Vector<T> implements TSTLIterable<T> {
    * @param {*}
    * @return {*}
    */
-  end(): VCIterator<T> {
+  end(): LinearIterator<T> {
     const last = this.cntr.length
-    return new VCIterator(last, this.cntr)
+    return new LinearIterator(last, this.cntr)
   }
 
   /**
@@ -155,7 +155,7 @@ export class Vector<T> implements TSTLIterable<T> {
   resize(n: number)
   resize(n: number, v: T)
   resize(n: number, v?: T) {
-    const first = new VCIterator<T>(this.begin().getKey() + n, this.cntr)
+    const first = new LinearIterator<T>(this.begin().index + n, this.cntr)
     if (n < this.size()) this.erase(first, this.end())
     else this.insert(this.end(), n - this.size(), v)
   }
@@ -182,11 +182,11 @@ export class Vector<T> implements TSTLIterable<T> {
    * @return {*}
    */
   assign(x: number | Iterable<T>, v?: T)
-  assign(first: VCIterator<T>, last: VCIterator<T>)
+  assign(first: LinearIterator<T>, last: LinearIterator<T>)
   assign(x: unknown, y: unknown) {
     if (typeof x === 'number' && y) {
       this._assign_n_elements(x, y as T)
-    } else if (x instanceof VCIterator && y instanceof VCIterator) {
+    } else if (x instanceof LinearIterator && y instanceof LinearIterator) {
       this._assign_range(x, y)
     } else {
       this._assing_itrabel_cntr(x as Iterable<T>)
@@ -213,10 +213,10 @@ export class Vector<T> implements TSTLIterable<T> {
    * @param {Iterator} last
    * @return {*}
    */
-  private _assign_range(first: VCIterator<T>, last: VCIterator<T>) {
+  private _assign_range(first: LinearIterator<T>, last: LinearIterator<T>) {
     const cur = first,
       elements: T[] = []
-    while (cur.hasNext() && cur.getKey() !== last.getKey()) {
+    while (cur.hasNext() && cur.index !== last.index) {
       elements.push(cur.getValue())
       cur.next()
     }
@@ -278,11 +278,11 @@ export class Vector<T> implements TSTLIterable<T> {
    * @param {*}
    * @return {*}
    */
-  insert(pos: VCIterator<T>, x: T | number | VCIterator<T>, last?: T | VCIterator<T>) {
+  insert(pos: LinearIterator<T>, x: T | number | LinearIterator<T>, last?: T | LinearIterator<T>) {
     if (typeof x === 'number' && last) {
       this._insert_fill(pos, x, last as T)
-    } else if (x instanceof VCIterator && last instanceof VCIterator) {
-      this._insert_range(pos, x as VCIterator<T>, last as VCIterator<T>)
+    } else if (x instanceof LinearIterator && last instanceof LinearIterator) {
+      this._insert_range(pos, x as LinearIterator<T>, last as LinearIterator<T>)
     } else {
       this._insert_pos(pos, x as T)
     }
@@ -290,27 +290,27 @@ export class Vector<T> implements TSTLIterable<T> {
 
   /**
    * @description: insert at a specificed pos (internally implementation)
-   * @param {VCIterator} pos
+   * @param {LinearIterator} pos
    * @param {T} x
    * @return {*}
    */
-  private _insert_pos(pos: VCIterator<T>, val: T) {
-    this.cntr.splice(pos.getKey(), 0, val)
+  private _insert_pos(pos: LinearIterator<T>, val: T) {
+    this.cntr.splice(pos.index, 0, val)
     this.finish++
   }
 
   /**
    * @description: Number of elements to insert. Each element is initialized to a copy of val (internally implementation)
-   * @param {VCIterator} pos
+   * @param {LinearIterator} pos
    * @param {number} n
    * @param {T} x
    * @return {*}
    */
-  private _insert_fill(pos: VCIterator<T>, n: number, val: T) {
+  private _insert_fill(pos: LinearIterator<T>, n: number, val: T) {
     if (n !== 0) {
       const added = new Array<T>(n)
       added.fill(val)
-      this.cntr.splice(pos.getKey(), 0, ...added)
+      this.cntr.splice(pos.index, 0, ...added)
       this.finish += n
     }
   }
@@ -318,21 +318,21 @@ export class Vector<T> implements TSTLIterable<T> {
   /**
    * @description: Iterators specifying a range of elements.
    * Copies of the elements in the range [first,last) are inserted at position in the same order (internally implementation)
-   * @param {VCIterator} pos
-   * @param {VCIterator} first
-   * @param {VCIterator} last
+   * @param {LinearIterator} pos
+   * @param {LinearIterator} first
+   * @param {LinearIterator} last
    * @return {*}
    */
-  private _insert_range(pos: VCIterator<T>, first: VCIterator<T>, last: VCIterator<T>) {
+  private _insert_range(pos: LinearIterator<T>, first: LinearIterator<T>, last: LinearIterator<T>) {
     const added = new Array<T>()
     let cur = first,
       n = 0
-    while (cur.hasNext() && cur.getKey() !== last.getKey()) {
+    while (cur.hasNext() && cur.index !== last.index) {
       added.push(cur.getValue() as T)
       cur.next()
       n++
     }
-    this.cntr.splice(pos.getKey(), 0, ...added)
+    this.cntr.splice(pos.index, 0, ...added)
     this.finish += n
   }
 
@@ -354,29 +354,29 @@ export class Vector<T> implements TSTLIterable<T> {
    * @param {*}
    * @return {*}
    */
-  erase(pos: VCIterator<T>, last?: VCIterator<T>) {
+  erase(pos: LinearIterator<T>, last?: LinearIterator<T>) {
     if (!last) this._erase_position(pos)
     else this._erase_range(pos, last)
   }
 
   /**
    * @description: erase version(1) erase one element of a position(internally implementation)
-   * @param {VCIterator} pos
+   * @param {LinearIterator} pos
    * @return {*}
    */
-  private _erase_position(pos: VCIterator<T>) {
-    this.cntr.splice(pos.getKey(), 1)
+  private _erase_position(pos: LinearIterator<T>) {
+    this.cntr.splice(pos.index, 1)
   }
 
   /**
    * @description:
-   * @param {VCIterator} first
-   * @param {VCIterator} last
+   * @param {LinearIterator} first
+   * @param {LinearIterator} last
    * @return {*}
    */
-  private _erase_range(first: VCIterator<T>, last: VCIterator<T>) {
-    const count = last.getKey() - first.getKey()
-    this.cntr.splice(first.getKey(), count)
+  private _erase_range(first: LinearIterator<T>, last: LinearIterator<T>) {
+    const count = last.index - first.index
+    this.cntr.splice(first.index, count)
     this.finish = this.finish - count
   }
 
@@ -396,7 +396,7 @@ export class Vector<T> implements TSTLIterable<T> {
    * @param {*}
    * @return {*}
    */
-  emplace<K>(pos: VCIterator<T>, c: { new (...arg) }, ...arg) {
+  emplace<K>(pos: LinearIterator<T>, c: { new (...arg) }, ...arg) {
     const ins: T = new c(arg)
     this.insert(pos, ins)
   }

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-03-22 23:04:06
+ * @LastEditTime: 2022-03-23 16:29:43
  * @LastEditors: hzheyuan
  * @Description: iterator definitions
  *
@@ -33,13 +33,13 @@
  *
  * Relationship of the five iterator is (not inherit but infinement):
  * =======================
- * |  Input      Output  |
- * |       \    /        |
- * |      Forward        |
- * |         |           |
- * |    Bidirectional    |
- * |         |           |
- * |    Random Access    |
+ * |      Input | Output |
+ * |       |             |
+ * |    Forward          |
+ * |       |             |
+ * |  Bidirectional      |
+ * |       |             |
+ * |  Random Access      |
  * =======================
  * @FilePath: /tstl/src/Iterator/index.ts
  */
@@ -65,7 +65,7 @@ interface IteratorMap<T> {
   randomAccessIterator: RandomAccessIterator<T>
 }
 
-type IteratorTypes<T> = InputIterator<T> | OutputIterator<T> | ForwardIterator<T> | BidirectionalIterator<T> | RandomAccessIterator<T>;
+export type IteratorTypes<T> = InputIterator<T> | OutputIterator<T> | ForwardIterator<T> | BidirectionalIterator<T> | RandomAccessIterator<T>;
 type LimitIteratorKeys = 'inputIterator' | 'outputIterator' | 'forwardIterator'; 
 type bidirectionalIteratorKeys = 'bidirectionalIterator'; 
 type randomAccessIteratorKey = 'randomAccessIterator'
@@ -150,14 +150,14 @@ export function distance<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): nu
   return n
 }
 
+/**
+ * @description: check two iterator equals
+ * @param {IteratorTypes} first
+ * @param {IteratorTypes} last
+ * @return {*}
+ */
 export function equals<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): boolean {
-  let tag = first.tag;
-  let firstVal = first.value, lastVal = last.value;
-  if(typeof first._cur === 'number') {
-    return first._cur === last._cur
-  } else {
-    return first._cur === last._cur
-  }
+  return first.cur === last.cur
 }
 
 
@@ -174,3 +174,5 @@ export * from './output_iterartor'
 export * from './forward_iterator'
 export * from './bidirectional_iterator'
 export * from './random_access_iterator'
+export * from './impls/LinearIterator'
+export * from './impls/ListIterator'

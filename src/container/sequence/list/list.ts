@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:58:00
- * @LastEditTime: 2022-03-22 14:25:30
+ * @LastEditTime: 2022-03-23 19:05:26
  * @LastEditors: hzheyuan
  * @Description: sequenece container list
  *
@@ -21,8 +21,7 @@
  * @FilePath: \tstl\src\container\sequence\list\list.ts
  */
 import { ListNode } from './ListNode'
-import { LinkListIterator } from './iterator'
-import { InputIterator } from '../../../iterator'
+import { InputIterator, ListIterator, distance} from '../../../iterator'
 import { TSTLIterable } from '../../../iterator/Iterable'
 
 export class List<T> implements TSTLIterable<T> {
@@ -109,7 +108,7 @@ export class List<T> implements TSTLIterable<T> {
    * @return {*}
    */
   public size(): number {
-    return LinkListIterator.distance(this.begin(), this.end())
+    return distance(this.begin(), this.end()) 
   }
 
   /**
@@ -117,8 +116,8 @@ export class List<T> implements TSTLIterable<T> {
    * @param {*}
    * @return {*}
    */
-  public begin(): LinkListIterator<T> {
-    return new LinkListIterator(this.header.next)
+  public begin(): ListIterator<T> {
+    return new ListIterator(this.header.next)
   }
 
   /**
@@ -126,17 +125,8 @@ export class List<T> implements TSTLIterable<T> {
    * @param {*}
    * @return {*}
    */
-  public end(): LinkListIterator<T> {
-    return new LinkListIterator(this.header)
-  }
-
-  /**
-   * @description: check is at end
-   * @param {*}
-   * @return {*}
-   */
-  private isEnd(p: LinkListIterator<T>): boolean {
-    return p.getNode() === this.end().getNode()
+  public end(): ListIterator<T> {
+    return new ListIterator(this.header)
   }
 
   /**
@@ -161,11 +151,11 @@ export class List<T> implements TSTLIterable<T> {
 
   /**
    * @description: insert element innternally implementation
-   * @param {LinkListIterator} pos
+   * @param {ListIterator} pos
    * @param {T} x
    * @return {*}
    */
-  private _insert(pos: LinkListIterator<T>, x: T) {
+  private _insert(pos: ListIterator<T>, x: T) {
     const temp = this.createNode(x)
     temp.next = pos.getNode()
     temp.prev = pos.getNode().prev
@@ -176,23 +166,23 @@ export class List<T> implements TSTLIterable<T> {
 
   /**
    * @description: insert new elements before the element at the sepcified position
-   * @param {LinkListIterator} pos
+   * @param {ListIterator} pos
    * @param {number} n
    * @param {T} v
    * @return {*}
    */
-  private _fill_insert(pos: LinkListIterator<T>, n: number, v: T) {
+  private _fill_insert(pos: ListIterator<T>, n: number, v: T) {
     for (; n > 0; --n) this.insert(pos, v)
   }
 
   /**
    * @description: insert elements by container iterator
-   * @param {LinkListIterator} pos
-   * @param {LinkListIterator} first
-   * @param {LinkListIterator} last
+   * @param {ListIterator} pos
+   * @param {ListIterator} first
+   * @param {ListIterator} last
    * @return {*}
    */
-  private _range_insert(pos: LinkListIterator<T>, first: InputIterator<T>, last: InputIterator<T>) {
+  private _range_insert(pos: ListIterator<T>, first: InputIterator<T>, last: InputIterator<T>) {
     for (; first.equals(last); first.next()) {
       this.insert(pos, first.getValue())
     }
@@ -200,11 +190,11 @@ export class List<T> implements TSTLIterable<T> {
 
   /**
    * @description: insert new element before the element at the specified position
-   * @param {LinkListIterator} pos
+   * @param {ListIterator} pos
    * @param {T} x
    * @return {*}
    */
-  public insert(pos: LinkListIterator<T>, x: T | number, v?: T) {
+  public insert(pos: ListIterator<T>, x: T | number, v?: T) {
     if (typeof x === 'number' && v) this._fill_insert(pos, x, v)
     else this._insert(pos, x as T)
   }
@@ -229,11 +219,11 @@ export class List<T> implements TSTLIterable<T> {
 
   /**
    * @description: erase elements internally implementation
-   * @param {LinkListIterator} pos
+   * @param {ListIterator} pos
    * @return {*}
    */
-  private _erase(pos: LinkListIterator<T>) {
-    if (pos.getNode() === this.end().getNode()) return
+  private _erase(pos: ListIterator<T>) {
+    if (pos.equals(this.end())) return
     const next_node = pos.getNode().next
     const prev_node = pos.getNode().prev
 
@@ -241,17 +231,17 @@ export class List<T> implements TSTLIterable<T> {
     prev_node.next = next_node
     next_node.prev = prev_node
 
-    return new LinkListIterator(next_node)
+    return new ListIterator(next_node)
   }
 
   /**
    * @description: erase a range of the list
-   * @param {LinkListIterator} fisrt
-   * @param {LinkListIterator} last
+   * @param {ListIterator} fisrt
+   * @param {ListIterator} last
    * @return {*}
    */
-  private _range_erase(first: LinkListIterator<T>, last: LinkListIterator<T>) {
-    while (first.getNode() !== last.getNode()) {
+  private _range_erase(first: ListIterator<T>, last: ListIterator<T>) {
+    while (!first.equals(last)) {
       this.erase(first)
       first.increment(1)
     }
@@ -260,10 +250,10 @@ export class List<T> implements TSTLIterable<T> {
 
   /**
    * @description: erase elments
-   * @param {LinkListIterator} pos
+   * @param {ListIterator} pos
    * @return {*}
    */
-  public erase(first: LinkListIterator<T>, last?: LinkListIterator<T>) {
+  public erase(first: ListIterator<T>, last?: ListIterator<T>) {
     if (last) this._range_erase(first, last)
     else this._erase(first)
   }
@@ -314,7 +304,7 @@ export class List<T> implements TSTLIterable<T> {
   resize(new_size: number, v: T) {
     const i = this.begin()
     let len = 0
-    for (; !this.isEnd(i) && len < new_size; i.increment(1), ++len);
+    for (; !i.equals(this.end()) && len < new_size; i.increment(1), ++len);
     if (len === new_size) this.erase(i, this.end())
     else this.insert(this.end(), new_size - len, v)
   }
@@ -338,17 +328,17 @@ export class List<T> implements TSTLIterable<T> {
   /**
    * @description: transfer list to list
    * transfers elements from x into the container, inserting them at position(before)
-   * @param {LinkListIterator} pos
-   * @param {LinkListIterator} first
-   * @param {LinkListIterator} last
+   * @param {ListIterator} pos
+   * @param {ListIterator} first
+   * @param {ListIterator} last
    * @return {*}
    */
   private transfer(
-    pos: LinkListIterator<T>,
-    first: LinkListIterator<T>,
-    last: LinkListIterator<T>
+    pos: ListIterator<T>,
+    first: ListIterator<T>,
+    last: ListIterator<T>
   ) {
-    if (pos.getNode() !== last.getNode()) {
+    if (!pos.equals(last)) {
       // remove [first, last) from its old position
       last.getNode().prev.next = pos.getNode()
       first.getNode().prev.next = last.getNode()
@@ -372,15 +362,15 @@ export class List<T> implements TSTLIterable<T> {
      * The second version (2) transfers only the element pointed by i from x into the container.
      * The third version (3) transfers the range [first,last) from x into the container.
 
-     * @param {LinkListIterator} pos
+     * @param {ListIterator} pos
      * @param {List} list
      * @return {*}
      */
   public splice(
-    pos: LinkListIterator<T>,
+    pos: ListIterator<T>,
     list: List<T>,
-    first?: LinkListIterator<T>,
-    last?: LinkListIterator<T>
+    first?: ListIterator<T>,
+    last?: ListIterator<T>
   ) {
     if (!first) {
       if (!list.empty()) this.transfer(pos, list.begin(), list.end())
@@ -395,33 +385,33 @@ export class List<T> implements TSTLIterable<T> {
 
   /**
    * @description: splice version(2) interanlly implementation
-   * @param {LinkListIterator} pos
+   * @param {ListIterator} pos
    * @param {List} list
-   * @param {LinkListIterator} i
+   * @param {ListIterator} i
    * @return {*}
    */
-  private _splice_one(pos: LinkListIterator<T>, list: List<T>, i: LinkListIterator<T>) {
+  private _splice_one(pos: ListIterator<T>, list: List<T>, i: ListIterator<T>) {
     let j = i
     j = j.nextItr()
-    if (pos.getNode() === i.getNode() || pos.getNode() === j.getNode()) return
+    if (pos.equals(i) || pos.equals(j)) return
     this.transfer(pos, i, j)
   }
 
   /**
    * @description: splice version(3) internally implementation
-   * @param {LinkListIterator} pos
+   * @param {ListIterator} pos
    * @param {List} list
-   * @param {LinkListIterator} first
-   * @param {LinkListIterator} last
+   * @param {ListIterator} first
+   * @param {ListIterator} last
    * @return {*}
    */
   private _splice_range(
-    pos: LinkListIterator<T>,
+    pos: ListIterator<T>,
     list: List<T>,
-    first: LinkListIterator<T>,
-    last: LinkListIterator<T>
+    first: ListIterator<T>,
+    last: ListIterator<T>
   ) {
-    if (first.getNode() !== last.getNode()) this.transfer(pos, first, last)
+    if (!first.equals(last)) this.transfer(pos, first, last)
   }
 
   /**
@@ -439,7 +429,7 @@ export class List<T> implements TSTLIterable<T> {
   public remove(v: T) {
     const first = this.begin(),
       last = this.end()
-    while (first.getNode() !== last.getNode()) {
+    while (!first.equals(last)) {
       // let next = first;
       if (v === first.getValue()) this.erase(first)
       first.increment(1)
@@ -456,7 +446,7 @@ export class List<T> implements TSTLIterable<T> {
   public remove_if(fn: (v: T) => boolean) {
     const first = this.begin(),
       last = this.end()
-    while (first.getNode() !== last.getNode()) {
+    while (!first.equals(last)) {
       // let next = first;
       const value = first.getValue()
       if (fn(value as T)) this.erase(first)
@@ -475,7 +465,7 @@ export class List<T> implements TSTLIterable<T> {
   public unique() {
     let first = this.begin(),
       last = this.end()
-    if (first.getNode() === last.getNode()) return
+    if (first.equals(last)) return
     let next = first
     while (next.hasNext()) {
       next = next.nextItr()
@@ -498,7 +488,7 @@ export class List<T> implements TSTLIterable<T> {
       last1 = this.end()
     let fisrt2 = list.begin(),
       last2 = list.end()
-    while (first1.getNode() !== last1.getNode() && fisrt2.getNode() !== last2.getNode()) {
+    while (!first1.equals(last1) && !fisrt2.equals(last2)) {
       if (fisrt2.getValue() < first1.getValue()) {
         const next = fisrt2.nextItr()
         this.transfer(first1, fisrt2, next)
@@ -507,7 +497,7 @@ export class List<T> implements TSTLIterable<T> {
         first1.increment(1)
       }
     }
-    if (fisrt2.getNode() !== last2.getNode()) this.transfer(last1, fisrt2, last2)
+    if (!fisrt2.equals(last2)) this.transfer(last1, fisrt2, last2)
   }
 
   /**
@@ -522,25 +512,28 @@ export class List<T> implements TSTLIterable<T> {
   public sort() {
     // if list has length 0 or 1 do nothing
     if (this.header.next !== this.header && this.header.next.next !== this.header) {
+      // carry list
       const carry = new List<T>()
+      // block: erery block has most 2^i elements
       const counter = new Array<List<T>>(64)
       counter.fill(new List<T>())
 
       let fill = 0
       while (!this.empty()) {
+        // get the first of the list
         carry.splice(carry.begin(), this, this.begin())
         let i = 0
         while (i < fill && !counter[i].empty()) {
+          // merge the carry to block[i]
           counter[i].merge(carry)
           carry.swap(counter[i++])
         }
         carry.swap(counter[i])
         if (i === fill) ++fill
       }
-      // console.log(this, this.empty(), counter, fill)
-      // for(let i = 1; i < fill; ++i) {
-      //     counter[i].merge(counter[i-1])
-      // }
+      for(let i = 1; i < fill; ++i) {
+          counter[i].merge(counter[i-1])
+      }
       this.swap(counter[fill - 1])
     }
   }
@@ -579,7 +572,7 @@ export class List<T> implements TSTLIterable<T> {
    */
   private _assign_fill(n: number, v: T) {
     const i = this.begin()
-    for (; i.getNode() !== this.end().getNode() && n > 0; i.increment(1), --n) {
+    for (; !i.equals(this.end()) && n > 0; i.increment(1), --n) {
       i.getNode().setValue(v)
     }
     if (n > 0) {
@@ -619,7 +612,7 @@ export class List<T> implements TSTLIterable<T> {
    * @param {*}
    * @return {*}
    */
-  emplace<K>(pos: LinkListIterator<T>, c: { new (...arg) }, ...arg) {
+  emplace<K>(pos: ListIterator<T>, c: { new (...arg) }, ...arg) {
     const ins: T = new c(arg)
     this.insert(pos, ins)
   }
