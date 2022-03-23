@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-23 13:04:12
- * @LastEditTime: 2022-03-23 16:14:32
+ * @LastEditTime: 2022-03-23 23:07:17
  * @LastEditors: hzheyuan
  * @Description: abstract class implemetation for linear iterator
- * @FilePath: \tstl\src\Iterator\impls\LinearIteratorBase.ts
+ * @FilePath: /tstl/src/iterator/impls/LinearIteratorBase.ts
  */
 import { RandomAccessIterator, IteratorTags, IteratorTypes, BaseIterator, equals } from '../index'
 
@@ -109,6 +109,8 @@ export abstract class LinearIteratorBase<T> implements RandomAccessIterator<T> {
   equals<T, I extends IteratorTypes<T>>(itr: I) {
       return this.cur == itr.cur
   }
+
+  abstract copy(): IteratorTypes<T>
 
   /**
    * @description: test whether has next element (like jdk hasnext method)

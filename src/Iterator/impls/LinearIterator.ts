@@ -1,12 +1,12 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-23 14:12:09
+ * @LastEditTime: 2022-03-23 23:07:08
  * @LastEditors: hzheyuan
  * @Description: linear type container iterator
- * @FilePath: \tstl\src\Iterator\impls\LinearIterator.ts
+ * @FilePath: /tstl/src/iterator/impls/LinearIterator.ts
  */
-import { RandomAccessIterator, IteratorTags } from '../index'
+import { RandomAccessIterator, IteratorTags, IteratorTypes } from '../index'
 import { LinearIteratorBase }  from './LinearIteratorBase'
 
 export class LinearIterator<T> extends LinearIteratorBase<T> {
@@ -34,6 +34,11 @@ export class LinearIterator<T> extends LinearIteratorBase<T> {
     //     return true
     //   }
     // })
+  }
+
+
+  copy(): IteratorTypes<T> {
+    return new LinearIterator<T>(this.cur, this.cntr)
   }
 
   /**

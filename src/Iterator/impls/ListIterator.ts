@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:24
- * @LastEditTime: 2022-03-23 18:13:14
+ * @LastEditTime: 2022-03-23 23:07:40
  * @LastEditors: hzheyuan
  * @Description: list container iterator
- * @FilePath: \tstl\src\Iterator\impls\ListIterator.ts
+ * @FilePath: /tstl/src/iterator/impls/ListIterator.ts
  */
 import { ListNode } from '../../container/sequence/list/ListNode'
 import { BaseIterator, RandomAccessIterator, BidirectionalIterator, IteratorTags, IteratorTypes } from '../index'
@@ -62,6 +62,10 @@ export class ListIterator<T> extends ListIteratorBase<T> {
    */  
   equals<T, I extends IteratorTypes<T>>(itr: I) {
       return this.cur === itr.cur
+  }
+
+  copy(): IteratorTypes<T> {
+    return new ListIterator<T>(this.cur)
   }
 
   /**

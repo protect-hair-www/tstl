@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-03-23 16:17:40
+ * @LastEditTime: 2022-03-23 23:08:44
  * @LastEditors: hzheyuan
  * @Description: 红黑树对应的迭代器
- * @FilePath: \tstl\src\container\tree\Iterator_new.ts
+ * @FilePath: /tstl/src/container/tree/Iterator_new.ts
  */
 
 import { RBTNode, Color } from './RBTNode'
@@ -62,6 +62,10 @@ export class RBTIterator<K, V> implements BidirectionalIterator<V> {
 
   setValue(v: V) {
     
+  }
+
+  copy(): IteratorTypes<V> {
+    return new RBTIterator<K, V>(this.cur)
   }
 
   /**

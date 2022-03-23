@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:24
- * @LastEditTime: 2022-03-23 16:27:22
+ * @LastEditTime: 2022-03-23 23:07:34
  * @LastEditors: hzheyuan
  * @Description: list container iterator
- * @FilePath: \tstl\src\Iterator\impls\ListIteratorBase.ts
+ * @FilePath: /tstl/src/iterator/impls/ListIteratorBase.ts
  */
 import { ListNode } from '../../container/sequence/list/ListNode'
 import { BidirectionalIterator, IteratorTags, IteratorTypes } from '../index'
@@ -58,6 +58,9 @@ export abstract class ListIteratorBase<T> implements BidirectionalIterator<T> {
      * @return {*}
      */
     abstract equals<T, I extends IteratorTypes<T>>(itr: I): boolean
+
+
+    abstract copy(): IteratorTypes<T>
 
     /**
      * @description: get list element node

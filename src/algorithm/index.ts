@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-12 10:58:55
- * @LastEditTime: 2022-03-21 22:35:59
+ * @LastEditTime: 2022-03-23 23:46:11
  * @LastEditors: hzheyuan
  * @Description: Algorithms
  *
@@ -24,12 +24,15 @@ import {
 
 import {
   find,
+  find_if,
+  find_if_not,
   find_end,
   find_first_of,
   all_of,
   any,
   every,
   any_of,
+  none_of,
   adjacent_find,
   count,
   count_if,
@@ -92,6 +95,24 @@ import {
   minmax_element
 } from './min_max'
 
+import {
+  sort,
+  stable_sort,
+  partial_sort,
+  is_sort,
+  is_sort_until,
+  nth_element
+} from './sorting'
+
+import {
+  merge,
+  replace_merge,
+  set_union,
+  set_difference,
+  set_intersection,
+  set_symmetric_diffrence
+} from './merge'
+
 export {
   // heap
   makeHeap,
@@ -103,12 +124,15 @@ export {
 
   // none modifying sequence operations
   find,
+  find_if,
+  find_if_not,
   find_end,
   find_first_of,
   all_of,
   any,
   every,
   any_of,
+  none_of,
   adjacent_find,
   count,
   count_if,
@@ -164,5 +188,21 @@ export {
   max,
   min_element,
   max_element,
-  minmax_element
+  minmax_element,
+
+  // sort
+  sort,
+  stable_sort,
+  partial_sort,
+  is_sort,
+  is_sort_until,
+  nth_element,
+
+  // merge
+  merge,
+  replace_merge,
+  set_union,
+  set_difference,
+  set_intersection,
+  set_symmetric_diffrence
 }

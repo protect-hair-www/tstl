@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2019-01-29 08:32:32
- * @LastEditTime: 2022-03-17 21:52:06
+ * @LastEditTime: 2022-03-23 23:46:27
  * @LastEditors: hzheyuan
  * @Description: TSSTL library main entry
  * @FilePath: /tstl/src/index.ts
@@ -12,8 +12,98 @@ import { Set, Map, MultiSet, MultiMap } from './container/associative/index'
 import { Tree, _RBTNode, _Entry } from './container/tree/index'
 import { PriorityQueue } from './container/sequence/'
 import { Queue, Stack } from './adapter'
-import { makeHeap, popHeap, pushHeap, sortHeap, isHeap, isHeapUntil } from './algorithm'
 import { less, greater } from './functor'
+import { makeHeap, popHeap, pushHeap, sortHeap, isHeap, isHeapUntil } from './algorithm'
+import {
+  find,
+  find_if,
+  find_if_not,
+  find_end,
+  find_first_of,
+  all_of,
+  any,
+  every,
+  any_of,
+  none_of,
+  adjacent_find,
+  count,
+  count_if,
+  mismatch,
+  equal,
+  is_premutation,
+  search,
+  search_n
+} from './algorithm'
+
+import {
+  copy,
+  copy_if,
+  copy_n,
+  copy_backward,
+  move,
+  swap,
+  swap_range,
+  transform,
+  replace,
+  replace_copy,
+  replace_copy_if,
+  fill,
+  fill_n,
+  generate,
+  generate_n,
+  remove,
+  reverse_copy,
+  remove_copy_if,
+  unique,
+  unique_coy,
+  reverse,
+  remove_copy,
+  rotate,
+  rotate_copy,
+  random_shuffle,
+  shuffle
+} from './algorithm'
+
+import {
+  is_partitioned,
+  partition,
+  partition_copy,
+  partition_point,
+  stable_partition
+} from './algorithm';
+
+import {
+  lower_bound,
+  upper_bound,
+  equal_range,
+  binaray_search
+} from './algorithm'
+
+import {
+  min,
+  max,
+  min_element,
+  max_element,
+  minmax_element
+} from './algorithm'
+
+import {
+  sort,
+  stable_sort,
+  partial_sort,
+  is_sort,
+  is_sort_until,
+  nth_element
+} from './algorithm'
+
+import {
+  merge,
+  replace_merge,
+  set_union,
+  set_difference,
+  set_intersection,
+  set_symmetric_diffrence
+} from './algorithm'
 
 export {
   // associative underlying data structrue
@@ -34,13 +124,100 @@ export {
   // adapter
   Stack,
   Queue,
+
   // algorithm
+  // heap
   makeHeap,
   popHeap,
   pushHeap,
   sortHeap,
   isHeap,
   isHeapUntil,
+
+  // none modifying sequence operations
+  find,
+  find_if,
+  find_if_not,
+  find_end,
+  find_first_of,
+  all_of,
+  any,
+  every,
+  any_of,
+  none_of,
+  adjacent_find,
+  count,
+  count_if,
+  mismatch,
+  equal,
+  is_premutation,
+  search,
+  search_n,
+
+  // modifying sequences operations
+  copy,
+  copy_if,
+  copy_n,
+  copy_backward,
+  move,
+  swap,
+  swap_range,
+  transform,
+  replace,
+  replace_copy,
+  replace_copy_if,
+  fill,
+  fill_n,
+  generate,
+  generate_n,
+  remove,
+  reverse_copy,
+  remove_copy_if,
+  unique,
+  unique_coy,
+  reverse,
+  remove_copy,
+  rotate,
+  rotate_copy,
+  random_shuffle,
+  shuffle,
+
+  // partition
+  is_partitioned,
+  partition,
+  partition_copy,
+  partition_point,
+  stable_partition,
+
+  // binary search
+  lower_bound,
+  upper_bound,
+  equal_range,
+  binaray_search,
+
+  // minmax
+  min,
+  max,
+  min_element,
+  max_element,
+  minmax_element,
+
+  // sort
+  sort,
+  stable_sort,
+  partial_sort,
+  is_sort,
+  is_sort_until,
+  nth_element,
+
+  // merge
+  merge,
+  replace_merge,
+  set_union,
+  set_difference,
+  set_intersection,
+  set_symmetric_diffrence,
+
   // functor
   less,
   greater

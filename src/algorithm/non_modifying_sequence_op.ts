@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:22
- * @LastEditTime: 2022-03-17 15:27:32
+ * @LastEditTime: 2022-03-23 23:59:38
  * @LastEditors: hzheyuan
  * @Description: non modifying sequence operations
- * @FilePath: \tstl\src\algorithm\non_modifying_sequence_op.ts
+ * @FilePath: /tstl/src/algorithm/non_modifying_sequence_op.ts
  */
 import { InputIterator, ForwardIterator, input_itr_distance, advance } from '../Iterator'
 
@@ -21,8 +21,9 @@ export function all_of<T>(
   last: InputIterator<T>,
   fn: (v: T) => boolean
 ): boolean {
-  while (first !== last) {
-    if (!fn(first.getValue())) return false
+  first = first.copy();
+  while (!first.equals(last)) {
+    if (!fn(first.value)) return false
     first.next()
   }
   return true
@@ -53,8 +54,9 @@ export function any_of<T>(
   last: InputIterator<T>,
   fn: (v: T) => boolean
 ): boolean {
-  while (first !== last) {
-    if (fn(first.getValue())) return true
+  first = first.copy();
+  while (!first.equals(last)) {
+    if (fn(first.value)) return true
     first.next()
   }
   return false
@@ -88,8 +90,9 @@ export function none_of<T>(
   last: InputIterator<T>,
   fn: (v: T) => boolean
 ): boolean {
-  while (first !== last) {
-    if (fn(first.getValue())) return false
+  first = first.copy();
+  while (!first.equals(last)) {
+    if (fn(first.value)) return false
     first.next()
   }
   return true
@@ -104,8 +107,12 @@ export function none_of<T>(
  * @return {*}
  */
 export function find<T>(first: InputIterator<T>, last: InputIterator<T>, val: T): T {
-  while (first !== last && first.getValue() !== val) first.next()
-  return first.getValue()
+  first = first.copy();
+  while (!first.equals(last) ) {
+    if(first.value === val) return first.value
+    first.next()
+  }
+  return last.value 
 }
 
 /**
@@ -121,8 +128,12 @@ export function find_if<T>(
   last: InputIterator<T>,
   fn: (v: T) => boolean
 ): T {
-  while (first !== last && fn(first.getValue())) first.next()
-  return first.getValue()
+  first = first.copy();
+  while (!first.equals(last) ) {
+    if(fn(first.value)) return first.value
+    first.next()
+  }
+  return last.value 
 }
 
 /**
@@ -137,11 +148,12 @@ export function find_if_not<T>(
   first: InputIterator<T>,
   last: InputIterator<T>,
   fn: (v: T) => boolean
-): T {
-  while (first !== last && fn(first.getValue())) {
-    if (!fn(first.getValue())) return first.getValue()
+): InputIterator<T> {
+  first = first.copy();
+  while (!first.equals(last)) {
+    if(!fn(first.value)) return first
   }
-  return last.getValue()
+  return last
 }
 
 /**
@@ -163,22 +175,25 @@ export function find_end<T>(
   last2: ForwardIterator<T>,
   fn: (x: T, y: T) => boolean
 ): T {
-  if (first2 === last2) return last1.getValue()
+  first1 = (first1.copy() as ForwardIterator<T>);
+  first2 = (first2.copy() as ForwardIterator<T>);
+
+  if (first2.equals(last2)) return last1.value
   let ret = last1
-  while (first1 !== last1) {
+  while (!first1.equals(last1)) {
     const it1 = first1,
       it2 = first2
-    while (fn(it1.getValue(), it2.getValue())) {
+    while (fn(it1.value, it2.value)) {
       it1.next(), it2.next()
       if (it2 === last2) {
         ret = first1
         break
       }
-      if (it1 == last1) return ret.getValue()
+      if (it1 == last1) return ret.value
     }
     first1.next()
   }
-  return ret.getValue()
+  return ret.value
 }
 
 /**
@@ -200,12 +215,12 @@ export function find_first_of<T>(
   last2: ForwardIterator<T>,
   fn: (x: T, y: T) => boolean
 ): T {
-  while (first1 !== last1) {
+  while (!first1.equals(last1)) {
     for (const it = first2; it !== last2; it.next()) {
-      if (fn(it.getValue(), first1.getValue())) return first1.getValue()
+      if (fn(it.value, first1.value)) return first1.value
     }
   }
-  return last1.getValue()
+  return last1.value
 }
 
 /**
@@ -223,16 +238,16 @@ export function adjacent_find<T>(
   last: ForwardIterator<T>,
   fn: (a: T, b: T) => boolean
 ): T {
-  if (first !== last) {
+  if (!first.equals(last)) {
     const next = first
     next.next()
-    while (next !== last) {
-      if (fn(first.getValue(), next.getValue())) return first.getValue()
+    while (next.equals(last)) {
+      if (fn(first.value, next.value)) return first.value
       first.next()
       next.next()
     }
   }
-  return last.getValue()
+  return last.value
 }
 
 /**
@@ -245,8 +260,8 @@ export function adjacent_find<T>(
  */
 export function count<T>(first: InputIterator<T>, last: InputIterator<T>, val: T): number {
   let ret = 0
-  while (first !== last) {
-    if (first.getValue() === val) ret++
+  while (!first.equals(last)) {
+    if (first.value === val) ret++
     first.next()
   }
   return ret
@@ -266,8 +281,8 @@ export function count_if<T>(
   fn: (val: T) => boolean
 ): number {
   let ret = 0
-  while (first !== last) {
-    if (fn(first.getValue())) ret++
+  while (!first.equals(last)) {
+    if (fn(first.value)) ret++
     first.next()
   }
   return ret
@@ -287,11 +302,11 @@ export function mismatch<T>(
   first2: InputIterator<T>,
   last2: InputIterator<T>
 ): [T, T] {
-  while (first1.getValue() !== last1.getValue() && first1.getValue() !== last2.getValue()) {
+  while (first1.value !== last1.value && first1.value !== last2.value) {
     first1.next()
     first2.next()
   }
-  return [first1.getValue(), first2.getValue()]
+  return [first1.value, first2.value]
 }
 
 /**
@@ -309,8 +324,8 @@ export function equal<T>(
   first2: InputIterator<T>,
   fn: (a: T, b: T) => boolean
 ): boolean {
-  while (first1 !== last1) {
-    if (!fn(first1.getValue(), first2.getValue())) return false
+  while (!first1.equals(last1)) {
+    if (!fn(first1.value, first2.value)) return false
     first1.next()
     first2.next()
   }
@@ -333,14 +348,14 @@ export function is_premutation<T>(
   first2: InputIterator<T>,
   fn: (a: T, b: T) => boolean
 ): boolean {
-  if (first1 === last1) return true
+  if (first1.equals(last1)) return true
   const last2 = first2
   const dis = input_itr_distance(first1, last1)
   advance(last2, dis)
   for (const it1 = first1; it1 != last1; it1.next()) {
-    if (find(first1, it1, it1.getValue()) === it1.getValue()) {
-      const n = count(first2, last2, it1.getValue())
-      if (n == 0 || count(it1, last1, it1.getValue()) !== n) return false
+    if (find(first1, it1, it1.value) === it1.value) {
+      const n = count(first2, last2, it1.value)
+      if (n == 0 || count(it1, last1, it1.value) !== n) return false
     }
   }
   return true
@@ -366,19 +381,19 @@ export function search<T>(
   first2: ForwardIterator<T>,
   last2: ForwardIterator<T>
 ): T {
-  if (first2 === last2) return first1.getValue()
-  while (first1 !== last2) {
+  if (first2.equals(last2)) return first1.value
+  while (!first1.equals(last2)) {
     const it1 = first1,
       it2 = first2
-    while (it1.getValue() === it2.getValue()) {
+    while (it1.value === it2.value) {
       it1.next()
       it2.next()
-      if (it1 === last1) return last1.getValue()
-      if (it2 === last2) return first1.getValue()
+      if (it1 === last1) return last1.value
+      if (it2 === last2) return first1.value
     }
     first1.next()
   }
-  return last1.getValue()
+  return last1.value
 }
 
 /**
@@ -402,10 +417,10 @@ export function search_n<T>(
 
   const dis = input_itr_distance(first, last)
   advance(limit, dis)
-  while (first !== limit) {
+  while (!first.equals(limit)) {
     it = first
     i = 0
-    while (it.getValue() === val) {
+    while (it.value === val) {
       it.next()
       if (++i === count) return first
     }
