@@ -6,8 +6,8 @@ dist-ssr
 *.local
 .cert/
 cert.config.js
-.vscode/
 types/
+coverage/
 
 # docs/
 .cache/

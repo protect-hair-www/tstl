@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-23 13:19:51
+ * @LastEditTime: 2022-03-24 09:54:41
  * @LastEditors: hzheyuan
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
@@ -39,7 +39,8 @@ export class Vector<T> implements TSTLIterable<T> {
    */
   public constructor()
   public constructor(vectorLength: number)
-  public constructor(vector: Vector<T>)
+  // public constructor(vector: Vector<T>)
+  public constructor(iterableData: Iterable<T>)
   public constructor(vectorLength: number, v: T)
   public constructor(first: InputIterator<T>, last: InputIterator<T>)
   public constructor(...args: any[]) {

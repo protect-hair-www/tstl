@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2019-01-29 08:32:32
- * @LastEditTime: 2022-03-23 23:46:27
+ * @LastEditTime: 2022-03-24 15:12:32
  * @LastEditors: hzheyuan
  * @Description: TSSTL library main entry
- * @FilePath: /tstl/src/index.ts
+ * @FilePath: \tstl\src\index.ts
  */
 
 import { Vector, List, Deque } from './container/sequence/index'
@@ -25,6 +25,7 @@ import {
   every,
   any_of,
   none_of,
+  for_each,
   adjacent_find,
   count,
   count_if,
@@ -145,6 +146,7 @@ export {
   every,
   any_of,
   none_of,
+  for_each,
   adjacent_find,
   count,
   count_if,

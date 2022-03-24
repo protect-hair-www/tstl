@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-03-23 16:29:43
+ * @LastEditTime: 2022-03-24 18:38:15
  * @LastEditors: hzheyuan
  * @Description: iterator definitions
  *
@@ -141,6 +141,7 @@ export function _distance_for_randomaccess_iter<T, K extends RandomAccessIterato
  * @return {*}
  */
 export function distance<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): number {
+  first = first.copy(), last = last.copy()
   let n = 0
   if(first.tag === IteratorTags.RANDOM_ACCESS_ITERATOR) {
    n = _distance_for_randomaccess_iter(first as RandomAccessIterator<T>, last as RandomAccessIterator<T>)

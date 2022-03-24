@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-12 10:58:55
- * @LastEditTime: 2022-03-23 23:46:11
+ * @LastEditTime: 2022-03-24 15:11:57
  * @LastEditors: hzheyuan
  * @Description: Algorithms
  *
@@ -11,7 +11,7 @@
  * through iterators directly on the values, not affecting in any way the structure of any possible
  * container (it never affects the size or storage allocation of the container).
  *
- * @FilePath: /tstl/src/algorithm/index.ts
+ * @FilePath: \tstl\src\algorithm\index.ts
  */
 import { 
   makeHeap, 
@@ -23,16 +23,20 @@ import {
 } from './heap'
 
 import {
-  find,
-  find_if,
-  find_if_not,
-  find_end,
-  find_first_of,
   all_of,
   any,
   every,
   any_of,
   none_of,
+
+  for_each,
+
+  find,
+  find_if,
+  find_if_not,
+  find_end,
+  find_first_of,
+
   adjacent_find,
   count,
   count_if,
@@ -133,6 +137,7 @@ export {
   every,
   any_of,
   none_of,
+  for_each,
   adjacent_find,
   count,
   count_if,
