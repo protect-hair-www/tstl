@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-23 23:07:08
+ * @LastEditTime: 2022-03-24 21:34:47
  * @LastEditors: hzheyuan
  * @Description: linear type container iterator
  * @FilePath: /tstl/src/iterator/impls/LinearIterator.ts
@@ -35,7 +35,6 @@ export class LinearIterator<T> extends LinearIteratorBase<T> {
     //   }
     // })
   }
-
 
   copy(): IteratorTypes<T> {
     return new LinearIterator<T>(this.cur, this.cntr)

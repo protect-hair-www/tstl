@@ -1,11 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:40
- * @LastEditTime: 2022-03-21 16:17:07
+ * @LastEditTime: 2022-03-24 23:49:41
  * @LastEditors: hzheyuan
  * @Description: Modifying sequence operations
- * TODO
- * @FilePath: \tstl\src\algorithm\modifying_sequence_op.ts
+ * @FilePath: /tstl/src/algorithm/modifying_sequence_op.ts
  */
 import {
   InputIterator,
@@ -20,48 +19,54 @@ import { RandomAccessIterator, random_itr_distance } from '../iterator/random_ac
 import { jsCopy } from '../utils/index'
 
 /**
- * @description: Copy range of elements
- * copies the elements in the range [first, last) into the range beginning at result.
- * the function returns an iterator to the end of the destination range (which points to the element following the last element copied).
- * the range shall not overlap in such way that the result points to an element in the range [first, last). for such cases, use copy_backward.
- * @param {InputIterator} first
- * @param {InputIterator} last
- * @param {OutputIterator} result
- * @return {*}
+ * @description Copy range of elements
+ * Copies the elements in the range [first, last) into the range beginning at result.
+ * The function returns an iterator to the end of the destination range (which points to the element following the last element copied).
+ * The range shall not overlap in such way that the result points to an element in the range [first, last). for such cases, use copy_backward.
+ * @param {InputIterator} first Input iterators to the initial in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} last Input iterators to final positions in a sequence to be copied. The range used is [first,last).
+ * @param {OutputIterator} result Output iterator to the initial position in the destination sequence. This shall not point to any element in the range [first,last).
+ * @param {Boolean} deep whether use deep copy (for object) 
+ * @return {OutputIterator<T>}  An iterator to the end of the destination range where elements have been copied.
  */
 export function copy<T>(
   first: InputIterator<T>,
   last: InputIterator<T>,
-  result: OutputIterator<T>
+  result: OutputIterator<T>,
+  deep: boolean = false
 ): OutputIterator<T> {
-  while (first !== last) {
-    const copyed_val = jsCopy(first.value)
+  first = first.copy(); last = last.copy();
+  while (!first.equals(last)) {
+    const copyed_val = deep ? jsCopy(first.value) : first.value;
     result.value = copyed_val
-    // result.setValue(copyed_val)
-    result.next
+    result.next()
     first.next()
   }
   return result
 }
 
 /**
- * @description: Copy elements
- * copies the first n elements from the range begining at first into the range begeinning at result.
- * the function return an iterator to the end of the destination range (which points to one pats at last elmenet copied).
- * if n is negative, the function does nothing.
- * if the range overlap, some of the elments in the range pointed by result may have undefined but valid values.
- * @param {InputIterator} first
- * @param {number} n
- * @param {OutputIterator} result
- * @return {*}
+ * @description Copy elements
+ * Copies the first n elements from the range begining at first into the range begeinning at result.
+ * The function return an iterator to the end of the destination range (which points to one pats at last elmenet copied).
+ * If n is negative, the function does nothing.
+ * If the range overlap, some of the elments in the range pointed by result may have undefined but valid values.
+ * @param {InputIterator} first Input iterators to the initial in a sequence to be copied. The range used is [first,last).
+ * @param {number} n Number of elements to copy. If this value is negative, the function does nothing.
+ * @param {OutputIterator} result Output iterator to the initial position in the destination sequence of at least n elements.
+ * @param {Boolean} deep whether use deep copy (for object) 
+ * @return {OutputIterator<T>} An iterator to the end of the destination range where elements have been copied.
  */
 export function copy_n<T>(
   first: InputIterator<T>,
   n: number,
-  result: OutputIterator<T>
+  result: OutputIterator<T>,
+  deep: boolean = false
 ): OutputIterator<T> {
-  while (n > 0) {
-    result.setValue(first.getValue())
+  first = first.copy();
+  while (n > 0 && first.hasNext()) {
+    const copyed_val = deep ? jsCopy(first.value) : first.value;
+    result.value = copyed_val;
     result.next()
     first.next()
     --n
@@ -71,22 +76,27 @@ export function copy_n<T>(
 
 /**
  * @description: Copy range of elements
- * copies the elements in the range [first, last) for which fn returns true to the range beginning at result.
- * @param {InputIterator} first
- * @param {InputIterator} last
- * @param {OutputIterator} result
- * @return {*}
+ * Copies the elements in the range [first, last) for which fn returns true to the range beginning at result.
+ * @param {InputIterator} first Input iterators to the initial in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} last Input iterators to final positions in a sequence to be copied. The range used is [first,last).
+ * @param {OutputIterator} result Output iterator to the initial position in the destination sequence. This shall not point to any element in the range [first,last).
+ * @param {function} fn Unary function that accepts an element in the range as argument, and returns a value convertible to bool.
+ * @param {Boolean} deep whether use deep copy (for object) 
+ * @return {OutputIterator} An iterator pointing to the element that follows the last element written in the result sequence.
  */
 export function copy_if<T>(
   first: InputIterator<T>,
   last: InputIterator<T>,
   result: OutputIterator<T>,
-  fn: (v: T) => boolean
+  fn: (v: T) => boolean,
+  deep: boolean = false
 ): OutputIterator<T> {
-  while (first !== last) {
-    const val = first.getValue()
+  first = first.copy()
+  while (!first.equals(last)) {
+    const val = first.value
     if (fn(val)) {
-      result.setValue(val)
+      const copyed_val = deep ? jsCopy(first.value) : first.value;
+      result.value = copyed_val
       result.next()
     }
     first.next()
@@ -100,20 +110,24 @@ export function copy_if<T>(
  * the function returns an iterator to the first element in the destination range.
  * the resulting range has the elements in the exact same order as [first, last). to reverse their order see reverse_copy.
  * the function begins by copying (last-1) into (result-1), and then follows backward by the elements preceding these, until first is reached (and including it).
- * @param {BidirectionalIterator} first
- * @param {BidirectionalIterator} last
- * @param {BidirectionalIterator} result
- * @return {*}
+ * @param {InputIterator} first BidirectionalIterator iterators to the initial in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} last BidirectionalIterator iterators to final positions in a sequence to be copied. The range used is [first,last).
+ * @param {OutputIterator} result Bidirectional iterator to the past-the-end position in the destination sequence.
+ * @param {Boolean} deep whether use deep copy (for object) 
+ * @return {BidirectionalIterator} An iterator to the first element of the destination sequence where elements have been copied.
  */
 export function copy_backward<T>(
   first: BidirectionalIterator<T>,
   last: BidirectionalIterator<T>,
-  result: BidirectionalIterator<T>
+  result: BidirectionalIterator<T>,
+  deep: boolean = false
 ): BidirectionalIterator<T> {
-  while (last !== first) {
-    first.prev()
-    last.prev()
-    first.setValue(last.getValue())
+  first = (first.copy() as BidirectionalIterator<T>)
+  last = (last.copy() as BidirectionalIterator<T>)
+  while (!last.equals(first) && result.hasPrev()) {
+    result.prev(); last.prev();
+    const copyed_val = deep ? jsCopy(last.value) : last.value;
+    result.value = copyed_val
   }
   return result
 }

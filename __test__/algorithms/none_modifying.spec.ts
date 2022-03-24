@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
- * @Date: 2022-03-24 09:49:39
- * @LastEditTime: 2022-03-24 18:56:54
+ * @Date: 2022-02-24 09:49:39
+ * @LastEditTime: 2022-03-24 21:23:48
  * @LastEditors: hzheyuan
- * @Description: 
- * @FilePath: \tstl\__test__\algorithms\none_modifying.spec.ts
+ * @Description: algorithms for none modifying operators
+ * @FilePath: /tstl/__test__/algorithms/none_modifying.spec.ts
  */
 import { Vector } from '../../src';
 import { all_of, any_of, none_of } from '../../src';
