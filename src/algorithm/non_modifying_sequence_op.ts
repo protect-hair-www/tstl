@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:22
- * @LastEditTime: 2022-03-24 19:09:54
+ * @LastEditTime: 2022-03-25 16:42:28
  * @LastEditors: hzheyuan
  * @Description: non modifying sequence operations
  * @FilePath: \tstl\src\algorithm\non_modifying_sequence_op.ts
@@ -21,10 +21,10 @@ export function all_of<T>(
   last: InputIterator<T>,
   fn: (v: T) => boolean
 ): boolean {
-  first = first.copy();
-  while (!first.equals(last)) {
-    if (!fn(first.value)) return false
-    first.next()
+  let _first = first, _last = last;
+  while (!_first.equals(_last)) {
+    if (!fn(_first.value)) return false
+    _first.next()
   }
   return true
 }

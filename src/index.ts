@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2019-01-29 08:32:32
- * @LastEditTime: 2022-03-24 15:12:32
+ * @LastEditTime: 2022-03-25 16:04:19
  * @LastEditors: hzheyuan
  * @Description: TSSTL library main entry
  * @FilePath: \tstl\src\index.ts
@@ -56,7 +56,7 @@ import {
   reverse_copy,
   remove_copy_if,
   unique,
-  unique_coy,
+  unique_copy,
   reverse,
   remove_copy,
   rotate,
@@ -176,7 +176,7 @@ export {
   reverse_copy,
   remove_copy_if,
   unique,
-  unique_coy,
+  unique_copy,
   reverse,
   remove_copy,
   rotate,

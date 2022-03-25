@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-12 10:58:55
- * @LastEditTime: 2022-03-24 15:11:57
+ * @LastEditTime: 2022-03-25 16:04:12
  * @LastEditors: hzheyuan
  * @Description: Algorithms
  *
@@ -67,7 +67,7 @@ import {
   reverse_copy,
   remove_copy_if,
   unique,
-  unique_coy,
+  unique_copy,
   reverse,
   remove_copy,
   rotate,
@@ -167,7 +167,7 @@ export {
   reverse_copy,
   remove_copy_if,
   unique,
-  unique_coy,
+  unique_copy,
   reverse,
   remove_copy,
   rotate,
