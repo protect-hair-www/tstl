@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-03-24 18:38:15
+ * @LastEditTime: 2022-03-26 18:20:01
  * @LastEditors: hzheyuan
  * @Description: iterator definitions
  *
@@ -112,7 +112,7 @@ export function _advance_for_randomaccess_iter<T, K extends RandomAccessIterator
  * @param {*}
  * @return {*}
  */
-export function advance<T, K extends IteratorMap<T>[keyof IteratorMap<T>]>(i: K, n: number): void;
+// export function advance<T, K extends IteratorMap<T>[keyof IteratorMap<T>]>(i: K, n: number): void;
 export function advance<T, K extends IteratorMap<T>[keyof IteratorMap<T>]>(i: K, n: number) {
   if(i.tag === IteratorTags.INPUT_ITERATOR || i.tag === IteratorTags.OUTPUT_ITERATOR || i.tag === IteratorTags.FORWARD_ITERATOR) {
     _advance_of_limited_iter(i, n);
@@ -121,6 +121,7 @@ export function advance<T, K extends IteratorMap<T>[keyof IteratorMap<T>]>(i: K,
   } else {
     _advance_for_randomaccess_iter<T, RandomAccessIterator<T>>(i as RandomAccessIterator<T>, n)
   }
+  return i
 };
 
 /**

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 16:02:55
- * @LastEditTime: 2022-03-23 23:08:44
+ * @LastEditTime: 2022-03-26 18:58:30
  * @LastEditors: hzheyuan
  * @Description: 红黑树对应的迭代器
  * @FilePath: /tstl/src/container/tree/Iterator_new.ts
@@ -64,7 +64,7 @@ export class RBTIterator<K, V> implements BidirectionalIterator<V> {
     
   }
 
-  copy(): IteratorTypes<V> {
+  copy(): RBTIterator<K, V> {
     return new RBTIterator<K, V>(this.cur)
   }
 

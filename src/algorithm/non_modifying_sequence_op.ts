@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:22
- * @LastEditTime: 2022-03-25 17:43:43
+ * @LastEditTime: 2022-03-26 17:07:56
  * @LastEditors: hzheyuan
  * @Description: non modifying sequence operations
- * @FilePath: \tstl\src\algorithm\non_modifying_sequence_op.ts
+ * @FilePath: /tstl/src/algorithm/non_modifying_sequence_op.ts
  */
 import { InputIterator, OutputIterator, ForwardIterator, advance, distance, itr_move } from '../Iterator'
 
@@ -198,8 +198,8 @@ export function find_if_not<T>(
  */
 export function find_end<T>(first1: ForwardIterator<T>, last1: ForwardIterator<T>, first2: ForwardIterator<T>, last2: ForwardIterator<T>, fn?: (x: T, y: T) => boolean): ForwardIterator<T>;
 export function find_end<T>(...args: any[]) {
-  let first1 = (args[0].copy() as ForwardIterator<T>);
-  let first2 = (args[2].copy() as ForwardIterator<T>);
+  let first1 = args[0].copy();
+  let first2 = args[2].copy();
   let last1 = args[1], last2 = args[3], pred = args[4];
   if (first2.equals(last2)) return last1
 
@@ -246,7 +246,7 @@ export function find_first_of<T>(
   last2: ForwardIterator<T>,
   fn?: (x: T, y: T) => boolean
 ): InputIterator<T> {
-  first1 = first1.copy(), first2 = (first2.copy() as ForwardIterator<T>);
+  first1 = first1.copy(), first2 = first2.copy();
   while (!first1.equals(last1)) {
     for (const it = first2.copy(); !it.equals(last2); it.next()) {
       if (fn && fn(it.value, first1.value)) return first1.copy()
@@ -270,7 +270,7 @@ export function find_first_of<T>(
  * if no such pair is found, the function returns last.
  */
 export function adjacent_find<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, fn?: (x: T, y: T) => boolean): ForwardIterator<T> {
-  first = (first.copy() as ForwardIterator<T>)
+  first = first.copy() 
   if (!first.equals(last)) {
     const next = first.copy()
     next.next()
@@ -280,7 +280,7 @@ export function adjacent_find<T>(first: ForwardIterator<T>, last: ForwardIterato
       first.next(); next.next()
     }
   }
-  return last.copy() as ForwardIterator<T>
+  return last.copy()
 }
 
 /**
@@ -440,8 +440,8 @@ export function search<T>(
   last2: ForwardIterator<T>,
   fn?: (a: T, b: T) => boolean
 ): ForwardIterator<T> {
-  first1 = (first1.copy() as ForwardIterator<T>); last1 = (last1.copy() as ForwardIterator<T>);
-  first2 = (first2.copy() as ForwardIterator<T>); last2 = (last2.copy() as ForwardIterator<T>);
+  first1 = first1.copy(); last1 = last1.copy();
+  first2 = first2.copy(); last2 = last2.copy();
   if (first2.equals(last2)) return first1
 
   while (!first1.equals(last1)) {

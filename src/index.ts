@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2019-01-29 08:32:32
- * @LastEditTime: 2022-03-25 16:04:19
+ * @LastEditTime: 2022-03-26 18:56:40
  * @LastEditors: hzheyuan
  * @Description: TSSTL library main entry
- * @FilePath: \tstl\src\index.ts
+ * @FilePath: /tstl/src/index.ts
  */
 
 import { Vector, List, Deque } from './container/sequence/index'
@@ -92,7 +92,7 @@ import {
   sort,
   stable_sort,
   partial_sort,
-  is_sort,
+  is_sorted,
   is_sort_until,
   nth_element
 } from './algorithm'
@@ -208,7 +208,7 @@ export {
   sort,
   stable_sort,
   partial_sort,
-  is_sort,
+  is_sorted,
   is_sort_until,
   nth_element,
 

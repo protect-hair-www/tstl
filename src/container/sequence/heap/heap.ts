@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:28
- * @LastEditTime: 2022-03-17 21:52:58
+ * @LastEditTime: 2022-03-26 18:50:03
  * @LastEditors: hzheyuan
  * @Description: Heap
  *
@@ -21,11 +21,11 @@
  *
  * @FilePath: /tstl/src/container/sequence/heap/heap.ts
  */
-import { RandomAccessIterator, random_itr_distance } from '../../../iterator'
+import { advance, distance, RandomAccessIterator, random_itr_distance } from '../../../iterator'
 import { CompFunType, less } from '../../../functor'
 
 /**
- * @description: heap heapify
+ * @description heap heapify
  * @param {RandomAccessIterator} first
  * @param {number} holeIndex
  * @param {number} len
@@ -60,7 +60,7 @@ function heapify<T>(
 }
 
 /**
- * @description: Push element into heap range
+ * @description Push element into heap range
  * Given a heap in the range [first,last-1),
  * this function extends the range considered a heap to [first,last)
  * by placing the value in (last-1) into its corresponding location within it.
@@ -86,7 +86,7 @@ export function push_heap<T>(
 }
 
 /**
- * @description: heap push_heap iteranlly implementation
+ * @description heap push_heap iteranlly implementation
  * @param {RandomAccessIterator} first
  * @param {number} holeIndex
  * @param {number} topIndex
@@ -112,7 +112,7 @@ function _push_heap<T>(
 }
 
 /**
- * @description: rearrenges the elements in heap range [first, last) in such a way that the past
+ * @description rearrenges the elements in heap range [first, last) in such a way that the past
  * considered a heap is shortended by one: The element with highest value is moved to (last - 1)
  *
  * While the element with highest value is moved from first to (last - 1) (which now is out of heap),
@@ -135,7 +135,7 @@ export function pop_heap<T>(
 }
 
 /**
- * @description: pop_heap iteranlly implementation
+ * @description pop_heap iteranlly implementation
  * @param {RandomAccessIterator} first
  * @param {RandomAccessIterator} last
  * @param {CompFunType} comp
@@ -156,7 +156,7 @@ function _pop_heap<T>(
 }
 
 /**
- * @description: make_heap
+ * @description make_heap
  * @param {RandomAccessIterator} first
  * @param {RandomAccessIterator} last
  * @param {function} comp
@@ -207,17 +207,7 @@ export function sort_heap<T>(
 }
 
 /**
- * @description: is_heap internally implementation
- * @param {*}
- * @return {*}
- */
-function _is_heap(): boolean
-function _is_heap() {
-  return true
-}
-
-/**
- * @description: test if range is heap
+ * @description test if range is heap
  * Return true if the range [first, last) froms heap, as if constructed with make_heap
  * The elements are compared using operator < for the first version, and comp for the second
  * @param {*}
@@ -231,9 +221,37 @@ export function is_heap<T>(
   let parent = 0,
     child = 1,
     distance = random_itr_distance(first, last)
+
   for (; child < distance; ++child) {
-    // if(comp(first.))
+    if(comp(first.at(parent), first.at(child))) return false;
+    if((child & 1) === 0) ++parent; 
   }
+
+  return true;
 }
 
-export function is_heap_until() {}
+function _is_heap_until<T>(first: RandomAccessIterator<T>, n: number, comp: CompFunType = less) {
+  let _first = first.copy();
+  let parent = 0;
+  for(let child = 1; child < n; ++child) {
+    if(comp(advance(_first, parent).value, advance(_first, child).value)) {
+      return child;
+    }
+    if((child & 1) === 0) ++parent
+  }
+  return n
+}
+
+/**
+ * @description Find first element not in heap order
+ * @param {RandomAccessIterator} first Random-access iterators to the initial positions in a sequence. The range checked is [first,last)
+ * @param {RandomAccessIterator} last Random-access iterators to the final positions in a sequence. The range checked is [first,last)
+ * @param {CompFunType} comp Binary function that accepts two elements in the range as arguments, and returns a value convertible to bool.
+ * @return {RandomAccessIterator} An iterator to the first element in the range which is not in a valid position for the range to be a heap, 
+ * or last if all elements are validly positioned or if the range contains less than two elements.
+ */
+export function is_heap_until<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
+  let _first = first.copy(), _last = last.copy(), dis = distance(_first, _last);
+  let n = _is_heap_until(_first, dis, comp)
+  return advance(_first, n)
+}

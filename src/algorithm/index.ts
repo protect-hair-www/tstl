@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-12 10:58:55
- * @LastEditTime: 2022-03-25 16:04:12
+ * @LastEditTime: 2022-03-26 18:56:26
  * @LastEditors: hzheyuan
  * @Description: Algorithms
  *
@@ -11,7 +11,7 @@
  * through iterators directly on the values, not affecting in any way the structure of any possible
  * container (it never affects the size or storage allocation of the container).
  *
- * @FilePath: \tstl\src\algorithm\index.ts
+ * @FilePath: /tstl/src/algorithm/index.ts
  */
 import { 
   makeHeap, 
@@ -103,7 +103,7 @@ import {
   sort,
   stable_sort,
   partial_sort,
-  is_sort,
+  is_sorted,
   is_sort_until,
   nth_element
 } from './sorting'
@@ -199,7 +199,7 @@ export {
   sort,
   stable_sort,
   partial_sort,
-  is_sort,
+  is_sorted,
   is_sort_until,
   nth_element,
 

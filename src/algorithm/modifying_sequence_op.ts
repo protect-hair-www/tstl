@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:40
- * @LastEditTime: 2022-03-25 16:32:46
+ * @LastEditTime: 2022-03-26 17:17:33
  * @LastEditors: hzheyuan
  * @Description: Modifying sequence operations
- * @FilePath: \tstl\src\algorithm\modifying_sequence_op.ts
+ * @FilePath: /tstl/src/algorithm/modifying_sequence_op.ts
  */
 import {
   InputIterator,
@@ -123,8 +123,8 @@ export function copy_backward<T>(
   result: BidirectionalIterator<T>,
   deep: boolean = false
 ): BidirectionalIterator<T> {
-  let _first = (first.copy() as BidirectionalIterator<T>)
-  let _last = (last.copy() as BidirectionalIterator<T>)
+  let _first = first.copy()
+  let _last = last.copy()
   while (!_last.equals(_first) && result.hasPrev()) {
     result.prev(); _last.prev();
     const copyed_val = deep ? jsCopy(_last.value) : _last.value;
@@ -222,7 +222,7 @@ export function transform<T>(...args: any[]) {
 export function replace<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, old_val: T, new_val: T): void 
 export function replace<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, fn: (v: T)=>boolean, new_val: T): void 
 export function replace<T>(...args: any[]): void {
-  let _first = (args[0].copy() as ForwardIterator<T>), _last = (args[1].copy as ForwardIterator<T>);
+  let _first = args[0].copy(), _last = args[1].copy;
   let pred = args[2], _new_val = args[3]
   while (!_first.equals(_last)) {
     if(typeof pred === 'function') {
@@ -250,7 +250,7 @@ export function replace_if<T>(
   fn: (v: T) => boolean,
   new_val: T
 ): void {
-  let _first = (first.copy() as ForwardIterator<T>), _last = (last.copy() as ForwardIterator<T>)
+  let _first = first.copy(), _last = last.copy()
   while (_first.equals(_last)) {
     if (fn(_first.value)) _first.value = new_val
     _first.next()
@@ -271,7 +271,7 @@ export function replace_if<T>(
 export function replace_copy<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, result: OutputIterator<T>, old_val: T, new_val: T): void 
 export function replace_copy<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, result: OutputIterator<T>, fn: (v: T)=>boolean, new_val: T): void 
 export function replace_copy<T>(...args: any[]): OutputIterator<T> {
-  let _first = (args[0].copy() as ForwardIterator<T>), _last = (args[1].copy as ForwardIterator<T>)
+  let _first = args[0].copy(), _last = args[1].copy
   let _result = args[2], pred = args[3], _new_val = args[4]
   while (_first.equals(_last)) {
     let val;
@@ -324,7 +324,7 @@ export function replace_copy_if<T>(
  * @return {*} void
  */
 export function fill<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, val: T) {
-  let _first = (first.copy() as ForwardIterator<T>), _last = (last.copy() as ForwardIterator<T>);
+  let _first = first.copy(), _last = last.copy();
   while (!_first.equals(_last)) {
     _first.value = val
     _first.next()
@@ -340,7 +340,7 @@ export function fill<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, val
  * @return {OutputIterator} An iterator pointing to the element that follows the last element filled.
  */
 export function fill_n<T>(first: ForwardIterator<T>, n: number, val: T) {
-  let _first = (first.copy() as ForwardIterator<T>);
+  let _first = first.copy();
   while (n > 0 && _first.hasNext()) {
     _first.setValue(val)
     _first.next()
@@ -358,7 +358,7 @@ export function fill_n<T>(first: ForwardIterator<T>, n: number, val: T) {
  * @return {*} void
  */
 export function generate<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, gen: () => T) {
-  let _first = (first.copy() as ForwardIterator<T>), _last = (last.copy() as ForwardIterator<T>);
+  let _first = first.copy(), _last = last.copy();
   while (_first.equals(_last)) {
     _first.setValue(gen())
     _first.next()
@@ -374,7 +374,7 @@ export function generate<T>(first: ForwardIterator<T>, last: ForwardIterator<T>,
  * @return {*} void
  */
 export function generate_n<T>(first: OutputIterator<T>, n: number, gen: () => T) {
-  let _first = (first.copy() as ForwardIterator<T>);
+  let _first = first.copy();
   while (n > 0) {
     _first.setValue(gen())
     _first.next()
@@ -395,9 +395,9 @@ export function generate_n<T>(first: OutputIterator<T>, n: number, gen: () => T)
 export function remove<T>( first: ForwardIterator<T>, last: ForwardIterator<T>, val: T): ForwardIterator<T>
 export function remove<T>( first: ForwardIterator<T>, last: ForwardIterator<T>, fn: (v: T)=>boolean): ForwardIterator<T>
 export function remove<T>(...args: any[]): ForwardIterator<T> {
-  let _first = (args[0].copy() as ForwardIterator<T>), _last = (args[1].copy() as ForwardIterator<T>);
+  let _first = args[0].copy(), _last = args[1].copy();
   let _pred = args[2]
-  const result: ForwardIterator<T> = _first.copy() as ForwardIterator<T>
+  const result: ForwardIterator<T> = _first.copy()
   while (!_first.equals(_last)) {
     let condition = typeof _pred === 'function' ? _pred(_first.value) : _first.value === _pred;
     if (condition) {
@@ -425,7 +425,7 @@ export function remove_if<T>(
   last: ForwardIterator<T>,
   fn: (v: T) => boolean
 ): ForwardIterator<T> {
-  let _first = (first.copy() as ForwardIterator<T>), _last = (last.copy() as ForwardIterator<T>);
+  let _first = first.copy(), _last = last.copy();
   const result: ForwardIterator<T> = first
   while (!_first.equals(_last)) {
     if (!fn(_first.getValue())) {
@@ -452,7 +452,7 @@ export function remove_if<T>(
 export function remove_copy<T>( first: ForwardIterator<T>, last: ForwardIterator<T>, result: OutputIterator<T>, val: T): ForwardIterator<T>
 export function remove_copy<T>( first: ForwardIterator<T>, last: ForwardIterator<T>, result: OutputIterator<T>, fn: (v: T)=>boolean): ForwardIterator<T>
 export function remove_copy<T>(...args: any[]): OutputIterator<T> {
-  let _first = (args[0].copy() as ForwardIterator<T>), _last = (args[1].copy() as ForwardIterator<T>)
+  let _first = args[0].copy(), _last = args[1].copy()
   let result = args[2], pred = args[3]
   while (!_first.equals(_last)) {
     let condition = typeof pred === 'function' ? pred(_first.value) : pred === _first.value
@@ -504,10 +504,10 @@ export function remove_copy_if<T>(
  * @return {ForwardIterator} An iterator to the element that follows the last element not removed.
  */
 export function unique<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, fn?: (x: T, y: T)=>boolean): ForwardIterator<T> {
-  let _first = (first.copy() as ForwardIterator<T>), _last = (last.copy() as ForwardIterator<T>)
+  let _first = first.copy(), _last = last.copy()
   if (_first.equals(_last)) return _last
 
-  const result: ForwardIterator<T> = (_first.copy() as ForwardIterator<T>)
+  const result: ForwardIterator<T> = _first.copy()
   while (_first.next() && !_first.equals(_last)) {
     let condition = fn ? fn(result.value, _first.value) : result.value === _first.value;
     if (condition) {
@@ -536,7 +536,7 @@ export function unique_copy<T>(
   result: OutputIterator<T>,
   fn?: (x: T, y: T) => boolean
 ): OutputIterator<T> {
-  let _first = (first.copy() as ForwardIterator<T>), _last = (last.copy() as ForwardIterator<T>)
+  let _first = first.copy(), _last = last.copy()
   if (_first.equals(_last)) return _last
   result.setValue(_first.value)
   while (_first.next() && !_first.equals(_last)) {
@@ -559,7 +559,7 @@ export function unique_copy<T>(
  * @return {*} void
  */
 export function reverse<T>(first: BidirectionalIterator<T>, last: BidirectionalIterator<T>) {
-  let _first = (first.copy() as BidirectionalIterator<T>), _last = (last.copy() as BidirectionalIterator<T>)
+  let _first = first.copy(), _last = last.copy()
   while (!_first.equals(_last) && (_last.prev() && !first.equals(_last))) {
     itr_swap(_first, _last)
     _first.next()
@@ -579,7 +579,7 @@ export function reverse_copy<T>(
   last: BidirectionalIterator<T>,
   result: OutputIterator<T>
 ): OutputIterator<T> {
-  let _first = (first.copy() as BidirectionalIterator<T>), _last = (last.copy() as BidirectionalIterator<T>)
+  let _first = first.copy(), _last = last.copy()
   while (!_first.equals(_last)) {
     _last.prev()
     result.setValue(_last.value)
@@ -601,16 +601,16 @@ export function rotate<T>(
   middle: ForwardIterator<T>,
   last: ForwardIterator<T>
 ): ForwardIterator<T> {
-  let _first = (first.copy() as BidirectionalIterator<T>), _last = (last.copy() as BidirectionalIterator<T>)
-  let next: ForwardIterator<T> = (middle.copy() as ForwardIterator<T>)
+  let _first = first.copy(), _last = last.copy()
+  let next: ForwardIterator<T> = middle.copy()
   while (!_first.equals(next)) {
     _first.next(); next.next();
     itr_swap(
       _first as unknown as BidirectionalIterator<T>,
       next as unknown as BidirectionalIterator<T>
     )
-    if (next.equals(_last)) next = (middle.copy() as ForwardIterator<T>)
-    else if (_first.equals(middle)) middle = (next.copy() as ForwardIterator<T>)
+    if (next.equals(_last)) next = middle.copy()
+    else if (_first.equals(middle)) middle = next.copy()
   }
   return _first
 }
@@ -631,7 +631,7 @@ export function rotate_copy<T>(
   last: ForwardIterator<T>,
   result: OutputIterator<T>
 ): OutputIterator<T> {
-  let _first = (first.copy() as ForwardIterator<T>), _last = (last.copy() as ForwardIterator<T>)
+  let _first = first.copy(), _last = last.copy()
   copy(middle, _last, result)
   return copy(_first, middle, result)
 }
@@ -651,7 +651,7 @@ export function random_shuffle<T>(
   last: RandomAccessIterator<T>,
   gen: (n: number) => number 
 ) {
-  let _first = (first.copy() as RandomAccessIterator<T>), _last = (last.copy() as RandomAccessIterator<T>); 
+  let _first = first.copy(), _last = last.copy(); 
   const n = distance(_first, _last)
   for(let i = n-1; i > 0; --i) {
     swap(_first.at(i), _first.at(gen(i+1)))

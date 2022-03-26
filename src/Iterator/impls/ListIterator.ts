@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:24
- * @LastEditTime: 2022-03-23 23:07:40
+ * @LastEditTime: 2022-03-26 18:59:10
  * @LastEditors: hzheyuan
  * @Description: list container iterator
  * @FilePath: /tstl/src/iterator/impls/ListIterator.ts
@@ -64,7 +64,7 @@ export class ListIterator<T> extends ListIteratorBase<T> {
       return this.cur === itr.cur
   }
 
-  copy(): IteratorTypes<T> {
+  copy(): ListIterator<T> {
     return new ListIterator<T>(this.cur)
   }
 

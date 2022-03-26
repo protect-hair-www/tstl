@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 09:43:54
- * @LastEditTime: 2022-03-19 16:56:43
+ * @LastEditTime: 2022-03-26 17:05:13
  * @LastEditors: hzheyuan
  * @Description: Input Iterator
  *
@@ -20,20 +20,5 @@ import { IteratorTags } from './index';
 import { BaseIterator } from './base_iterator'
 export interface InputIterator<T> extends BaseIterator<T> {
   // access index if defined 
-}
-
-export function input_itr_distance<T>(first: InputIterator<T>, last: InputIterator<T>): number {
-  let n = 0
-  // if(last.index && first.index) {
-  //   n = last.index - first.index
-  // }
-  return n
-}
-
-export function advance<T>(first: InputIterator<T>, n: number) {
-  let s = 0
-  while (s < n) {
-    first.next()
-    s++
-  }
+  copy(): InputIterator<T>
 }
