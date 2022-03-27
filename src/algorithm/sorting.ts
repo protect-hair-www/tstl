@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:04
- * @LastEditTime: 2022-03-27 12:21:11
+ * @LastEditTime: 2022-03-27 21:56:01
  * @LastEditors: hzheyuan
  * @Description: Sorting
  * doing
@@ -10,10 +10,10 @@
 import { RandomAccessIterator, ForwardIterator, BidirectionalIterator, distance, advance, iter_swap} from '../iterator'
 import { CompFunType, less } from '../functor/'
 import { lg } from '../utils/'
-import { copy_backward } from './modifying_sequence_op'
+import { copy_backward } from './modifying_sequence'
 import { makeHeap, popHeap, sortHeap } from '../algorithm/heap';
 import { lower_bound, upper_bound } from './binary_search';
-import { rotate } from './modifying_sequence_op'
+import { rotate } from './modifying_sequence'
 
 const THRESHOLD = 16 // 阈值
 

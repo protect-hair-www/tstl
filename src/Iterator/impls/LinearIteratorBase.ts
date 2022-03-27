@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-23 13:04:12
- * @LastEditTime: 2022-03-26 17:05:00
+ * @LastEditTime: 2022-03-27 23:12:33
  * @LastEditors: hzheyuan
  * @Description: abstract class implemetation for linear iterator
  * @FilePath: /tstl/src/iterator/impls/LinearIteratorBase.ts

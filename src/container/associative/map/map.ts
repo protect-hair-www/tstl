@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:17
- * @LastEditTime: 2022-03-21 11:46:14
+ * @LastEditTime: 2022-03-27 21:55:33
  * @LastEditors: hzheyuan
  * @Description: associative container map
  *
@@ -22,7 +22,7 @@
  *
  * @FilePath: \tstl\src\container\associative\map.ts
  */
-import { Tree } from '../tree/index'
+import { Tree } from '../../tree/index'
 
 export class Map<K, V> {
   // 存储数据，一颗红黑树

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:48
- * @LastEditTime: 2022-03-21 11:47:03
+ * @LastEditTime: 2022-03-27 21:55:48
  * @LastEditors: hzheyuan
  * @Description: associative container multimap
  * Multimaps are associative containers that store elements formed by a combination of a key value and a mapped value,
@@ -22,7 +22,7 @@
  *
  * @FilePath: \tstl\src\container\associative\multimap.ts
  */
-import { Tree } from '../tree/index'
+import { Tree } from '../../tree/index'
 
 export class MultiMap<K, V> {
   // 存储数据，一颗红黑树

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:39
- * @LastEditTime: 2022-03-21 11:46:32
+ * @LastEditTime: 2022-03-27 21:55:41
  * @LastEditors: hzheyuan
  * @Description: associative containers multiset
  *
@@ -23,7 +23,7 @@
  *
  * @FilePath: \tstl\src\container\associative\multiset.ts
  */
-import { Tree } from '../tree/index'
+import { Tree } from '../../tree/index'
 
 export class MultiSet<K> {
   // 存储数据，一颗红黑树
