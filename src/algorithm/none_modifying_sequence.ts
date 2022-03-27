@@ -1,12 +1,12 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:22
- * @LastEditTime: 2022-03-26 17:07:56
+ * @LastEditTime: 2022-03-27 12:47:17
  * @LastEditors: hzheyuan
  * @Description: non modifying sequence operations
- * @FilePath: /tstl/src/algorithm/non_modifying_sequence_op.ts
+ * @FilePath: /tstl/src/algorithm/none_modifying_sequence.ts
  */
-import { InputIterator, OutputIterator, ForwardIterator, advance, distance, itr_move } from '../Iterator'
+import { InputIterator, OutputIterator, ForwardIterator, advance, distance, iter_swap } from '../iterator'
 
 /**
  * @description test condition on all elements in range
@@ -32,7 +32,7 @@ export function all_of<T>(
 /**
  * @description same with all_of
  * @param {InputIterator} first initial position in a sequence
- * @param {InputIterator} last initial position in a sequence
+ * @param {InputIterator} last final position in a sequence
  * @param {function} fn Unary function that accepts an element in the range as argument and return a value convertiable to boolean.
  * @return {boolean} boolean
  */
@@ -45,7 +45,7 @@ export function every<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (v
  * return true if fn returns true for any of the elements  in the range [first, last), and false otherwise
  * if [first, last) is empty range, return false
  * @param {InputIterator} first initial position in a sequence
- * @param {InputIterator} last initial position in a sequence
+ * @param {InputIterator} last final position in a sequence
  * @param {function} fn Unary function that accepts an element in the range as argument and return a value convertiable to boolean.
  * @return {*}
  */
@@ -65,7 +65,7 @@ export function any_of<T>(
 /**
  * @description same as any_of
  * @param {InputIterator} first initial position in a sequence
- * @param {InputIterator} last initial position in a sequence
+ * @param {InputIterator} last final position in a sequence
  * @param {function} fn Unary function that accepts an element in the range as argument and return a value convertiable to boolean.
  * @return {*}
  */
@@ -81,7 +81,7 @@ export function any<T>(
  * @description test if no in range fulfills condition
  * return true if fn returns false for all of the elements in the range [first, last), or if the range is empty, and false otherwise.
  * @param {InputIterator} first initial position in a sequence
- * @param {InputIterator} last initial position in a sequence
+ * @param {InputIterator} last final position in a sequence
  * @param {function} fn Unary function that accepts an element in the range as argument and return a value convertiable to boolean.
  * @return {*}
  */
@@ -103,7 +103,7 @@ export function none_of<T>(
  * applies function fn to each of the elements in the range [first,last)
  * 
  * @param {InputIterator} first initial position in a sequence
- * @param {InputIterator} last initial position in a sequence
+ * @param {InputIterator} last final position in a sequence
  * @param {function} fn Unary function that accepts an element in the range as argument and return a value convertiable to boolean.
  * @return {*}
  */
@@ -119,7 +119,7 @@ export function for_each<T>(first: InputIterator<T>, last: InputIterator<T>, fn:
  * @description find value in range
  * return the first element in the range[first, last) that compares euqal to val. if no such element is found, return last.
  * @param {InputIterator} first initial position in a sequence
- * @param {InputIterator} last initial position in a sequence
+ * @param {InputIterator} last final position in a sequence
  * @param {function} fn Unary function that accepts an element in the range as argument and return a value convertiable to boolean.
  * @return {InputIterator<T>} InputIterator<T>
  */
@@ -142,7 +142,7 @@ export function find<T>(...args: any[]): InputIterator<T> {
  * @description find value in range
  * return the first element in the range[first, last) that fn return true. if no such element is found, return last.
  * @param {InputIterator} first initial position in a sequence
- * @param {InputIterator} last initial position in a sequence
+ * @param {InputIterator} last final position in a sequence
  * @param {function} fn Unary function that accepts an element in the range as argument and return a value convertiable to boolean.
  * @return {InputIterator<T>} InputIterator<T>
  */
@@ -163,7 +163,7 @@ export function find_if<T>(
  * @description find element in range negative condition
  * return the first element in the range [first, last) for which fn returns false, if no such element is found, return last.
  * @param {InputIterator} first initial position in a sequence
- * @param {InputIterator} last initial position in a sequence
+ * @param {InputIterator} last final position in a sequence
  * @param {function} fn Unary function that accepts an element in the range as argument and return a value convertiable to boolean.
  * @return {InputIterator<T>} InputIterator<T>
  */
@@ -190,11 +190,11 @@ export function find_if_not<T>(
  * only when this is true for all elements of [first2, last2).
  *
  * this function returns the last of such occurrence. For an algorithm that return this first instead.
- * @param {ForwardIterator<T>} first1
- * @param {ForwardIterator<T>} last1
- * @param {ForwardIterator<T>} first2
- * @param {ForwardIterator<T>} last2
- * @return {ForwardIterator<T>} ForwardIterator<T>
+ * @param {ForwardIterator<T>} first1 Forward iterator to the initial position of the searched sequence. 
+ * @param {ForwardIterator<T>} last1 Forward iterator to the final position of the searched sequence. 
+ * @param {ForwardIterator<T>} first2 Forward iterator to the final position of the sequence to be searched for. 
+ * @param {ForwardIterator<T>} last2 Forward iterator to the final position of the sequence to be searched for. 
+ * @return {ForwardIterator<T>} An iterator to the first element of the last occurrence of [first2,last2) in [first1,last1). If the sequence is not found, the function returns last1.
  */
 export function find_end<T>(first1: ForwardIterator<T>, last1: ForwardIterator<T>, first2: ForwardIterator<T>, last2: ForwardIterator<T>, fn?: (x: T, y: T) => boolean): ForwardIterator<T>;
 export function find_end<T>(...args: any[]) {
@@ -233,10 +233,10 @@ export function find_end<T>(...args: any[]) {
  * the elements in [first1, last1) are sequentially compared to each of the values in [first2, last2) using
  * fn, util a pair matches.
  *
- * @param {InputIterator<T>} first1 input iterators to the initial positions of the searched sequence.
- * @param {InputIterator<T>} last1 input iterators to the final positions of the searched sequence.
- * @param {ForwardIterator<T>} first2 forward iterators to the initial positions of the element values to be searched for. The range used is [first2,last2).
- * @param {ForwardIterator<T>} last2 forward iterators to the final positions of the element values to be searched for. The range used is [first2,last2).
+ * @param {InputIterator<T>} first1 input iterator to the initial position of the searched sequence.
+ * @param {InputIterator<T>} last1 input iterator to the final position of the searched sequence.
+ * @param {ForwardIterator<T>} first2 forward iterator to the initial position of the element values to be searched for. The range used is [first2,last2).
+ * @param {ForwardIterator<T>} last2 forward iterator to the final position of the element values to be searched for. The range used is [first2,last2).
  * @return {InputIterator<T>} an iterator to the first element in [first1,last1) that is part of [first2,last2). if no matches are found, the function returns last1.
  */
 export function find_first_of<T>(
@@ -262,8 +262,8 @@ export function find_first_of<T>(
  * searches the range [first,last) for first occurrence of two consecutive elements that match
  * and return the first of these two elements, or last if no such parir is found.
  * two elements match if they compare equal using function fn.
- * @param {InputIterator<T>} first1 input iterators to the initial positions of the searched sequence.
- * @param {InputIterator<T>} last1 input iterators to the final positions of the searched sequence.
+ * @param {InputIterator<T>} first1 input iterator to the initial position of the searched sequence.
+ * @param {InputIterator<T>} last1 input iterator to the final position of the searched sequence.
  * @param {function} fn binary function that accepts two elements as arguments, and returns a value convertible to bool. 
  * the returned value indicates whether the elements are considered to match in the context of this function.
  * @return {ForwardIterator<T>} an iterator to the first element of the first pair of matching consecutive elements in the range [first,last).
@@ -286,8 +286,8 @@ export function adjacent_find<T>(first: ForwardIterator<T>, last: ForwardIterato
 /**
  * @description count appearnces of value in range
  * return the number of elements in the range [first, last) that compare equla to val.
- * @param {InputIterator<T>} first input iterators to the initial positions of the searched sequence.
- * @param {InputIterator<T>} last input iterators to the final positions of the searched sequence.
+ * @param {InputIterator<T>} first input iterator to the initial position of the searched sequence.
+ * @param {InputIterator<T>} last input iterator to the final position of the searched sequence.
  * @param {function | val} pred Unary function that accepts an element in the range as argument and return a value convertiable to boolean.
  * @return {number} count appearnces of value in range
  */
@@ -309,8 +309,8 @@ export function count<T>(...args: any[]): number {
 /**
  * @description Count appearnces of value in range
  * return the number of elements in the range [first, last) that fn(val) return true.
- * @param {InputIterator<T>} first input iterators to the initial positions of the searched sequence.
- * @param {InputIterator<T>} last input iterators to the final positions of the searched sequence.
+ * @param {InputIterator<T>} first input iterator to the initial position of the searched sequence.
+ * @param {InputIterator<T>} last input iterator to the final position of the searched sequence.
  * @param {function} pred Unary function that accepts an element in the range as argument and return a value convertiable to boolean.
  * @return {number} count appearnces of value in range
  */
@@ -332,9 +332,9 @@ export function count_if<T>(
  * compares the elements in the range [first1, last1) with those in the range beginning at first2,
  * and returns the first element of both sequences that does not match.
  * the function return a pair of the first in each range that dose not match.
- * @param {InputIterator<T>} first1 input iterators to the initial positions of the first sequence.
- * @param {InputIterator<T>} last1 input iterators to the final positions of the first sequence.
- * @param {InputIterator<T>} first2 input iterators to the initial positions of the second sequence.
+ * @param {InputIterator<T>} first1 input iterator to the initial position of the first sequence.
+ * @param {InputIterator<T>} last1 input iterator to the final position of the first sequence.
+ * @param {InputIterator<T>} first2 input iterator to the initial position of the second sequence.
  * @param {function} fn binary function that accepts two elements as arguments, and returns a value convertible to bool. 
  * @return {number} first position where two ranges differ
  */
@@ -361,8 +361,8 @@ export function mismatch<T>(
  * @description test whether the elements in two ranges are equal
  * Compares the elements in the range [first1, last1) with those in range beginning at first2
  * and returns true if all of the elements in both ranges match.
- * @param {InputIterator<T>} first1 input iterators to the initial positions of the first sequence.
- * @param {InputIterator<T>} last1 input iterators to the final positions of the first sequence.
+ * @param {InputIterator<T>} first1 input iterator to the initial position of the first sequence.
+ * @param {InputIterator<T>} last1 input iterator to the final position of the first sequence.
  * @param {InputIterator<T>} first2 input iterator to the initial position of the second sequence. 
  * @param {function} [fn] binary function that accepts two elements as arguments, and returns a value convertible to bool. 
  * @return {Boolean} whether the elements in two ranges are equal
@@ -387,8 +387,8 @@ export function equal<T>(
  * @description test whether range is premutation of another
  * compares the elements in the range [first1, last1) with those in the range beginning at first2,
  * and returns true if all of the elements in both ranges match, even in a diffrent order.
- * @param {InputIterator<T>} first1 input iterators to the initial positions of the first sequence.
- * @param {InputIterator<T>} last1 input iterators to the final positions of the first sequence.
+ * @param {InputIterator<T>} first1 input iterator to the initial position of the first sequence.
+ * @param {InputIterator<T>} last1 input iterator to the final position of the first sequence.
  * @param {InputIterator<T>} first2 input iterator to the initial position of the second sequence. 
  * @param {function} [fn] binary function that accepts two elements as argument (one of each of the two sequences, in the same order), and returns a value convertible to bool.
  * @return {*}
@@ -426,10 +426,10 @@ export function is_premutation<T>(
  * in considered a match only when this is true for all the elements of [first2, last2).
  *
  * this function return the first of such occurrences.
- * @param {ForwardIterator} first1 forward iterators to the initial  positions of the searched sequence. The range used is [first1,last1).
- * @param {ForwardIterator} last1 forward iterators to final positions of the searched sequence. The range used is [first1,last1). 
- * @param {ForwardIterator} first2 forward iterators to the initial positions of the sequence to be searched for. The range used is [first2,last2).
- * @param {ForwardIterator} last2 forward iterators to and final positions of the sequence to be searched for. The range used is [first2,last2).
+ * @param {ForwardIterator} first1 forward iterator to the initial position of the searched sequence. The range used is [first1,last1).
+ * @param {ForwardIterator} last1 forward iterator to final position of the searched sequence. The range used is [first1,last1). 
+ * @param {ForwardIterator} first2 forward iterator to the initial position of the sequence to be searched for. The range used is [first2,last2).
+ * @param {ForwardIterator} last2 forward iterator to and final position of the sequence to be searched for. The range used is [first2,last2).
  * @param {function} [fn] binary function that accepts two elements as arguments (one of each of the two sequences, in the same order), and returns a value convertible to bool. 
  * @return {ForwardIterator<T>}
  */
@@ -468,8 +468,8 @@ export function search<T>(
  * @description search range for elements
  * searches the range [first,last) for a sequence of count elements, each comparing equal to val (or for which pred returns true).
  * the function returns an iterator to the first of such elements, or last if no such sequence is found.
- * @param {ForwardIterator} first forward iterators to the initial of the searched sequence. The range used is [first,last).
- * @param {ForwardIterator} last forward iterators to final positions of the searched sequence. The range used is [first,last).
+ * @param {ForwardIterator} first forward iterator to the initial position of the searched sequence. The range used is [first,last).
+ * @param {ForwardIterator} last forward iterator to the final position of the searched sequence. The range used is [first,last).
  * @param {number} count Minimum number of successive elements to match. size shall be (convertible to) an number type.
  * @param {T} val 
  * @param {function} [fn] binary function that accepts two elements as arguments (one of each of the two sequences, in the same order), and returns a value convertible to bool. 

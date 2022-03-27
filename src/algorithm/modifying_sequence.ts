@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:40
- * @LastEditTime: 2022-03-26 17:17:33
+ * @LastEditTime: 2022-03-27 12:39:37
  * @LastEditors: hzheyuan
  * @Description: Modifying sequence operations
  * @FilePath: /tstl/src/algorithm/modifying_sequence_op.ts
@@ -14,8 +14,8 @@ import {
   ForwardIterator,
   distance,
   advance,
-  itr_move,
-  itr_swap
+  iter_swap,
+  iter_move
 } from '../iterator'
 import { jsCopy } from '../utils/index'
 
@@ -24,8 +24,8 @@ import { jsCopy } from '../utils/index'
  * Copies the elements in the range [first, last) into the range beginning at result.
  * The function returns an iterator to the end of the destination range (which points to the element following the last element copied).
  * The range shall not overlap in such way that the result points to an element in the range [first, last). for such cases, use copy_backward.
- * @param {InputIterator} first Input iterators to the initial in a sequence to be copied. The range used is [first,last).
- * @param {InputIterator} last Input iterators to final positions in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} first Input iterator to the initial position in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} last Input iterator to the final position in a sequence to be copied. The range used is [first,last).
  * @param {OutputIterator} result Output iterator to the initial position in the destination sequence. This shall not point to any element in the range [first,last).
  * @param {Boolean} deep whether use deep copy (for object) 
  * @return {OutputIterator<T>}  An iterator to the end of the destination range where elements have been copied.
@@ -52,7 +52,7 @@ export function copy<T>(
  * The function return an iterator to the end of the destination range (which points to one pats at last elmenet copied).
  * If n is negative, the function does nothing.
  * If the range overlap, some of the elments in the range pointed by result may have undefined but valid values.
- * @param {InputIterator} first Input iterators to the initial in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} first Input iterator to the initial in a sequence to be copied. The range used is [first,last).
  * @param {number} n Number of elements to copy. If this value is negative, the function does nothing.
  * @param {OutputIterator} result Output iterator to the initial position in the destination sequence of at least n elements.
  * @param {Boolean} deep whether use deep copy (for object) 
@@ -78,8 +78,8 @@ export function copy_n<T>(
 /**
  * @description Copy range of elements
  * Copies the elements in the range [first, last) for which fn returns true to the range beginning at result.
- * @param {InputIterator} first Input iterators to the initial in a sequence to be copied. The range used is [first,last).
- * @param {InputIterator} last Input iterators to final positions in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} first Input iterator to the initial position in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} last Input iterator to the final position in a sequence to be copied. The range used is [first,last).
  * @param {OutputIterator} result Output iterator to the initial position in the destination sequence. This shall not point to any element in the range [first,last).
  * @param {function} fn Unary function that accepts an element in the range as argument, and returns a value convertible to bool.
  * @param {Boolean} deep whether use deep copy (for object) 
@@ -111,8 +111,8 @@ export function copy_if<T>(
  * the function returns an iterator to the first element in the destination range.
  * the resulting range has the elements in the exact same order as [first, last). to reverse their order see reverse_copy.
  * the function begins by copying (last-1) into (result-1), and then follows backward by the elements preceding these, until first is reached (and including it).
- * @param {InputIterator} first BidirectionalIterator iterators to the initial in a sequence to be copied. The range used is [first,last).
- * @param {InputIterator} last BidirectionalIterator iterators to final positions in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} first BidirectionalIterator iterator to the initial position in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} last BidirectionalIterator iterator to the final position in a sequence to be copied. The range used is [first,last).
  * @param {OutputIterator} result Bidirectional iterator to the past-the-end position in the destination sequence.
  * @param {Boolean} deep whether use deep copy (for object) 
  * @return {BidirectionalIterator} An iterator to the first element of the destination sequence where elements have been copied.
@@ -140,8 +140,8 @@ export function copy_backward<T>(
  * after the call, the elements in range [first, last) are left in an unspcified but valid state(undefined).
  * the ranges shall not overlap in such a way that result pointers to an element in the range [first, last).
  * for such cases, see move_backward.
- * @param {InputIterator} first Input iterators to the initial in a sequence to be copied. The range used is [first,last).
- * @param {InputIterator} last Input iterators to final positions in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} first Input iterator to the initial position in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} last Input iterator to the final position in a sequence to be copied. The range used is [first,last).
  * @param {OutputIterator} result Output iterator to the initial position in the destination sequence. This shall not point to any element in the range [first,last).
  * @return {OutputIterator<T>}  An iterator to the end of the destination range where elements have been copied. 
  */
@@ -152,7 +152,7 @@ export function move<T>(
 ): OutputIterator<T> {
   let _first = first.copy(), _last = last.copy();
   while (!_first.equals(_last)) {
-    result.setValue(itr_move(_last))
+    result.setValue(iter_move(_last))
   }
   return result
 }
@@ -172,8 +172,8 @@ export function swap_range() {}
  *  (2) Binary operation: call binary_op using each of the elements in the range [first1, last1) at first
  *      arguments, and the respective argument in the range that begins at first2 as second argument. the value
  *      returned by each call is stored in the range that begins at result.
- * @param {InputIterator} first1 Input iterators to the initial in a sequence to be copied. The range used is [first,last).
- * @param {InputIterator} last1 Input iterators to final positions in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} first1 Input iterator to the initial position in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} last1 Input iterator to the final position in a sequence to be copied. The range used is [first,last).
  * @param {InputIterator} first2 Input iterator to the initial position of the second range. The range includes as many elements as [first1,last1)
  * @param {OutputIterator} result Output iterator to the initial position in the destination sequence. This shall not point to any element in the range [first,last).
  * @param {Function} fn Unary function or binary function that accepts element of the type pointed to by InputIterator as argument, and returns some result value convertible to the type pointed to by OutputIterator.
@@ -212,8 +212,8 @@ export function transform<T>(...args: any[]) {
  * @description replace value in range
  * assign new_val to all the elements in the range [first, last) that compare equal to old_val
  * the functions use operator === to compare the individual elements to old_val.
- * @param {ForwardIterator} first Forward iterators to the initial in a sequence of elements that support being assigned a value of type T
- * @param {ForwardIterator} last Forward iterators to final positions in a sequence of elements that support being assigned a value of type T
+ * @param {ForwardIterator} first Forward iterator to the initial position in a sequence of elements that support being assigned a value of type T
+ * @param {ForwardIterator} last Forward iterator to the final position in a sequence of elements that support being assigned a value of type T
  * @param {OutputIterator} result Output iterator to the initial position in the destination sequence. This shall not point to any element in the range [first,last).
  * @param {T | Function} old_val Value to be replaced or a unary function that accepts an element in the range as argument, and returns a value convertible to bool.
  * @param {T} new_val Replacement value
@@ -237,8 +237,8 @@ export function replace<T>(...args: any[]): void {
 /**
  * @description replace value in range
  * assign new_val to all the elements in the range [first, last) which fn returns true.
- * @param {ForwardIterator} first Forward iterators to the initial in a sequence of elements that support being assigned a value of type T
- * @param {ForwardIterator} last Forward iterators to final positions in a sequence of elements that support being assigned a value of type T
+ * @param {ForwardIterator} first Forward iterator to the initial position in a sequence of elements that support being assigned a value of type T
+ * @param {ForwardIterator} last Forward iterator to the final position in a sequence of elements that support being assigned a value of type T
  * @param {OutputIterator} result Output iterator to the initial position in the destination sequence. This shall not point to any element in the range [first,last).
  * @param {Function} old_val A unary function that accepts an element in the range as argument, and returns a value convertible to bool.
  * @param {T} new_val Replacement value
@@ -262,8 +262,8 @@ export function replace_if<T>(
  * copies the elements in the range [first, last) to the range beginning at result, replacing the apprarance of old_val by new_val.
  * the function use operator "===" to compare the individual elements to old_val.
  * the ranges shall not overlap in such a way result points to an elements in the range [first, last)
- * @param {ForwardIterator} first Forward iterators to the initial in a sequence of elements that support being assigned a value of type T
- * @param {ForwardIterator} last Forward iterators to final positions in a sequence of elements that support being assigned a value of type T
+ * @param {ForwardIterator} first Forward iterator to the initial position in a sequence of elements that support being assigned a value of type T
+ * @param {ForwardIterator} last Forward iterator to the final position in a sequence of elements that support being assigned a value of type T
  * @param {T | Function} old_val Value to be replaced or a unary function that accepts an element in the range as argument, and returns a value convertible to bool.
  * @param {T} new_val Replacement value
  * @return {T} An iterator pointing to the element that follows the last element written in the result sequence.
@@ -292,8 +292,8 @@ export function replace_copy<T>(...args: any[]): OutputIterator<T> {
  * copies the elements in the range [first, last) to the range beginning at result, replacing the apprarance of old_val by new_val.
  * the function use operator "===" to compare the individual elements to old_val.
  * the ranges shall not overlap in such a way result points to an elements in the range [first, last)
- * @param {ForwardIterator} first Forward iterators to the initial in a sequence of elements that support being assigned a value of type T
- * @param {ForwardIterator} last Forward iterators to final positions in a sequence of elements that support being assigned a value of type T
+ * @param {ForwardIterator} first Forward iterator to the initial position in a sequence of elements that support being assigned a value of type T
+ * @param {ForwardIterator} last Forward iterator to the final position in a sequence of elements that support being assigned a value of type T
  * @param {Function} old_val A unary function that accepts an element in the range as argument, and returns a value convertible to bool.
  * @param {T} new_val Replacement value
  * @return {T} An iterator pointing to the element that follows the last element written in the result sequence. 
@@ -318,8 +318,8 @@ export function replace_copy_if<T>(
 /**
  * @description fill range with value
  * Assigns val to the elements in the range [first, last)
- * @param {InputIterator} first Input iterators to the initial in a sequence to be copied. The range used is [first,last).
- * @param {InputIterator} last Input iterators to final positions in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} first Input iterator to the initial position in a sequence to be copied. The range used is [first,last).
+ * @param {InputIterator} last Input iterator to the final position in a sequence to be copied. The range used is [first,last).
  * @param {T} val Value to assign to the elements in the filled range.
  * @return {*} void
  */
@@ -352,8 +352,8 @@ export function fill_n<T>(first: ForwardIterator<T>, n: number, val: T) {
 /**
  * @description: Generate values for range with function
  * assigns the value returned by successive call to gen to the elements in the range [first, last)
- * @param {ForwardIterator} first Forward iterators to the initial positions in a sequence. The range affected is [first,last).
- * @param {ForwardIterator} last Forward iterators to the final positions in a sequence. The range affected is [first,last)
+ * @param {ForwardIterator} first Forward iterator to the initial position in a sequence. The range affected is [first,last).
+ * @param {ForwardIterator} last Forward iterator to the final position in a sequence. The range affected is [first,last)
  * @param {function} gen Generator function that is called with no arguments and returns some value of a type convertible to those pointed by the iterators.
  * @return {*} void
  */
@@ -368,7 +368,7 @@ export function generate<T>(first: ForwardIterator<T>, last: ForwardIterator<T>,
 /**
  * @description Generate values for range with function
  * assigns the value returned by successive call to gen to the first n elements of the sequence by pointed first.
- * @param {ForwardIterator} first Forward iterators to the initial positions in a sequence. The range affected is [first,last).
+ * @param {ForwardIterator} first Forward iterator to the initial position in a sequence. The range affected is [first,last).
  * @param {Number} n Number of values to generate, shall be (convertible to) an integral type.
  * @param {function} gen Generator function that is called with no arguments and returns some value of a type convertible to those pointed by the iterators.
  * @return {*} void
@@ -387,8 +387,8 @@ export function generate_n<T>(first: OutputIterator<T>, n: number, gen: () => T)
  * Transforms the range [first, last) into a range with all the elements that compare equal to val removed,
  * and returns an iterator to the new end of that range.
  * The function uses operator === or a unary function to compare the individual elements to val.
- * @param {ForwardIterator} first Forward iterators to the initial positions in a sequence of move-assignable elements supporting being compared to a value of type T.
- * @param {ForwardIterator} last Forward iterators to final positions in a sequence of move-assignable elements supporting being compared to a value of type T.
+ * @param {ForwardIterator} first Forward iterator to the initial position in a sequence of move-assignable elements supporting being compared to a value of type T.
+ * @param {ForwardIterator} last Forward iterator to the final position in a sequence of move-assignable elements supporting being compared to a value of type T.
  * @param {T | Function} old_val Value to be replaced or a unary function that accepts an element in the range as argument, and returns a value convertible to bool.
  * @return {ForwardIterator} An iterator to the element that follows the last element not removed.
  */
@@ -402,7 +402,7 @@ export function remove<T>(...args: any[]): ForwardIterator<T> {
     let condition = typeof _pred === 'function' ? _pred(_first.value) : _first.value === _pred;
     if (condition) {
       if (!result.equals(_first)) {
-        result.setValue(itr_move(_first))
+        result.setValue(iter_move(_first))
       }
       result.next()
     }
@@ -415,8 +415,8 @@ export function remove<T>(...args: any[]): ForwardIterator<T> {
  * @description: remove value from range
  * transforms the range [first, last) into a range with all the elements for which fn returns true,
  * and returns an iterator to the new end of that range.
- * @param {ForwardIterator} first Forward iterators to the initial positions in a sequence of move-assignable elements supporting being compared to a value of type T.
- * @param {ForwardIterator} last Forward iterators to final positions in a sequence of move-assignable elements supporting being compared to a value of type T.
+ * @param {ForwardIterator} first Forward iterator to the initial position in a sequence of move-assignable elements supporting being compared to a value of type T.
+ * @param {ForwardIterator} last Forward iterator to the final position in a sequence of move-assignable elements supporting being compared to a value of type T.
  * @param {Function} fn A unary function that accepts an element in the range as argument, and returns a value convertible to bool.
  * @return {ForwardIterator} An iterator to the element that follows the last element not removed.
  */
@@ -430,7 +430,7 @@ export function remove_if<T>(
   while (!_first.equals(_last)) {
     if (!fn(_first.getValue())) {
       if (!result.equals(_first)) {
-        result.setValue(itr_move(first))
+        result.setValue(iter_move(first))
       }
       result.next()
     }
@@ -443,8 +443,8 @@ export function remove_if<T>(
  * @description copy range removing value
  * copies the elements in the range [first, last) to the range beginning at result, except those elements that compare equal to val.
  * the resulting range is short than [first, last) by as many elements as matches in the sequence, which are "removed".
- * @param {InputIterator} first Forward iterators to the initial positions in a sequence of move-assignable elements supporting being compared to a value of type T.
- * @param {InputIterator} last Forward iterators to final positions in a sequence of move-assignable elements supporting being compared to a value of type T.
+ * @param {InputIterator} first Forward iterator to the initial position in a sequence of move-assignable elements supporting being compared to a value of type T.
+ * @param {InputIterator} last Forward iterator to the final position in a sequence of move-assignable elements supporting being compared to a value of type T.
  * @param {OutputIterator} result Output iterator to the initial position of the range where the resulting sequence is stored.
  * @param {T | Function} fn A unary function that accepts an element in the range as argument, and returns a value convertible to bool.
  * @return {OutputIterator} An iterator pointing to the end of the copied range, which includes all the elements in [first,last) except those that compare equal to val.
@@ -469,8 +469,8 @@ export function remove_copy<T>(...args: any[]): OutputIterator<T> {
  * @description copy range removing value
  * copies the elements in the range [first, last) to the range beginning at result, except those elements for which fn returns true.
  * the resulting range is short than [first, last) by as many elements as matches in the sequence, which are "removed".
- * @param {InputIterator} first Forward iterators to the initial positions in a sequence of move-assignable elements supporting being compared to a value of type T.
- * @param {InputIterator} last Forward iterators to final positions in a sequence of move-assignable elements supporting being compared to a value of type T.
+ * @param {InputIterator} first Forward iterator to the initial position in a sequence of move-assignable elements supporting being compared to a value of type T.
+ * @param {InputIterator} last Forward iterator to the final position in a sequence of move-assignable elements supporting being compared to a value of type T.
  * @param {OutputIterator} result Output iterator to the initial position of the range where the resulting sequence is stored.
  * @param {Function} fn A unary function that accepts an element in the range as argument, and returns a value convertible to bool.
  * @return {OutputIterator} An iterator pointing to the end of the copied range, which includes all the elements in [first,last) except those that compare equal to val.
@@ -498,8 +498,8 @@ export function remove_copy_if<T>(
  * The relative order of the elements not removed is preserved, while the elements between.
  * The returned iterator and last are left in a valid but unspecified state.
  * The function uses operator === to compare the pairs of elements.
- * @param {ForwardIterator} first Forward iterators to the initial positions of the sequence of move-assignable elements. 
- * @param {ForwardIterator} last Forward iterators to final positions of the sequence of move-assignable elements. 
+ * @param {ForwardIterator} first Forward iterator to the initial position of the sequence of move-assignable elements. 
+ * @param {ForwardIterator} last Forward iterator to the final position of the sequence of move-assignable elements. 
  * @param {Function} [fn] Value to be replaced or a unary function that accepts an element in the range as argument, and returns a value convertible to bool.
  * @return {ForwardIterator} An iterator to the element that follows the last element not removed.
  */
@@ -524,8 +524,8 @@ export function unique<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, f
  * copies the elements in the range [first,last) to the range beginning at result,
  * except consecutive duplicates (elements that compare equal to the element preceding).
  * only the first element from every consecutive group of equivalent elements in the range [first,last) is copied.
- * @param {ForwardIterator} first Forward iterators to the initial positions of the sequence of move-assignable elements. 
- * @param {ForwardIterator} last Forward iterators to final positions of the sequence of move-assignable elements. 
+ * @param {ForwardIterator} first Forward iterator to the initial position of the sequence of move-assignable elements. 
+ * @param {ForwardIterator} last Forward iterator to the final position of the sequence of move-assignable elements. 
  * @param {OutputIterator} result Output iterator to the initial position of the range where the resulting sequence is stored.
  * @param {Function} [fn] Value to be replaced or a unary function that accepts an element in the range as argument, and returns a value convertible to bool.
  * @return {ForwardIterator} An iterator to the element that follows the last element not removed.
@@ -561,7 +561,7 @@ export function unique_copy<T>(
 export function reverse<T>(first: BidirectionalIterator<T>, last: BidirectionalIterator<T>) {
   let _first = first.copy(), _last = last.copy()
   while (!_first.equals(_last) && (_last.prev() && !first.equals(_last))) {
-    itr_swap(_first, _last)
+    iter_swap(_first, _last)
     _first.next()
   }
 }
@@ -569,8 +569,8 @@ export function reverse<T>(first: BidirectionalIterator<T>, last: BidirectionalI
 /**
  * @description copy range reverse
  * copies the elements in the range [first,last) to the range beginning at result, but in reverse order.
- * @param {BidirectionalIterator} first Bidirectional iterators to the initial positions of the sequence to be copied. 
- * @param {BidirectionalIterator} last Bidirectional iterators to the final positions of the sequence to be copied. 
+ * @param {BidirectionalIterator} first Bidirectional iterator to the initial position of the sequence to be copied. 
+ * @param {BidirectionalIterator} last Bidirectional iterator to the final position of the sequence to be copied. 
  * @param {OutputIterator} result Output iterator to the initial position of the range where the reversed range is stored.
  * @return {OutputIterator} An output iterator pointing to the end of the copied range, which contains the same elements in reverse order.
  */
@@ -591,9 +591,9 @@ export function reverse_copy<T>(
 /**
  * @description rotate left the elements in range
  * rotates the order of the elements in the range [first,last), in such a way that the element pointed by middle becomes the new first element.
- * @param {ForwardIterator} first Forward iterators to the initial positions of the sequence to be rotated left. 
+ * @param {ForwardIterator} first Forward iterator to the initial position of the sequence to be rotated left. 
  * @param {ForwardIterator} middle Forward iterator pointing to the element within the range [first,last) that is moved to the first position in the range.
- * @param {ForwardIterator} last Forward iterators to the final positions of the sequence to be rotated left. 
+ * @param {ForwardIterator} last Forward iterator to the final position of the sequence to be rotated left. 
  * @return {ForwardIterator} An iterator pointing to the element that now contains the value previously pointed by first.
  */
 export function rotate<T>(
@@ -605,7 +605,7 @@ export function rotate<T>(
   let next: ForwardIterator<T> = middle.copy()
   while (!_first.equals(next)) {
     _first.next(); next.next();
-    itr_swap(
+    iter_swap(
       _first as unknown as BidirectionalIterator<T>,
       next as unknown as BidirectionalIterator<T>
     )
@@ -620,9 +620,9 @@ export function rotate<T>(
  * copy range rotated left
  * copies the elements in the range [first,last) to the range beginning at result,
  * but rotating the order of the elements in such a way that the element pointed by middle becomes the first element in the resulting range.
- * @param {ForwardIterator} first Forward iterators to the initial positions of the range to be copy-rotated. 
- * @param {ForwardIterator} middle Forward iterator pointing to the element within the range [first,last) that is copied as the first element in the resulting range.
- * @param {ForwardIterator} last Forward iterators to the final positions of the range to be copy-rotated. 
+ * @param {ForwardIterator} first Forward iterator to the initial positionsof the range to be copy-rotated. 
+ * @param {ForwardIterator} middle Forward iterato pointing to the element within the range [first,last) that is copied as the first element in the resulting range.
+ * @param {ForwardIterator} last Forward iterator to the final position of the range to be copy-rotated. 
  * @return {OutputIterator} An output iterator pointing to the end of the copied range.
  */
 export function rotate_copy<T>(
@@ -641,8 +641,8 @@ export function rotate_copy<T>(
  * rearranges the elements in the range [first,last) randomly.
  * the function swaps the value of each element with that of some other randomly picked element.
  * when provided, the function gen determines which element is picked in every case. Otherwise, the function uses some unspecified source of randomness.
- * @param {RandomAccessIterator} first Random-access iterators to the initial positions of the sequence to be shuffled.
- * @param {RandomAccessIterator} last Random-access iterators to the final positions of the sequence to be shuffled.
+ * @param {RandomAccessIterator} first Random-access iterator to the initial position of the sequence to be shuffled.
+ * @param {RandomAccessIterator} last Random-access iterator to the final position of the sequence to be shuffled.
  * @param {function} gen Unary function taking one argument and returning a value, both convertible to/from the appropriate difference type used by the iterators. 
  * @return {*} void
  */
@@ -662,8 +662,8 @@ export function random_shuffle<T>(
  * @description randomly rearrange elements in range using generator
  * rearranges the elements in the range [first,last) randomly, using g as uniform random number generator.
  * the function swaps the value of each element with that of some other randomly picked element. The function determines the element picked by calling gen().
- * @param {RandomAccessIterator} first Random-access iterators to the initial positions of the sequence to be shuffled.
- * @param {RandomAccessIterator} last Random-access iterators to the final positions of the sequence to be shuffled.
+ * @param {RandomAccessIterator} first Random-access iterator to the initial positions of the sequence to be shuffled.
+ * @param {RandomAccessIterator} last Random-access iterator to the final position of the sequence to be shuffled.
  * @param {function} gen A uniform random number generator, used as the source of randomness.
  * @return {*} void
  */

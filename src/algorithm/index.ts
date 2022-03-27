@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-12 10:58:55
- * @LastEditTime: 2022-03-26 18:56:26
+ * @LastEditTime: 2022-03-27 12:40:21
  * @LastEditors: hzheyuan
  * @Description: Algorithms
  *
@@ -45,7 +45,7 @@ import {
   is_premutation,
   search,
   search_n
-} from './non_modifying_sequence_op'
+} from './none_modifying_sequence'
 
 import {
   copy,
@@ -74,7 +74,7 @@ import {
   rotate_copy,
   random_shuffle,
   shuffle
-} from './modifying_sequence_op'
+} from './modifying_sequence'
 
 import {
   is_partitioned,

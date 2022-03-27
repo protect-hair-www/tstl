@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:54:17
- * @LastEditTime: 2022-03-21 11:45:39
+ * @LastEditTime: 2022-03-27 10:46:58
  * @LastEditors: hzheyuan
  * @Description: sorted associative container set
  *
@@ -22,7 +22,7 @@
  *
  * @FilePath: \tstl\src\container\associative\set.ts
  */
-import { Tree } from '../tree/index'
+import { Tree } from '../../tree/index'
 
 export class Set<K> {
   // 存储数据，一颗红黑树

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-03-26 18:20:01
+ * @LastEditTime: 2022-03-27 11:38:15
  * @LastEditors: hzheyuan
  * @Description: iterator definitions
  *
@@ -162,12 +162,23 @@ export function equals<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): bool
   return first.cur === last.cur
 }
 
-
-export function itr_move<T>(itr: InputIterator<T>): T {
-  return itr.getValue()
+/**
+ * @description: swap and iter_swap
+ * @param {ForwardIterator} first
+ * @param {ForwardIterator} last
+ * @return {*}
+ */
+export function iter_swap<T>(first: ForwardIterator<T>, last: ForwardIterator<T>) {
+  let _first = first.copy(), _last = last.copy()
+  let temp = _first.value;
+  _first.value = _last.value;
+  _last.value = temp
 }
 
-export function itr_swap<T>(first: BidirectionalIterator<T>, last: BidirectionalIterator<T>) {}
+export function iter_move<T>(i: IteratorTypes<T>) {
+  // todo
+  return i.value
+}
 
 export * from './base_iterator'
 export * from './Iterable'

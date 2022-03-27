@@ -1,28 +1,21 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:04
- * @LastEditTime: 2022-03-26 18:54:35
+ * @LastEditTime: 2022-03-27 12:21:11
  * @LastEditors: hzheyuan
  * @Description: Sorting
- * todo
+ * doing
  * @FilePath: /tstl/src/algorithm/sorting.ts
  */
-import {
-    InputIterator,
-    OutputIterator,
-    BidirectionalIterator,
-    RandomAccessIterator,
-    ForwardIterator,
-    distance,
-    advance,
-    itr_move,
-    itr_swap
-  } from '../iterator'
+import { RandomAccessIterator, ForwardIterator, BidirectionalIterator, distance, advance, iter_swap} from '../iterator'
 import { CompFunType, less } from '../functor/'
 import { lg } from '../utils/'
 import { copy_backward } from './modifying_sequence_op'
 import { makeHeap, popHeap, sortHeap } from '../algorithm/heap';
-const THRESHOLD = 16
+import { lower_bound, upper_bound } from './binary_search';
+import { rotate } from './modifying_sequence_op'
+
+const THRESHOLD = 16 // 阈值
 
 function _insert_sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _last = last.copy();
@@ -74,7 +67,7 @@ function _unguarded_partition<T>(first: RandomAccessIterator<T>, last: RandomAcc
         _last.prev();
         while(comp(pivot, _last.value)) _last.prev();
         if(!(_first.cur < _last.cur)) return _first;
-        itr_swap(_first, _last);
+        iter_swap(_first, _last);
         _first.next();
     } 
 }
@@ -154,6 +147,69 @@ export function is_sort_until<T>(first: ForwardIterator<T>, last: ForwardIterato
     return next;
 }
 
+function _nth_element<T>(first: RandomAccessIterator<T>, nth: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
+    let _first = first.copy(), _last = last.copy();
+    let dis = distance(_first, _last);
+    while(dis > 3) {
+        let median = _first.copy();
+        advance(median, dis / 2);
+        let _cut = _unguarded_partition(_first, median, _last.next().value, comp)
+        if(_cut <= nth) _first = _cut.copy()
+        else _last = _cut.copy()
+    }
+    _insert_sort(_first, _last, comp)
+}
 
-export function stable_sort() {}
-export function nth_element() {}
+export function nth_element<T>(first: RandomAccessIterator<T>, nth: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
+    let _first = first.copy(), _nth = nth.copy(), _last = last.copy();
+    _nth_element(_first, _nth, _last, comp)
+}
+
+function _inplace_stable_sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
+    let _first = first.copy(), _last = last.copy();
+    let dis = distance(_first, _last)
+    if(dis < 15) {
+        _insert_sort(_first, _last, comp)
+        return
+    }
+
+    let _middle = advance(_first, dis >> 1)
+    _inplace_stable_sort(_first, _middle, comp)
+    _inplace_stable_sort(_middle, _last, comp)
+}
+
+function _merge_aux<T>(first: BidirectionalIterator<T>, middle: BidirectionalIterator<T>, last: BidirectionalIterator<T>, len1: number, len2: number, comp: CompFunType = less) {
+    let _first = first.copy(), _middle = middle.copy(), _last = last.copy();
+    if(len1 === 0 || len2 === 0) return
+    if(len1 + len2 === 2) {
+        if(comp(_middle.value, _first.value)) iter_swap(_first, _middle)
+        return
+    }
+    let _first_cut = _first, _second_cut = _middle
+    let len11 = 0, len22 = 0
+    if(len1 > len2) {
+        len11 = len1 / 2;
+        advance(_first_cut, len11)
+        _second_cut = lower_bound(_middle, _last, _first_cut.value, comp) as BidirectionalIterator<T>;
+        len22 =  distance(_middle, _second_cut)
+    } else {
+        len22 = len2 >> 1
+        advance(_second_cut, len22)
+        _first_cut = upper_bound(_first, _middle, _second_cut.value, comp) as BidirectionalIterator<T>
+        len11 = distance(_first, _first_cut)
+    }
+
+    let _new_middle: BidirectionalIterator<T> = rotate(_first_cut, _middle, _second_cut) as BidirectionalIterator<T>;
+    _merge_aux(_first, _first_cut, _new_middle, len11, len22, comp)
+    _merge_aux(_new_middle, _second_cut, _last, len1 - len11, len2-len22, comp)
+}
+
+
+function _stable_sort_aux<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
+    _inplace_stable_sort(first, last)
+}
+
+export function stable_sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
+    let _first = first.copy(), _last = last.copy();
+    _stable_sort_aux(_first, _last)
+}
