@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:04
- * @LastEditTime: 2022-03-27 21:56:01
+ * @LastEditTime: 2022-03-28 22:15:26
  * @LastEditors: hzheyuan
  * @Description: Sorting
  * doing
@@ -17,6 +17,13 @@ import { rotate } from './modifying_sequence'
 
 const THRESHOLD = 16 // 阈值
 
+/**
+ * @description interanlly insert sort auxiliary
+ * @param {RandomAccessIterator} first
+ * @param {RandomAccessIterator} last
+ * @param {CompFunType} comp
+ * @return {*}
+ */
 function _insert_sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _last = last.copy();
     if(_first.equals(_last)) return
@@ -112,12 +119,31 @@ function _final_insertion_sort<T>(first: RandomAccessIterator<T>, last: RandomAc
     }
 } 
 
-
+/**
+ * @description Partially sort elements in range
+ * Rearranges the elements in the range [first,last), 
+ * in such a way that the elements before middle are the smallest elements in the entire range and are sorted in ascending order, 
+ * while the remaining elements are left without any specific order.
+ * @param {RandomAccessIterator} first Random-access iterator to the initial position of the sequence to be partially sorted.
+ * @param {RandomAccessIterator} middle Random-access iterator pointing to the element within the range [first,last) that is used as the upper boundary of the elements that are fully sorted.
+ * @param {RandomAccessIterator} last Random-access iterators to the final position of the sequence to be partially sorted.
+ * @param {CompFunType} comp Binary function that accepts two elements in the range as arguments, and returns a value convertible to bool.
+ * @return {Void} void
+ */
 export function partial_sort<T>(first: RandomAccessIterator<T>, middle: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _middle = middle.copy(), _last = last.copy();
     _partial_sort(_first, _middle, _last, comp);
 }
 
+/**
+ * @description Sort elements in range
+ * Sorts the elements in the range [first,last) into ascending order.
+ * The elements are compared using operator< for the first version, and comp for the second.
+ * @param {RandomAccessIterator} first Random-access iterator to the initial position of the sequence to be sorted. 
+ * @param {RandomAccessIterator} last Random-access iterator to the final position of the sequence to be sorted. 
+ * @param {CompFunType} comp Binary function that accepts two elements in the range as arguments, and returns a value convertible to bool.
+ * @return {Void} void
+ */
 export function sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _last = last.copy();
     if(!_first.equals(_last)) {
@@ -127,6 +153,14 @@ export function sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterat
     }
 }
 
+/**
+ * @description Check whether range is sorted
+ * Returns true if the range [first,last) is sorted into ascending order.
+ * @param {ForwardIterator} first Forward iterator to the initial positions of the sequence. 
+ * @param {ForwardIterator} last Forward iterator to the final position of the sequence. 
+ * @param {CompFunType} comp Binary function that accepts two elements in the range as arguments, and returns a value convertible to bool.
+ * @return {Boolean} true if the range [first,last) is sorted into ascending order, false otherwise.
+ */
 export function is_sorted<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _last = last.copy();
     if(_first. equals(_last)) return true;
@@ -137,6 +171,15 @@ export function is_sorted<T>(first: ForwardIterator<T>, last: ForwardIterator<T>
     return true;
 }
 
+/**
+ * @description Find first unsorted element in range
+ * Returns an iterator to the first element in the range [first,last) which does not follow an ascending order.
+ * The range between first and the iterator returned is sorted.
+ * @param {ForwardIterator} first Forward iterator to the initial position in a sequence.
+ * @param {ForwardIterator} last Forward iterator to the final position in a sequence. T
+ * @param {CompFunType} comp Binary function that accepts two elements in the range as arguments, and returns a value convertible to bool.
+ * @return {ForwardIterator} An iterator to the first element in the range which does not follow an ascending order, or last if all elements are sorted or if the range contains less than two elements.
+ */
 export function is_sort_until<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, comp: CompFunType = less): ForwardIterator<T> {
     let _first = first.copy(), _last = last.copy();
     if(_first.equals(_last)) return _last;
@@ -147,6 +190,14 @@ export function is_sort_until<T>(first: ForwardIterator<T>, last: ForwardIterato
     return next;
 }
 
+/**
+ * @description nth element internally implemetation
+ * @param {RandomAccessIterator} first
+ * @param {RandomAccessIterator} nth
+ * @param {RandomAccessIterator} last
+ * @param {CompFunType} comp
+ * @return {*}
+ */
 function _nth_element<T>(first: RandomAccessIterator<T>, nth: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _last = last.copy();
     let dis = distance(_first, _last);
@@ -160,6 +211,16 @@ function _nth_element<T>(first: RandomAccessIterator<T>, nth: RandomAccessIterat
     _insert_sort(_first, _last, comp)
 }
 
+/**
+ * @description Sort element in range
+ * Rearranges the elements in the range [first,last), in such a way that the element at the nth position is the element that would be in that position in a sorted sequence.
+ * The other elements are left without any specific order, except that none of the elements preceding nth are greater than it, and none of the elements following it are less.
+ * @param {RandomAccessIterator} first Random-access iterator to the initial position of the sequence to be used.
+ * @param {RandomAccessIterator} nth Random-access iterator pointing to the location within the range [first,last) that will contain the sorted element.
+ * @param {RandomAccessIterator} last Random-access iterator to the final position of the sequence to be used.
+ * @param {CompFunType} comp Binary function that accepts two elements in the range as arguments, and returns a value convertible to bool.
+ * @return {Void} void
+ */
 export function nth_element<T>(first: RandomAccessIterator<T>, nth: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _nth = nth.copy(), _last = last.copy();
     _nth_element(_first, _nth, _last, comp)
@@ -205,10 +266,25 @@ function _merge_aux<T>(first: BidirectionalIterator<T>, middle: BidirectionalIte
 }
 
 
+/**
+ * @description stable sort auxiliary function
+ * @param {RandomAccessIterator} first
+ * @param {RandomAccessIterator} last
+ * @param {CompFunType} comp
+ * @return {*}
+ */
 function _stable_sort_aux<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     _inplace_stable_sort(first, last)
 }
 
+/**
+ * @description Sort elements preserving order of equivalents
+ * Sorts the elements in the range [first,last) into ascending order, like sort, but stable_sort preserves the relative order of the elements with equivalent values.
+ * @param {RandomAccessIterator} first Random-access iterator to the initial position of the sequence to be sorted. 
+ * @param {RandomAccessIterator} last Random-access iterator to the final position of the sequence to be sorted. 
+ * @param {CompFunType} comp Binary function that accepts two elements in the range as arguments, and returns a value convertible to bool.
+ * @return {Void} void
+ */
 export function stable_sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _last = last.copy();
     _stable_sort_aux(_first, _last)

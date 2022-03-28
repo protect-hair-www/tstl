@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-12 10:58:55
- * @LastEditTime: 2022-03-27 12:40:21
+ * @LastEditTime: 2022-03-28 22:22:33
  * @LastEditors: hzheyuan
  * @Description: Algorithms
  *
@@ -111,6 +111,7 @@ import {
 import {
   merge,
   replace_merge,
+  includes,
   set_union,
   set_difference,
   set_intersection,
@@ -206,6 +207,7 @@ export {
   // merge
   merge,
   replace_merge,
+  includes,
   set_union,
   set_difference,
   set_intersection,
