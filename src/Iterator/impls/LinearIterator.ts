@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-27 23:12:24
+ * @LastEditTime: 2022-03-28 11:40:19
  * @LastEditors: hzheyuan
  * @Description: linear type container iterator
- * @FilePath: /tstl/src/iterator/impls/LinearIterator.ts
+ * @FilePath: \tstl\src\Iterator\impls\LinearIterator.ts
  */
 import { BaseIterator, RandomAccessIterator, IteratorTags, IteratorTypes } from '../index'
 import { LinearIteratorBase }  from './LinearIteratorBase'
@@ -38,11 +38,11 @@ export class LinearIterator<T> extends LinearIteratorBase<T> {
     // })
   }
 
-  // valueOf() {
-  //   console.log('value of')
-  //   return this.cur
-  //   // return new LinearIterator<T>(this.cur, this.cntr)
-  // }
+  valueOf = () => {
+    console.log('value of')
+    return this.cur
+    // return new LinearIterator<T>(this.cur, this.cntr)
+  }
 
   copy(): LinearIterator<T> {
     return new LinearIterator<T>(this.cur, this.cntr)
