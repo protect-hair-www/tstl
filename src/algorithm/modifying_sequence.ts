@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:40
- * @LastEditTime: 2022-03-27 12:39:37
+ * @LastEditTime: 2022-03-29 17:01:31
  * @LastEditors: hzheyuan
  * @Description: Modifying sequence operations
- * @FilePath: /tstl/src/algorithm/modifying_sequence_op.ts
+ * @FilePath: \tstl\src\algorithm\modifying_sequence.ts
  */
 import {
   InputIterator,
@@ -350,7 +350,7 @@ export function fill_n<T>(first: ForwardIterator<T>, n: number, val: T) {
 }
 
 /**
- * @description: Generate values for range with function
+ * @description Generate values for range with function
  * assigns the value returned by successive call to gen to the elements in the range [first, last)
  * @param {ForwardIterator} first Forward iterator to the initial position in a sequence. The range affected is [first,last).
  * @param {ForwardIterator} last Forward iterator to the final position in a sequence. The range affected is [first,last)
@@ -412,7 +412,7 @@ export function remove<T>(...args: any[]): ForwardIterator<T> {
 }
 
 /**
- * @description: remove value from range
+ * @description remove value from range
  * transforms the range [first, last) into a range with all the elements for which fn returns true,
  * and returns an iterator to the new end of that range.
  * @param {ForwardIterator} first Forward iterator to the initial position in a sequence of move-assignable elements supporting being compared to a value of type T.

@@ -1,19 +1,18 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:04
- * @LastEditTime: 2022-03-28 22:15:26
+ * @LastEditTime: 2022-03-29 17:00:39
  * @LastEditors: hzheyuan
  * @Description: Sorting
- * doing
- * @FilePath: /tstl/src/algorithm/sorting.ts
+ * Sorting operations
+ * @FilePath: \tstl\src\algorithm\sorting.ts
  */
 import { RandomAccessIterator, ForwardIterator, BidirectionalIterator, distance, advance, iter_swap} from '../iterator'
 import { CompFunType, less } from '../functor/'
-import { lg } from '../utils/'
-import { copy_backward } from './modifying_sequence'
+import { rotate, copy_backward } from './modifying_sequence'
 import { makeHeap, popHeap, sortHeap } from '../algorithm/heap';
 import { lower_bound, upper_bound } from './binary_search';
-import { rotate } from './modifying_sequence'
+import { lg } from '../utils/'
 
 const THRESHOLD = 16 // 阈值
 

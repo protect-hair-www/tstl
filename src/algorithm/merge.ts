@@ -1,20 +1,19 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:45
- * @LastEditTime: 2022-03-28 22:22:13
+ * @LastEditTime: 2022-03-29 17:07:25
  * @LastEditors: hzheyuan
  * @Description: merge
- * todo
- * @FilePath: /tstl/src/algorithm/merge.ts
+ * Operations on sorted ranges
+ * @FilePath: \tstl\src\algorithm\merge.ts
  */
 import { CompFunType, less } from '../functor/'
 import { lower_bound, upper_bound } from './binary_search';
-import { rotate } from './modifying_sequence'
-import { copy } from './modifying_sequence'
+import { rotate, copy } from './modifying_sequence'
 import { distance, InputIterator, OutputIterator, BidirectionalIterator, iter_swap, advance } from './../iterator';
 
 /**
- * @description: merge auxilibary function
+ * @description merge auxilibary function
  * @param {BidirectionalIterator} first Bidirectional iterator to the initial position in the first sorted sequence to merge. 
  * @param {BidirectionalIterator} middle Bidirectional iterator to the initial position of the second sorted sequence.
  * @param {BidirectionalIterator} last Bidirectional iterator to the past-the-end position of the second sorted sequence.

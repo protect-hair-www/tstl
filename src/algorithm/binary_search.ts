@@ -1,16 +1,16 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:37
- * @LastEditTime: 2022-03-27 12:57:04
+ * @LastEditTime: 2022-03-29 17:03:09
  * @LastEditors: hzheyuan
  * @Description: binary seach (operating on partitioned/stoted ranges)
- * @FilePath: /tstl/src/algorithm/binary_search.ts
+ * @FilePath: \tstl\src\algorithm\binary_search.ts
  */
 import { distance, ForwardIterator, advance } from '../Iterator/index'
 import { CompFunType, less } from '../functor/'
 
 /**
- * @description: return iterator to lower bound
+ * @description return iterator to lower bound
  * return an iterator pointing to the first element in the range [first, last) which does not compare less than val
  * @param {ForwardIterator} first Forward iterator to the initial position of a sorted (or properly partitioned) sequence. 
  * @param {ForwardIterator} last Forward iterator to the final position of a sorted (or properly partitioned) sequence. 
@@ -34,7 +34,7 @@ export function lower_bound<T>(first: ForwardIterator<T>, last: ForwardIterator<
 }
 
 /**
- * @description: return iterator to lower bound
+ * @description return iterator to lower bound
  * return an iterator pointing to the first element in the range [first, last) which does not compare greater than val
  * @param {ForwardIterator} first Forward iterator to the initial position of a sorted (or properly partitioned) sequence. 
  * @param {ForwardIterator} last Forward iterator to the final position of a sorted (or properly partitioned) sequence. 
@@ -54,7 +54,7 @@ export function upper_bound<T>(first: ForwardIterator<T>, last: ForwardIterator<
 }
 
 /**
- * @description: get subrange of equal ranges
+ * @description get subrange of equal ranges
  * returns the bounds of the subrange that includes all the elements of the range [first,last) with values equivalent to val.
  * @param {ForwardIterator} first Forward iterator to the initial position of a sorted (or properly partitioned) sequence. 
  * @param {ForwardIterator} last Forward iterator to the final position of a sorted (or properly partitioned) sequence. 
@@ -69,7 +69,7 @@ export function equal_range<T>(first: ForwardIterator<T>, last: ForwardIterator<
 }
 
 /**
- * @description: test if value in sorted sequence
+ * @description test if value in sorted sequence
  * returns true if any element in the range [first,last) is equivalent to val, and false otherwise.
  * @param {ForwardIterator} first Forward iterator to the initial position of a sorted (or properly partitioned) sequence. 
  * @param {ForwardIterator} last Forward iterator to the final position of a sorted (or properly partitioned) sequence. 

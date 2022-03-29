@@ -1,16 +1,13 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:58
- * @LastEditTime: 2022-03-27 12:31:29
+ * @LastEditTime: 2022-03-29 16:58:56
  * @LastEditors: hzheyuan
  * @Description: Partition
- * @FilePath: /tstl/src/algorithm/paritions.ts
+ * Partitioning operations
+ * @FilePath: \tstl\src\algorithm\paritions.ts
  */
-import { InputIterator } from './../iterator/input_iterator';
-import { BidirectionalIterator } from './../iterator/bidirectional_iterator';
-import { ForwardIterator } from './../iterator/forward_iterator';
-import { OutputIterator } from './../iterator/output_iterartor';
-import { iter_swap } from '../iterator/';
+import { InputIterator, BidirectionalIterator, ForwardIterator, OutputIterator, iter_swap } from '../iterator/';
 
 /**
  * @description test whether range is partitoned

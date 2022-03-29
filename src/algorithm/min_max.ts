@@ -2,18 +2,18 @@ import { ForwardIterator } from './../iterator/forward_iterator';
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:26:08
- * @LastEditTime: 2022-03-27 13:03:45
+ * @LastEditTime: 2022-03-29 17:01:08
  * @LastEditors: hzheyuan
  * @Description: min max
  * todo
- * @FilePath: /tstl/src/algorithm/min_max.ts
+ * @FilePath: \tstl\src\algorithm\min_max.ts
  */
 
 
 import { CompFunType, less } from './../functor/relational';
 
 /**
- * @description: return the smallest
+ * @description return the smallest
  * returns the smallest of a and b. if both are equivalent, a is returned.
  * @param {T} a value to compare
  * @param {T} b value to compare
@@ -31,7 +31,7 @@ export function min<T>(a: T, b: T, compare?: CompFunType) {
 
 
 /**
- * @description: return the largest
+ * @description return the largest
  * returns the largest of a and b. If both are equivalent, a is returned.
  * @param {T} a value to compare
  * @param {T} b value to compare
@@ -50,7 +50,7 @@ export function max<T>(a: T, b: T, compare?: CompFunType) {
 export function minmax() {}
 
 /**
- * @description: return smallest element in range
+ * @description return smallest element in range
  * returns an iterator pointing to the element with the smallest value in the range [first,last).
  * @param {ForwardIterator} first Input iterator to the initial position of the sequence to compare. 
  * @param {ForwardIterator} last Input iterator to the final position of the sequence to compare. 
@@ -73,7 +73,7 @@ export function min_element<T>(first: ForwardIterator<T>, last: ForwardIterator<
 }
 
 /**
- * @description: return largest element in range
+ * @description return largest element in range
  * returns an iterator pointing to the element with the largest value in the range [first,last).
  * @param {ForwardIterator} first Input iterator to the initial position of the sequence to compare. 
  * @param {ForwardIterator} last Input iterator to the final position of the sequence to compare. 
@@ -96,7 +96,7 @@ export function max_element<T>(first: ForwardIterator<T>, last: ForwardIterator<
 }
 
 /**
- * @description: return smallest and largest elements in range
+ * @description return smallest and largest elements in range
  * returns a tuple with an iterator pointing to the element with the smallest value in the range [first,last) as first element, 
  * and the largest as second.
  * @param {ForwardIterator} first Input iterator to the initial position of the sequence to compare. 
