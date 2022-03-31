@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-03-28 11:40:19
+ * @LastEditTime: 2022-03-29 17:45:23
  * @LastEditors: hzheyuan
  * @Description: linear type container iterator
  * @FilePath: \tstl\src\Iterator\impls\LinearIterator.ts
@@ -15,30 +15,30 @@ export class LinearIterator<T> extends LinearIteratorBase<T> {
 
   constructor(c, cntr: T[]) {
     super(c, cntr)
-    // return new Proxy(this, {
-    //   get: function (target, prop, receiver) {
-    //     console.log('get', target, prop, Reflect.has(target, prop), receiver);
-    //     if (Reflect.has(target, prop)) return Reflect.get(target, prop, receiver)
-    //   },
-    //   set: function (target, prop, value, receiver) {
-    //     console.log(`set: `, target, prop, value, Reflect.has(target, prop));
-    //     Reflect.set(target, prop, value, receiver);
-    //     // if(prop === 'cur') {
-    //     //   target.cur =  value
-    //     // } else
-    //     // if(prop !== 'cur' && Reflect.has(target, prop)) {
-    //     //   Reflect.set(target, prop, value, receiver);
-    //     //   return true
-    //     // } else {
-    //     //   target._cur = value;
-    //     //   return true
-    //     // }
-    //     return true
-    //   }
-    // })
+    return new Proxy(this, {
+      get: function (target, prop, receiver) {
+        console.log('get', target, prop, Reflect.has(target, prop), receiver);
+        if (Reflect.has(target, prop)) return Reflect.get(target, prop, receiver)
+      },
+      set: function (target, prop, value, receiver) {
+        console.log(`set: `, target, prop, value, Reflect.has(target, prop));
+        Reflect.set(target, prop, value, receiver);
+        // if(prop === 'cur') {
+        //   target.cur =  value
+        // } else
+        // if(prop !== 'cur' && Reflect.has(target, prop)) {
+        //   Reflect.set(target, prop, value, receiver);
+        //   return true
+        // } else {
+        //   target._cur = value;
+        //   return true
+        // }
+        return true
+      }
+    })
   }
 
-  valueOf = () => {
+  valueOf() {
     console.log('value of')
     return this.cur
     // return new LinearIterator<T>(this.cur, this.cntr)
