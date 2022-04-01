@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-31 10:42:20
- * @LastEditTime: 2022-03-31 16:33:17
+ * @LastEditTime: 2022-04-01 15:55:20
  * @LastEditors: hzheyuan
  * @Description: test immerjs implemetation for immutable data
  * @FilePath: \tstl\src\utils\proxy.ts
@@ -126,7 +126,7 @@ function revokeDraft(draft: Drafted) {
 		state._type === ProxyType.ProxyArray
 	)
 		state._revoke()
-	else state._revoked = true
+	else (state as any)._revoke = true
 }
 
 type ProxyState = ProxyObjectState
@@ -319,8 +319,9 @@ export function createProxy<T extends Objectish>(
 ): Drafted<T, ImmerState> {
 	// precondition: createProxy should be guarded by isDraftable, so we know we can safely draft
 	const draft: Drafted = createProxyProxy(value, parent)
+    console.log('draft', draft)
 	const scope = parent ? parent._scope : getCurrentScope()
-	scope.drafts_.push(draft)
+	scope._drafts.push(draft)
 	return draft
 }
 
@@ -333,8 +334,11 @@ export function markChanged(state: ImmerState) {
 	}
 }
 
+
 export const objectTraps: ProxyHandler<ProxyState> = {
+    // read 操作
     get(state, prop) {
+        console.log('proxy read handler', state, prop)
         if(prop === DRAFT_STATE) return state
         const source = latest(state)
         if(!has(source, prop)) {
@@ -344,14 +348,18 @@ export const objectTraps: ProxyHandler<ProxyState> = {
         if(state._finalized || !isDraftable(value)) {
             return value
         }
+        // Check for existing draft in modified state.
+		// Assigned values are never drafted. This catches any drafts we created, too.
         if(value === peek(state._base, prop)) {
             prepareCopy(state)
-            return (state._copy[prop as any]) = createProxy(state._scope._immer, value, state)
+            return (state._copy![prop as any]) = createProxy(state._scope._immer, value, state)
         }
+        console.log(value, 'get value');
         return value
     },
-
+    // write 操作
     set(state: ProxyObjectState, prop: string, value) {
+        console.log('proxy write handler', prop, value)
         const desc = getDescriptorFromProto(latest(state), prop)
         if(desc?.set) {
             desc.set.call(state._draft, value)
@@ -359,13 +367,16 @@ export const objectTraps: ProxyHandler<ProxyState> = {
         }
         if(!state._modified) {
             const current = peek(latest(state), prop)
+            console.log('xxxx', current)
             const currentState: ProxyObjectState = current?.[DRAFT_STATE]
             if(currentState && currentState._base === value) {
                 state._copy![prop] = value
                 state._assigned[prop] = false
                 return true
             }
-            if(!is(value, current) && (value !== undefined || has(state._base, prop))) return true
+            if(is(value, current) && (value !== undefined || has(state._base, prop))) {
+                return true
+            }
             prepareCopy(state)
             markChanged(state)
         }
@@ -403,15 +414,95 @@ export function enterScope(immer: any) {
 	return (currentScope = createScope(currentScope, immer))
 }
 
+export function isFrozen(obj: any): boolean {
+	if (obj == null || typeof obj !== "object") return true
+	// See #600, IE dies on non-objects in Object.isFrozen
+	return Object.isFrozen(obj)
+}
+
+export function each<T extends Objectish>(
+	obj: T,
+	iter: (key: string | number, value: any, source: T) => void,
+	enumerableOnly?: boolean
+): void
+export function each(obj: any, iter: any, enumerableOnly = false) {
+	if (getArchtype(obj) === Archtype.Object) {
+		;(enumerableOnly ? Object.keys : ownKeys)(obj).forEach(key => {
+			if (!enumerableOnly || typeof key !== "symbol") iter(key, obj[key], obj)
+		})
+	} else {
+		obj.forEach((entry: any, index: any) => iter(index, entry, obj))
+	}
+}
+
+export function isDraft(value: any): boolean {
+	return !!value && !!value[DRAFT_STATE]
+}
+
+export function set(thing: any, propOrOldValue: PropertyKey, value: any) {
+	const t = getArchtype(thing)
+	if (t === Archtype.Map) thing.set(propOrOldValue, value)
+	else if (t === Archtype.Set) {
+		thing.delete(propOrOldValue)
+		thing.add(value)
+	} else thing[propOrOldValue] = value
+}
+
+function finalizeProperty(
+	rootScope: ImmerScope,
+	parentState: undefined | ImmerState,
+	targetObject: any,
+	prop: string | number,
+	childValue: any,
+	rootPath?: PatchPath
+) {
+    if(isDraft(childValue)) {
+        const path = rootPath && parentState && rootPath!.concat(prop);
+        const res = finalize(rootScope, childValue, path)
+        set(targetObject, prop, res)
+        if(isDraft(res)) {
+            rootScope._canAutoFreeze = false
+        } else return
+    }
+    // search new objects for unfinalized drafts, Frozen objects should never contain drafts.
+    if(isDraftable(childValue) && !isFrozen(childValue)) {
+        finalize(rootScope, childValue)
+    }
+    if(!parentState || !parentState._scope._parent) {
+        console.log('finalizeProperty no parent state')
+    }
+}
 export type PatchPath = (string | number)[]
-function finalize(rootScope: ImmerScope, value: any, path?: PatchPath) {}
+function finalize(rootScope: ImmerScope, value: any, path?: PatchPath) {
+    if(isFrozen(value)) return value
+    const state = value[DRAFT_STATE]
+    if(!state) {
+        each(value, (key, childValue) => {
+            finalizeProperty(rootScope, state, value, key, childValue, path)
+        }, true)
+        return value
+    }
+    if(state._scope !== rootScope) return value
+    if(!state._modified) return state._base
+    if(!state._finalized) {
+        state._finalized = true
+        state._scope._unfinalizedDrafts--
+        const result = state._copy
+
+        each(result, (key, childValue) => {
+            finalizeProperty(rootScope, state, result, key, childValue, path)
+        })
+    }
+    return state._copy
+}
 
 export function processResult(result: any, scope: ImmerScope) {
+    console.log('process result', result, scope)
 	scope._unfinalizedDrafts = scope._drafts.length
 	const baseDraft = scope._drafts![0]
 	const isReplaced = result !== undefined && result !== baseDraft
 	if (isReplaced) {
-		if (baseDraft[DRAFT_STATE].modified_) {
+		if (baseDraft[DRAFT_STATE]._modified) {
 			revokeScope(scope)
 		}
 		if (isDraftable(result)) {
@@ -428,14 +519,14 @@ export function processResult(result: any, scope: ImmerScope) {
 	return result !== NOTHING ? result : undefined
 }
 
+
 export const produce = (base: any, recipe?: any) => {
     let result
     if(isDraftable(base)) {
         const scope = enterScope(this)
+        console.log('scope', scope)
         const proxy = createProxy(this, base, undefined)
         result = recipe(proxy)
-        return result.then(result => {
-            return processResult(result, scope)
-        })
+        return processResult(result, scope)
     }
 }

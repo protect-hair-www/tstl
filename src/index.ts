@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2019-01-29 08:32:32
- * @LastEditTime: 2022-03-28 22:23:01
+ * @LastEditTime: 2022-04-01 09:53:04
  * @LastEditors: hzheyuan
  * @Description: TSSTL library main entry
- * @FilePath: /tstl/src/index.ts
+ * @FilePath: \tstl\src\index.ts
  */
 
 import { Vector, List, Deque } from './container/sequence/index'
@@ -14,6 +14,7 @@ import { PriorityQueue } from './container/sequence/'
 import { Queue, Stack } from './adapter'
 import { less, greater } from './functor'
 import { makeHeap, popHeap, pushHeap, sortHeap, isHeap, isHeapUntil } from './algorithm'
+import { produce } from './utils/index'
 import {
   find,
   find_if,
@@ -224,5 +225,7 @@ export {
 
   // functor
   less,
-  greater
+  greater,
+
+  produce as _produce
 }
