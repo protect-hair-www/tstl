@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2019-01-29 08:32:32
- * @LastEditTime: 2022-04-01 09:53:04
+ * @LastEditTime: 2022-04-02 17:54:41
  * @LastEditors: hzheyuan
  * @Description: TSSTL library main entry
  * @FilePath: \tstl\src\index.ts
@@ -14,7 +14,7 @@ import { PriorityQueue } from './container/sequence/'
 import { Queue, Stack } from './adapter'
 import { less, greater } from './functor'
 import { makeHeap, popHeap, pushHeap, sortHeap, isHeap, isHeapUntil } from './algorithm'
-import { produce } from './utils/index'
+import { immCreator } from './utils/'
 import {
   find,
   find_if,
@@ -227,5 +227,5 @@ export {
   less,
   greater,
 
-  produce as _produce
+  immCreator as _immCreator
 }

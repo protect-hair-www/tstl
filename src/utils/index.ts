@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-05 09:50:29
- * @LastEditTime: 2022-04-01 09:51:48
+ * @LastEditTime: 2022-04-02 17:54:17
  * @LastEditors: hzheyuan
  * @Description:
  * @FilePath: \tstl\src\utils\index.ts
@@ -11,6 +11,6 @@
 import { isPrimitive, createInstanceOf, getTypeOf } from './jstype'
 import { copy } from './copy'
 import { lg } from './math'
-import { produce } from './proxy'
+import { immCreator  } from './immuation'
 
-export { getTypeOf, isPrimitive, createInstanceOf, copy as jsCopy, lg, produce }
+export { getTypeOf, isPrimitive, createInstanceOf, copy as jsCopy, lg, immCreator }
