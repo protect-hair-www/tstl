@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2019-01-29 08:32:32
- * @LastEditTime: 2022-04-02 17:54:41
+ * @LastEditTime: 2022-04-05 19:23:17
  * @LastEditors: hzheyuan
  * @Description: TSSTL library main entry
- * @FilePath: \tstl\src\index.ts
+ * @FilePath: /tstl/src/index.ts
  */
 
 import { Vector, List, Deque } from './container/sequence/index'
@@ -107,6 +107,8 @@ import {
   set_intersection,
   set_symmetric_diffrence
 } from './algorithm'
+
+import { ArrayList } from './exp/ArrayList/'
 
 export {
   // associative underlying data structrue
@@ -227,5 +229,8 @@ export {
   less,
   greater,
 
-  immCreator as _immCreator
+  immCreator as _immCreator,
+
+  // exp
+  ArrayList
 }

@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 15:38:26
- * @LastEditTime: 2022-04-05 18:47:40
+ * @LastEditTime: 2022-04-05 19:14:25
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/src/exp/ArrayList/index.ts
@@ -21,11 +21,15 @@ export class ArrayList<E> extends AbstractList<E> implements IList<E>, IRandomAc
         super()
     }
 
-    public iterator: Iterator<E> = new Iterator(0, this._cntr);
-    public listIterator: ListIterator<E> = new ListIterator(0, this._cntr)
+    public iterator: Iterator<E> = new Iterator(0, this);
+    public listIterator: ListIterator<E> = new ListIterator(0, this)
 
     public size(): number {
         return this._cntr.length
+    }
+
+    public cntr() {
+        return this._cntr
     }
 
     public isEmpty(): boolean {
