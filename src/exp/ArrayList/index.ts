@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 15:38:26
- * @LastEditTime: 2022-04-05 19:14:25
+ * @LastEditTime: 2022-04-06 10:56:21
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: /tstl/src/exp/ArrayList/index.ts
+ * @FilePath: \tstl\src\exp\ArrayList\index.ts
  */
 import { AbstractList }  from '../Abstracts/AbstractList'
 import { IList }  from '../Interface/IList'
@@ -22,7 +22,10 @@ export class ArrayList<E> extends AbstractList<E> implements IList<E>, IRandomAc
     }
 
     public iterator: Iterator<E> = new Iterator(0, this);
-    public listIterator: ListIterator<E> = new ListIterator(0, this)
+    public listIter: ListIterator<E> = new ListIterator(0, this)
+    public listIterator(index: number): ListIterator<E> {
+        return new ListIterator<E>(index, this)
+    }
 
     public size(): number {
         return this._cntr.length
@@ -72,14 +75,19 @@ export class ArrayList<E> extends AbstractList<E> implements IList<E>, IRandomAc
         this._cntr.push(e)
     }
 
-    public add(e: E): boolean {
-        this._add(e)
+    private _addAt(index: number, e: E): boolean {
+        this.modCount++
+        this._cntr.splice(index, 0, e)
         return true
     }
 
-    public addAt(index: number, e: E): void {
-        this.modCount++
-        this._cntr.splice(index, 0, e)
+    public add(...args: any[]): boolean {
+        if(args.length === 1) {
+            this._add(args[0])
+        } else {
+            this._addAt(args[0], args[1])
+        }
+        return true
     }
 
     public addAll(elements: Iterable<E>): boolean {
