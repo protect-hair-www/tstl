@@ -1,21 +1,21 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 13:53:36
- * @LastEditTime: 2022-03-09 23:29:49
+ * @LastEditTime: 2022-04-06 21:06:34
  * @LastEditors: hzheyuan
  * @Description: list container node
- * @FilePath: /tstl/src/container/sequence/list/ListNode.ts
+ * @FilePath: /tstl/src/exp/LinkedList/ListNode.ts
  */
 
-export class ListNode<T> {
-  private _prev: ListNode<T>
-  private _next: ListNode<T>
+export class Node<T> {
+  private _prev: Node<T> | null
+  private _next: Node<T> | null
   private _value: T | null
 
-  constructor(x?: T) {
-    this._prev = this
-    this._next = this
-    this._value = x ? x : null
+  constructor(prev: Node<T> | null, e: T, next: Node<T> | null) {
+    this._prev = prev
+    this._value = e
+    this._next = next
   }
 
   /**

@@ -1,17 +1,18 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 15:38:26
- * @LastEditTime: 2022-04-06 10:56:21
+ * @LastEditTime: 2022-04-06 23:24:17
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: \tstl\src\exp\ArrayList\index.ts
+ * @FilePath: /tstl/src/exp/ArrayList/index.ts
  */
 import { AbstractList }  from '../Abstracts/AbstractList'
 import { IList }  from '../Interface/IList'
 import { IRandomAccess } from '../Interface/IRandomAccess'
 import { ICloneable } from './../Interface/ICloneable';
-import { Iterator }  from '../Iterators/Iterator'
-import { ListIterator }  from '../Iterators/ListIterator'
+import { Iterator }  from './Iterator'
+import { ListIterator }  from './ListIterator'
+import type { IteratorTypes, ListIteratorTypes } from '../Iterators/type'
 
 export class ArrayList<E> extends AbstractList<E> implements IList<E>, IRandomAccess, ICloneable {
     private _size: number = 0
@@ -21,9 +22,11 @@ export class ArrayList<E> extends AbstractList<E> implements IList<E>, IRandomAc
         super()
     }
 
-    public iterator: Iterator<E> = new Iterator(0, this);
-    public listIter: ListIterator<E> = new ListIterator(0, this)
-    public listIterator(index: number): ListIterator<E> {
+    public iterator(): IteratorTypes<E> { 
+        return new Iterator(0, this);
+    }
+
+    public listIterator(index: number): ListIteratorTypes<E> {
         return new ListIterator<E>(index, this)
     }
 
@@ -88,26 +91,44 @@ export class ArrayList<E> extends AbstractList<E> implements IList<E>, IRandomAc
             this._addAt(args[0], args[1])
         }
         return true
-    }
+    }    
 
-    public addAll(elements: Iterable<E>): boolean {
-        this._cntr = this._cntr.concat(...elements)
+    // public addAll(elements: Iterable<E>): boolean {
+    //     this._cntr = this._cntr.concat(...elements)
+    //     return true
+    // }
+    addAll(elements: Iterable<E>): boolean;
+    addAll(index: number, elements: Iterable<E>): boolean;
+    addAll(...args: any[]): boolean {
+        if(args.length === 1) {
+            let eles = args[0]
+            this._cntr = this._cntr.concat(...eles)
+        } else {
+
+        }
         return true
     }
 
-    public remove(index: number): boolean {
+    
+    remove(): boolean;
+    remove(e: E): boolean;
+    remove(index: number): boolean;
+    remove(index?: any): boolean {
+        if(index) {
+            this._remove(index)
+        }        
+        return true
+    }
+
+    private _remove(index: number): boolean {
         this.checkIndex(index)
-        this._remove(index)
+        this.modCount++
+        this._cntr.splice(index, 1)
         return true
     }
 
     public removeIf(): boolean {
         return true;
-    }
-
-    private _remove(idx: number) {
-        this.modCount++
-        this._cntr.splice(idx, 1)
     }
 
     public removeAll(): boolean {

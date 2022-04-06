@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 18:17:16
- * @LastEditTime: 2022-04-05 19:52:10
+ * @LastEditTime: 2022-04-06 22:08:47
  * @LastEditors: hzheyuan
  * @Description: 
  * @FilePath: /tstl/src/exp/Iterators/Iterator.ts
@@ -30,7 +30,7 @@ export class Iterator<E> implements BaseIterator<E> {
         else {
             this.cursor = i + 1
             this.lastRet = i
-            return {value: this.cntr.cntr()[this.lastRet], done: false}
+            return {value: this.cntr.cntr[this.lastRet], done: false}
         }
     }
 

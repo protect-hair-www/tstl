@@ -1,14 +1,14 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 18:16:12
- * @LastEditTime: 2022-04-05 19:15:36
+ * @LastEditTime: 2022-04-06 23:10:12
  * @LastEditors: hzheyuan
  * @Description: 
- * @FilePath: /tstl/src/exp/Iterators/ListIterator.ts
+ * @FilePath: /tstl/src/exp/ArrayList/ListIterator.ts
  */
 import { Iterator } from './Iterator'
-import { IListIterator  } from './IListIterator'
-import { ArrayList } from './../ArrayList/index';
+import { IListIterator  } from '../Iterators/IListIterator'
+import { ArrayList } from './index';
 
 export class ListIterator<E> extends Iterator<E> implements IListIterator<E> {
     constructor(cursor: number, cntr: ArrayList<E>) {
@@ -35,8 +35,13 @@ export class ListIterator<E> extends Iterator<E> implements IListIterator<E> {
         return this.cntr[this.lastRet = i]
     } 
 
-    public set() {
+    public set(e: E) {
         if(this.lastRet < 0) throw new Error('')
+        try {
+            this.cntr.set(this.lastRet, e)
+        } catch (error) {
+            
+        }
     }
 
     public add() {
