@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2019-01-29 08:32:32
- * @LastEditTime: 2022-04-05 19:23:17
+ * @LastEditTime: 2022-04-07 21:21:59
  * @LastEditors: hzheyuan
  * @Description: TSSTL library main entry
  * @FilePath: /tstl/src/index.ts
@@ -109,6 +109,7 @@ import {
 } from './algorithm'
 
 import { ArrayList } from './exp/ArrayList/'
+import { LinkedList } from './exp/LinkedList/'
 
 export {
   // associative underlying data structrue
@@ -232,5 +233,6 @@ export {
   immCreator as _immCreator,
 
   // exp
-  ArrayList
+  ArrayList,
+  LinkedList
 }

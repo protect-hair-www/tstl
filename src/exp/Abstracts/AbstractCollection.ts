@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 15:09:58
- * @LastEditTime: 2022-04-06 23:34:33
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-04-07 23:13:20
+ * @LastEditors: kalai
  * @Description: 
  * @FilePath: /tstl/src/exp/Abstracts/AbstractCollection.ts
  */
@@ -28,9 +28,9 @@ export abstract class AbstractCollection<E> implements ICollection<E> {
     abstract add(e: E):boolean
     abstract add(index: number, e: E):boolean
 
-    abstract remove(): boolean;
+    abstract remove(): E;
     abstract remove(e: E): boolean;
-    abstract remove(index: number): boolean;
+    abstract remove(index: number): E;
     abstract removeIf(): boolean;
 
     abstract clear();

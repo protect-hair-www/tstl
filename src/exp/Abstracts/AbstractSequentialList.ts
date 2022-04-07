@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-06 10:38:25
- * @LastEditTime: 2022-04-06 23:03:01
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-04-07 23:48:01
+ * @LastEditors: kalai
  * @Description: 
  * @FilePath: /tstl/src/exp/Abstracts/AbstractSequentialList.ts
  */
@@ -33,14 +33,12 @@ export abstract class AbstractSequentialList<E> extends AbstractList<E> {
         return true
     }
 
-
-    remove(): boolean;
+    remove(): E;
     remove(e: E): boolean;
-    remove(index: number): boolean;
-    remove(...args: any[]): boolean {
-        let len = args.length
-        if(len === 1 && typeof args[0] === 'number') {
-            this._removeByIndex(args[0])
+    remove(index: number): E;
+    remove(...args: any[]): boolean | E { 
+        if(args.length === 1 && typeof args[0] === 'number') {
+            return this._removeByIndex(args[0]);
         }
         return true
     }

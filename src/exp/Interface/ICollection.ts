@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 15:00:16
- * @LastEditTime: 2022-04-06 23:32:50
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-04-07 23:12:54
+ * @LastEditors: kalai
  * @Description: 
  * @FilePath: /tstl/src/exp/Interface/ICollection.ts
  */
@@ -18,9 +18,9 @@ export interface ICollection<E> extends Iterable<E> {
     addAll(elements: Iterable<E>): boolean
     addAll(index: number, elements: Iterable<E>): boolean
 
-    remove()
-    remove(e: E)
-    remove(index: number): boolean
+    remove(): E
+    remove(e: E): boolean
+    remove(index: number): E
 
     removeIf(): boolean
     removeAll(): boolean

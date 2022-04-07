@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 15:38:26
- * @LastEditTime: 2022-04-06 23:24:17
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-04-07 23:18:37
+ * @LastEditors: kalai
  * @Description: 
  * @FilePath: /tstl/src/exp/ArrayList/index.ts
  */
@@ -34,7 +34,7 @@ export class ArrayList<E> extends AbstractList<E> implements IList<E>, IRandomAc
         return this._cntr.length
     }
 
-    public cntr() {
+    public get cntr() {
         return this._cntr
     }
 
@@ -110,21 +110,23 @@ export class ArrayList<E> extends AbstractList<E> implements IList<E>, IRandomAc
     }
 
     
-    remove(): boolean;
+    remove(): E;
     remove(e: E): boolean;
-    remove(index: number): boolean;
-    remove(index?: any): boolean {
-        if(index) {
-            this._remove(index)
+    remove(index: number): E;
+    remove(...args: any[]): E | boolean {
+        const len = args.length
+        if(args.length === 1 && typeof args[0] === 'number') {
+            this._removeByIndex(args[0])
         }        
         return true
     }
 
-    private _remove(index: number): boolean {
+    private _removeByIndex(index: number): E {
         this.checkIndex(index)
         this.modCount++
-        this._cntr.splice(index, 1)
-        return true
+        const val = this.cntr[index];
+        this.cntr.splice(index, 1)
+        return val
     }
 
     public removeIf(): boolean {

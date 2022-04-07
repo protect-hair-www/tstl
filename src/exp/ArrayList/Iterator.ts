@@ -1,13 +1,13 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 18:17:16
- * @LastEditTime: 2022-04-06 22:08:47
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-04-07 23:01:20
+ * @LastEditors: kalai
  * @Description: 
- * @FilePath: /tstl/src/exp/Iterators/Iterator.ts
+ * @FilePath: /tstl/src/exp/ArrayList/Iterator.ts
  */
-import { BaseIterator }  from './IBaseIterator'
-import { ArrayList } from './../ArrayList/index';
+import { BaseIterator }  from '../Iterators/IBaseIterator'
+import { ArrayList } from './index';
 export class Iterator<E> implements BaseIterator<E> {
     cntr: ArrayList<E>;
     cursor: number      // index of next element to return
@@ -21,11 +21,11 @@ export class Iterator<E> implements BaseIterator<E> {
 
     public hasNext(): boolean {
         // console.log(this.cursor, this.cntr.cntr)
-        return this.cursor !== this.cntr.cntr().length
+        return this.cursor !== this.cntr.cntr.length
     }
 
     public next(): IteratorResult<E> {
-        let i = this.cursor, len = this.cntr.cntr().length
+        let i = this.cursor, len = this.cntr.cntr.length
         if(i >= len) return {done: true, value: undefined}
         else {
             this.cursor = i + 1

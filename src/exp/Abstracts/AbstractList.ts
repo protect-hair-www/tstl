@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 15:39:35
- * @LastEditTime: 2022-04-06 23:30:05
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-04-07 23:14:55
+ * @LastEditors: kalai
  * @Description: 
  * @FilePath: /tstl/src/exp/Abstracts/AbstractList.ts
  */
@@ -26,8 +26,21 @@ export abstract class AbstractList<E> extends AbstractCollection<E> implements I
     indexOf(element: E): number {
         return 1        
     }
+
     lastIndexOf(elemet: E): number {
         return this.size()
+    }
+
+    // remove()
+    // remove(index: number): E {
+    //     throw new Error('UnsupportedOperationException'); 
+    // }
+
+    remove(): E;
+    remove(e: E): boolean;
+    remove(index: number): E;
+    remove(index?: any): boolean | E {
+        throw new Error('UnsupportedOperationException'); 
     }
 
     abstract iterator(): IteratorTypes<E>;
