@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 15:38:26
- * @LastEditTime: 2022-04-07 23:18:37
+ * @LastEditTime: 2022-04-08 17:45:14
  * @LastEditors: kalai
  * @Description: 
- * @FilePath: /tstl/src/exp/ArrayList/index.ts
+ * @FilePath: \tstl\src\exp\ArrayList\index.ts
  */
 import { AbstractList }  from '../Abstracts/AbstractList'
 import { IList }  from '../Interface/IList'
@@ -13,6 +13,7 @@ import { ICloneable } from './../Interface/ICloneable';
 import { Iterator }  from './Iterator'
 import { ListIterator }  from './ListIterator'
 import type { IteratorTypes, ListIteratorTypes } from '../Iterators/type'
+import { ICollection } from '../Interface/ICollection';
 
 export class ArrayList<E> extends AbstractList<E> implements IList<E>, IRandomAccess, ICloneable {
     private _size: number = 0
@@ -160,6 +161,10 @@ export class ArrayList<E> extends AbstractList<E> implements IList<E>, IRandomAc
 
     of(el: E): IList<E> {
         return new ArrayList()
+    }
+
+    copyOf(c: ICollection<E>): boolean {
+        return true
     }
     
     [Symbol.iterator];

@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 15:09:58
- * @LastEditTime: 2022-04-07 23:13:20
+ * @LastEditTime: 2022-04-08 18:13:43
  * @LastEditors: kalai
  * @Description: 
- * @FilePath: /tstl/src/exp/Abstracts/AbstractCollection.ts
+ * @FilePath: \tstl\src\exp\Abstracts\AbstractCollection.ts
  */
 import { ICollection } from '../Interface/ICollection'
 import type { IteratorTypes, ListIteratorTypes } from '../Iterators/type'
@@ -18,11 +18,20 @@ export abstract class AbstractCollection<E> implements ICollection<E> {
     }
 
     public contains(e: E): boolean {
-        let it = this.iterator
-        if(it == null) {
-            // while(it.done)
+        const iter = this.iterator()
+        while(iter.hasNext()) {
+            if(e === iter.next().value) {
+                return true
+            }
         }
-        return false
+        return false;
+    }
+
+    public containsAll(eles: Iterable<E>) {
+        for (const val of eles) {
+            if(!this.contains(val)) return false
+        }
+        return true
     }
 
     abstract add(e: E):boolean
@@ -34,8 +43,16 @@ export abstract class AbstractCollection<E> implements ICollection<E> {
     abstract removeIf(): boolean;
 
     abstract clear();
-    abstract addAll(elements: Iterable<E>): boolean;
-    abstract addAll(index: number, elements: Iterable<E>): boolean
+
+    addAll(eles: Iterable<E>): boolean {
+        let modified = false
+        for(let val of eles) {
+            if(this.add(val)) modified = true
+        }
+        return modified
+    }
+
+    // abstract addAll(index: number, elements: Iterable<E>): boolean
     abstract removeAll(): boolean;
     abstract hashCode(): number;
     abstract equals(e: E): boolean;

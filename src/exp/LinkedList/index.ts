@@ -2,10 +2,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-06 10:36:58
- * @LastEditTime: 2022-04-07 23:49:03
+ * @LastEditTime: 2022-04-08 17:45:31
  * @LastEditors: kalai
  * @Description: 
- * @FilePath: /tstl/src/exp/LinkedList/index.ts
+ * @FilePath: \tstl\src\exp\LinkedList\index.ts
  */
 import { AbstractSequentialList } from "../Abstracts/AbstractSequentialList";
 import { IRandomAccess } from '../Interface/IRandomAccess'
@@ -14,6 +14,7 @@ import { IList } from './../Interface/IList';
 import { Node } from './ListNode'
 import { LinkedIterator }  from './Iterator'
 import { LinkedListIterator }  from './ListIterator'
+import { ICollection } from "../Interface/ICollection";
 
 export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>, ICloneable, IRandomAccess {
     _size: number = 0
@@ -420,6 +421,10 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
      */
     public pop(): E | null {
         return this.removeFisrt()
+    }
+
+    copyOf(c: ICollection<E>): boolean {
+        return true
     }
 
     hashCode(): number {
