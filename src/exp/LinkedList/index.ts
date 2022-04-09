@@ -2,10 +2,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-06 10:36:58
- * @LastEditTime: 2022-04-08 17:45:31
+ * @LastEditTime: 2022-04-08 23:32:03
  * @LastEditors: kalai
  * @Description: 
- * @FilePath: \tstl\src\exp\LinkedList\index.ts
+ * @FilePath: /tstl/src/exp/LinkedList/index.ts
  */
 import { AbstractSequentialList } from "../Abstracts/AbstractSequentialList";
 import { IRandomAccess } from '../Interface/IRandomAccess'
@@ -25,10 +25,18 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
         return this._size
     }
 
+    /**
+     * @description Access the first node
+     * @return {Node}
+     */    
     get first() {
         return this._first
     }
 
+    /**
+     * @description Access the last node 
+     * @return {Node}
+     */    
     get last() {
         return this._last
     }
@@ -41,6 +49,11 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
         this._last = n
     }
 
+    /**
+     * @description 
+     * @param {*}
+     * @return {*}
+     */    
     public cntr() {
         return this.first
     }

@@ -11,6 +11,7 @@ export interface IListIterator<E> extends BaseIterator<E> {
     hasPrevious(): boolean
     nextIndex(): number
     previousIndex(): number
+    previous(): IteratorResult<E>
     remove(): void
     set(e: E): void
     add(e: E): void
