@@ -1,13 +1,13 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 18:05:46
- * @LastEditTime: 2022-04-06 22:37:29
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-04-10 16:09:27
+ * @LastEditors: kalai
  * @Description: 
  * @FilePath: /tstl/src/exp/Iterators/IListIterator.ts
  */
-import { BaseIterator } from './IBaseIterator'
-export interface IListIterator<E> extends BaseIterator<E> {
+import { IBaseIterator } from './IBaseIterator'
+export interface IListIterator<E> extends IBaseIterator<E> {
     hasPrevious(): boolean
     nextIndex(): number
     previousIndex(): number

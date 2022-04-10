@@ -1,19 +1,17 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 15:39:35
- * @LastEditTime: 2022-04-09 12:47:01
+ * @LastEditTime: 2022-04-10 20:30:07
  * @LastEditors: kalai
  * @Description: 
  * @FilePath: /tstl/src/exp/Abstracts/AbstractList.ts
  */
 import { AbstractCollection } from "./AbstractCollection"
 import { IList } from '../Interface/IList'
-import type { IteratorTypes, ListIteratorTypes } from '../Iterators/type'
 import { ICollection } from "../Interface/ICollection"
-import { BaseIterator } from '../Iterators/IBaseIterator';
-import { IListIterator } from '../Iterators/IListIterator';
+import { IBaseIterator, IListIterator } from '../Iterators/';
 
-class Itr<E> implements BaseIterator<E> {
+class Itr<E> implements IBaseIterator<E> {
     cursor: number = 0
     lastRet: number = -1
     // expectedModCount: number
@@ -122,7 +120,12 @@ export abstract class AbstractList<E> extends AbstractCollection<E> implements I
     add(e: E): boolean;
     add(index: number, e: E): boolean;
     add(...args: any[]): boolean {
-        this.add(this.size(), args[0])
+        let len = args.length
+        if(len === 1) {
+            this.add(this.size(), args[0])
+        } else {
+            throw new Error('UnsupportedOperationException')
+        }
         return true
     }
 
@@ -181,12 +184,17 @@ export abstract class AbstractList<E> extends AbstractCollection<E> implements I
         return true
     }
 
-    remove(): E;
     remove(e: E): boolean;
-    remove(index: number): E;
-    remove(...args: any[]): boolean | E {
-        throw new Error('UnsupportedOperationException');
+    remove(index: number): E
+    remove(filter: (e: E) => boolean): boolean;
+    remove(arg: any): boolean | E {
+        if(typeof arg === 'number') {
+            throw new Error('UnsupportedOperationException')
+        } else {
+            return super.remove(arg);
+        }
     }
+
 
     public clear() {
         this.removeRange(0, this.size());
@@ -199,7 +207,7 @@ export abstract class AbstractList<E> extends AbstractCollection<E> implements I
         }
     }
 
-    public iterator(): BaseIterator<E> {
+    public iterator(): IBaseIterator<E> {
         return new Itr<E>(this)
     }
 
@@ -207,7 +215,24 @@ export abstract class AbstractList<E> extends AbstractCollection<E> implements I
         return new ListItr(this, index)
     }
 
-    abstract copyOf(c: ICollection<E>): boolean;
-    abstract subList(fromIndex: number, toIndex: number): IList<E>;
-    abstract of(el: E): IList<E>;
+    subListRangeCheck(fromIndex: number, toIndex: number) {
+        if(fromIndex < 0)
+            throw new Error('IndexOutOfBoundsException')
+        if(toIndex > this.size())
+            throw new Error('IndexOutOfBoundsException')
+        if(fromIndex > toIndex)
+            throw new Error('IllegalArgumentException')
+    }
+
+    public subList(fromIndex: number, toIndex: number): IList<E> {
+        this.subListRangeCheck(fromIndex, toIndex)
+        return this
+    }
+
+    // abstract copyOf(c: ICollection<E>): boolean;
+    // abstract of(el: E): IList<E>;
 }
+
+// class  SubList<E> extends AbstractList<E> {
+
+// }

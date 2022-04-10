@@ -2,9 +2,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-06 10:36:58
- * @LastEditTime: 2022-04-08 23:32:03
+ * @LastEditTime: 2022-04-10 18:52:13
  * @LastEditors: kalai
- * @Description: 
+ * @Description: Doubly-linked list implementation of the {@code List} and {@code Deque} interfaces. 
+ * Implements all optional list operations, and permits all elements 
  * @FilePath: /tstl/src/exp/LinkedList/index.ts
  */
 import { AbstractSequentialList } from "../Abstracts/AbstractSequentialList";
@@ -12,11 +13,20 @@ import { IRandomAccess } from '../Interface/IRandomAccess'
 import { ICloneable } from './../Interface/ICloneable';
 import { IList } from './../Interface/IList';
 import { Node } from './ListNode'
-import { LinkedIterator }  from './Iterator'
-import { LinkedListIterator }  from './ListIterator'
+import { LinkedIterator } from './Iterator'
+import { LinkedListIterator } from './ListIterator'
 import { ICollection } from "../Interface/ICollection";
 
-export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>, ICloneable, IRandomAccess {
+// linkedList remove method support a remove() [empty param]
+// this method call removeFirst
+interface IRemoveNoParam<E> extends Omit<IList<E>, 'remove'> {
+    remove(): E
+    remove(e: E): boolean;
+    remove(index: number): E;
+    remove(filter: (e: E) => boolean): boolean;
+}
+
+export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>, ICloneable, IRandomAccess, IRemoveNoParam<E> {
     _size: number = 0
     _first: Node<E> | null = null
     _last: Node<E> | null = null
@@ -28,7 +38,7 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
     /**
      * @description Access the first node
      * @return {Node}
-     */    
+     */
     get first() {
         return this._first
     }
@@ -36,7 +46,7 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
     /**
      * @description Access the last node 
      * @return {Node}
-     */    
+     */
     get last() {
         return this._last
     }
@@ -53,7 +63,7 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
      * @description 
      * @param {*}
      * @return {*}
-     */    
+     */
     public cntr() {
         return this.first
     }
@@ -72,7 +82,7 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
         const newNode = new Node(null, e, f)
         this.first = newNode;
 
-        if(f === null) {
+        if (f === null) {
             this.last = newNode
         } else {
             f.prev = newNode
@@ -85,7 +95,7 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
         let l = this.last
         const newNode = new Node(l, e, null)
         this.last = newNode
-        if(l === null) {
+        if (l === null) {
             this.first = newNode
         } else {
             l.next = newNode
@@ -98,7 +108,7 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
         const pred = succ.prev
         const newNode = new Node(pred, e, succ)
         succ.prev = newNode
-        if(pred === null) this.first = newNode
+        if (pred === null) this.first = newNode
         else pred.next = newNode
         this._size++
         this.modCount++
@@ -108,13 +118,13 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
      * @description Unlinks non-null first node f.
      * @param {Node} f
      * @return {E}
-     */    
+     */
     _unlinkFirst(f: Node<E>): E {
         let v = f.value, next = f.next
         f.value = null
         f.next = null
         this.first = next
-        if(next === null) this.last = null
+        if (next === null) this.last = null
         else next.prev = null
         this._size--
         this.modCount++
@@ -125,13 +135,13 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
      * @description Unlinks non-null last node f.
      * @param {Node} f
      * @return {E}
-     */    
+     */
     _unlinkLast(l: Node<E>) {
         let v = l.value, prev = l.prev
         l.value = null
         l.next = null
         this.last = prev
-        if(prev === null) this.first = null
+        if (prev === null) this.first = null
         else prev.next = null
         this._size--
         this.modCount++
@@ -145,7 +155,7 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
 
     public getFirst() {
         const f = this.first
-        if(f == null) {
+        if (f == null) {
             throw new Error('the list is empty')
         }
         else return f.value
@@ -153,9 +163,9 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
 
     public getLast() {
         const l = this.last
-        if(l == null) {
+        if (l == null) {
             throw new Error('the list is empty')
-        } 
+        }
         else return l.value
     }
 
@@ -168,24 +178,24 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
     }
 
     private checkPositionIndex(index) {
-        if(!this.isPositionIndex(index))
+        if (!this.isPositionIndex(index))
             throw new Error('index out of bound');
     }
 
     private checkElementIndex(index: number) {
-        if(!this.isElementIndex(index)) 
+        if (!this.isElementIndex(index))
             throw new Error('index out of bound');
     }
 
     public add(e: E): boolean;
     public add(index: number, e: E): boolean;
     public add(...args: any[]): boolean {
-        if(args.length === 1) {
+        if (args.length === 1) {
             this._linkLast(args[0])
         } else {
             let index = args[0], e = args[1]
             this.checkPositionIndex(index);
-            if(index === this.size()) this._linkLast(e)
+            if (index === this.size()) this._linkLast(e)
             else this._linkBefore(e, this.node(index))
         }
         return true
@@ -196,13 +206,13 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
     }
 
     public addLast(e: E) {
-        this._linkLast(e) 
+        this._linkLast(e)
     }
 
     public addAll(eles: Iterable<E>): boolean;
     public addAll(index: number, eles: Iterable<E>): boolean;
     public addAll(...args: any[]): boolean {
-        if(args.length === 1) {
+        if (args.length === 1) {
             this._addAll(this.size(), args[0])
         } else {
             this._addAll(args[0], args[1])
@@ -213,35 +223,39 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
     private _addAll(index: number, eles: Iterable<E>) {
         let size = this.size()
         const arr = Array.from(eles)
-        if(arr.length === 0) return false
+        if (arr.length === 0) return false
 
         let pred: Node<E> | null, succ: Node<E> | null
-        if(index === size) {succ = null; pred = this.last}
-        else {succ = this.node(index); pred = succ?.prev}
+        if (index === size) { succ = null; pred = this.last }
+        else { succ = this.node(index); pred = succ?.prev }
 
         for (const e of arr) {
             const newNode = new Node(pred, e, null)
-            if(pred === null) this.first = newNode
+            if (pred === null) this.first = newNode
             else pred.next = newNode
             pred = newNode
         }
 
-        if(succ === null) this.last = pred
-        else {pred!.next = succ; succ.prev = pred}
+        if (succ === null) this.last = pred
+        else { pred!.next = succ; succ.prev = pred }
         this._size += arr.length
         this.modCount++
         return true
     }
 
-    public remove(): E;
+    public remove()
     public remove(e: E): boolean;
     public remove(index: number): E;
+    public remove(filter: (e: E) => boolean): boolean;
     public remove(...args: any[]): boolean | E {
         let len = args.length
-        if(len === 0) return this.removeFisrt()
+        if (len === 0) return this.removeFisrt()
         else {
-            if(typeof args[0] === 'number') {
+            if (typeof args[0] === 'number') {
                 return this._removeOfIndex(args[0])
+            }
+            if (typeof args[0] === 'function') {
+                return this._removeByFilter(args[0])
             }
             return this._removeByEle(args[0])
         }
@@ -252,9 +266,16 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
         return this.unlink(this.node(index))
     }
 
+    private _removeByFilter(fn: (e: E) => boolean) {
+        for (let x = this.first; x !== null; x = x.next) {
+            if (fn(x.getValue())) { this.unlink(x); return true }
+        }
+        return false
+    }
+
     private _removeByEle(e: E) {
-        for(let x = this.first; x !== null; x = x.next) {
-            if(e === x.value) {this.unlink(x); return true}
+        for (let x = this.first; x !== null; x = x.next) {
+            if (e === x.value) { this.unlink(x); return true }
         }
         return false
     }
@@ -264,13 +285,13 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
      */
     public removeFisrt(): E {
         const f = this.first;
-        if(f === null) throw new Error('no such element exception')
+        if (f === null) throw new Error('no such element exception')
         return this._unlinkFirst(f)
     }
 
     public removeLast(): E {
         const l = this.last;
-        if(l === null) throw new Error('no such element exception')
+        if (l === null) throw new Error('no such element exception')
         return this._unlinkLast(l)
     }
 
@@ -279,8 +300,8 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
     }
 
     public removeLastOccurrence(e: E): boolean {
-        for(let x = this.last; x !== null; x = x.prev) {
-            if(e === x.value) { this.unlink(x); return true;}
+        for (let x = this.last; x !== null; x = x.prev) {
+            if (e === x.value) { this.unlink(x); return true; }
         }
         return false;
     }
@@ -295,10 +316,10 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
 
     unlink(x: Node<E>): E {
         let e = x.value, next = x.next, prev = x.prev;
-        if(prev === null) this.first = null
-        else {prev.next = next; x.prev = null}
+        if (prev === null) this.first = null
+        else { prev.next = next; x.prev = null }
 
-        if(next === null) this.last = prev
+        if (next === null) this.last = prev
         else { next.prev = prev; x.next = null }
 
         x.value = null
@@ -311,15 +332,15 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
      * @description Returns {@code true} if this list contains the specified element.
      * @param {E} e e element whose presence in this list is to be tested
      * @return {boolean} {@code true} if this list contains the specified element
-     */    
+     */
     public contains(e: E): boolean {
         return this.indexOf(e) >= 0
     }
 
     public indexOf(e: E): number {
         let index = 0
-        for(let x = this.first; x !== null; x = x.next) {
-            if(x.value === e) return index
+        for (let x = this.first; x !== null; x = x.next) {
+            if (x.value === e) return index
             index++
         }
         return -1
@@ -327,28 +348,28 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
 
     public lastIndexOf(e: E): number {
         let index = this.size()
-        for(let x = this.last; x !== null; x = x.prev) {
+        for (let x = this.last; x !== null; x = x.prev) {
             index--
-            if(e == x.value) return index;
+            if (e == x.value) return index;
         }
         return -1;
     }
 
     public node(index: number): Node<E> {
         let size = this.size()
-        if(index < (size >> 1)) {
+        if (index < (size >> 1)) {
             let x = this.first
-            for(let i = 0; i < index; i++) x = x!.next
+            for (let i = 0; i < index; i++) x = x!.next
             return x!
         } else {
             let x = this.last
-            for(let i = size - 1; i > index; i--) x = x!.prev
+            for (let i = size - 1; i > index; i--) x = x!.prev
             return x!
         }
     }
 
     public clear() {
-        for(let x = this.first; x !== null;) {
+        for (let x = this.first; x !== null;) {
             let next = x.next
             x.value = null, x.next = null, x.prev = null;
             x = next
@@ -368,7 +389,7 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
      * @description Retrieves, but does not remove, the head (first element) of this list.
      * 
      * @return the head of this list, or {@code null} if this list is empty
-     */    
+     */
     public peek(): E | null {
         return this.first === null ? null : this.first.value
     }
@@ -391,7 +412,7 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
      * offerLast
      */
     public offerLast(e: E): boolean {
-        this.addLast(e) 
+        this.addLast(e)
         return true
     }
 
@@ -399,18 +420,18 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
      * peekFirst
      */
     public peekFirst(): E | null {
-        return this.first === null ? null : this.first.value 
+        return this.first === null ? null : this.first.value
     }
 
     public peekLast(): E | null {
-        return this.last === null ? null : this.last.value 
+        return this.last === null ? null : this.last.value
     }
 
     /**
      * pollFirst
      */
     public pollFirst(): E | null {
-        const f = this.first 
+        const f = this.first
         return f === null ? null : this._unlinkFirst(f)
     }
 
@@ -449,10 +470,10 @@ export class LinkedList<E> extends AbstractSequentialList<E> implements IList<E>
     }
 
     of(el: E): IList<E> {
-        return new LinkedList<E>()   
+        return new LinkedList<E>()
     }
 
     subList(fromIndex: number, toIndex: number): IList<E> {
-        return new LinkedList<E>()   
+        return new LinkedList<E>()
     }
 }

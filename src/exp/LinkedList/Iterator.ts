@@ -1,16 +1,16 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-06 22:09:10
- * @LastEditTime: 2022-04-06 23:16:38
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-04-10 16:43:05
+ * @LastEditors: kalai
  * @Description: 
  * @FilePath: /tstl/src/exp/LinkedList/Iterator.ts
  */
-import { BaseIterator }  from '../Iterators/IBaseIterator'
+import { IBaseIterator }  from '../Iterators/IBaseIterator'
 import { LinkedListIterator } from './ListIterator'
 import { LinkedList } from './index';
 
-export class LinkedIterator<E> implements BaseIterator<E> {
+export class LinkedIterator<E> implements IBaseIterator<E> {
     private _itr: LinkedListIterator<E>
 
     constructor(index: number, list: LinkedList<E>) {

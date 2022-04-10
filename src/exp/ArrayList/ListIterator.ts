@@ -1,13 +1,13 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-04-05 18:16:12
- * @LastEditTime: 2022-04-06 23:10:12
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-04-10 19:25:24
+ * @LastEditors: kalai
  * @Description: 
  * @FilePath: /tstl/src/exp/ArrayList/ListIterator.ts
  */
 import { Iterator } from './Iterator'
-import { IListIterator  } from '../Iterators/IListIterator'
+import { IListIterator  } from '../Iterators/'
 import { ArrayList } from './index';
 
 export class ListIterator<E> extends Iterator<E> implements IListIterator<E> {
@@ -30,7 +30,7 @@ export class ListIterator<E> extends Iterator<E> implements IListIterator<E> {
     public previous() {
         let i = this.cursor - 1
         if(i < 0) throw new Error('')
-        if(i >= this.cntr.cntr.length) throw new Error('')
+        if(i >= this.cntr.cotr.length) throw new Error('')
         this.cursor = i
         return this.cntr[this.lastRet = i]
     } 
