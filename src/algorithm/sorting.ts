@@ -1,9 +1,9 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:04
- * @LastEditTime: 2022-03-29 17:00:39
- * @LastEditors: hzheyuan
- * @Description: Sorting
+ * @LastEditTime: 2022-04-19 18:52:59
+ * @LastEditors: kalai
+ * @Description: Sorting(doing)
  * Sorting operations
  * @FilePath: \tstl\src\algorithm\sorting.ts
  */
@@ -32,6 +32,13 @@ function _insert_sort<T>(first: RandomAccessIterator<T>, last: RandomAccessItera
     }
 }
 
+/**
+ * @description: helper function for linear insert sort
+ * @param {RandomAccessIterator} first
+ * @param {RandomAccessIterator} last
+ * @param {CompFunType} comp
+ * @return {*}
+ */
 function _linear_insert<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _last = last.copy();
     let val = _last.value;
@@ -55,6 +62,14 @@ function _unguarded_linear_insert<T>(last: RandomAccessIterator<T>, val: T, comp
     _last.value = val;
 }
 
+/**
+ * @description: midian helper function for merger sort
+ * @param {T} a
+ * @param {T} b
+ * @param {T} c
+ * @param {CompFunType} comp
+ * @return {*}
+ */
 function _median<T>(a: T, b: T, c: T, comp: CompFunType = less): T {
     if(comp(a, b)) {
         if(comp(b, c)) return b
@@ -111,6 +126,13 @@ function _partial_sort<T>(first: RandomAccessIterator<T>, middle: RandomAccessIt
     sortHeap(_first, _middle, comp) 
 }
 
+/**
+ * @description: insertion sort internally helper function
+ * @param {RandomAccessIterator} first
+ * @param {RandomAccessIterator} last
+ * @param {CompFunType} comp
+ * @return {*}
+ */
 function _final_insertion_sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(),  _last = last.copy();
     if(distance(_first, _last) > THRESHOLD) {

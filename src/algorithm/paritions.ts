@@ -1,9 +1,9 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:58
- * @LastEditTime: 2022-03-29 16:58:56
- * @LastEditors: hzheyuan
- * @Description: Partition
+ * @LastEditTime: 2022-04-19 18:32:48
+ * @LastEditors: kalai
+ * @Description: Partition(doing)
  * Partitioning operations
  * @FilePath: \tstl\src\algorithm\paritions.ts
  */

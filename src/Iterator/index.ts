@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-03-27 11:38:15
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-04-19 18:34:38
+ * @LastEditors: kalai
  * @Description: iterator definitions
  *
  * An iterator is any object that, pointing to some element in a range of elements(such as a contatiner),
