@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-04-19 18:34:38
+ * @LastEditTime: 2022-05-07 11:31:03
  * @LastEditors: kalai
  * @Description: iterator definitions
  *
@@ -170,8 +170,8 @@ export function equals<T>(first: IteratorTypes<T>, last: IteratorTypes<T>): bool
  */
 export function iter_swap<T>(first: ForwardIterator<T>, last: ForwardIterator<T>) {
   let _first = first.copy(), _last = last.copy()
-  let temp = _first.value;
-  _first.value = _last.value;
+  let temp = _first.value
+  _first.value = _last.value
   _last.value = temp
 }
 

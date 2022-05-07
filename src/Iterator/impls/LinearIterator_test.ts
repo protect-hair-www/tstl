@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-04 11:08:41
- * @LastEditTime: 2022-04-03 10:24:39
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-05-07 10:35:18
+ * @LastEditors: kalai
  * @Description: linear type container iterator
- * @FilePath: /tstl/src/iterator/impls/LinearIteratorRs.ts
+ * @FilePath: \tstl\src\Iterator\impls\LinearIterator_test.ts
  */
 import { BaseIterator, RandomAccessIterator, IteratorTags, IteratorTypes } from '../index'
 import { LinearIteratorBase }  from './LinearIteratorBase'
@@ -21,11 +21,11 @@ export class LinearIterator<T> extends LinearIteratorBase<T> {
     super(c, cntr)
     return new Proxy(this, {
       get: function (target, prop, receiver) {
-        console.log('get', target, prop, Reflect.has(target, prop), receiver);
+        // console.log('get', target, prop, Reflect.has(target, prop), receiver);
         if (Reflect.has(target, prop)) return Reflect.get(target, prop, receiver)
       },
       set: function (target, prop, value, receiver) {
-        console.log(`set: `, target, prop, value, Reflect.has(target, prop));
+        // console.log(`set: `, target, prop, value, Reflect.has(target, prop));
         Reflect.set(target, prop, value, receiver);
         // if(prop === 'cur') {
         //   target.cur =  value
