@@ -65,4 +65,12 @@ describe('sort algorithms test', () => {
       const res =  vec.data.join(' ')
       expect(res).toEqual('1 2 3 4 5 6 7 8 9 10');
     })
+
+    test('test sort case size < 16', () => {
+      const vec = init_test_container([6, 8, 3, 1, 5, 7, 2, 4, 10, 9]);
+      let begin = vec.begin(), end = vec.end();
+      sort(begin, end);
+      const res =  vec.data.join(' ')
+      expect(res).toEqual('1 2 3 4 5 6 7 8 9 10');
+    })
 })

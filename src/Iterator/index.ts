@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-22 09:29:12
- * @LastEditTime: 2022-05-07 11:31:03
+ * @LastEditTime: 2022-05-07 18:27:57
  * @LastEditors: kalai
  * @Description: iterator definitions
  *
@@ -131,7 +131,8 @@ export function advance<T, K extends IteratorMap<T>[keyof IteratorMap<T>]>(i: K,
  * @return {*}
  */
 export function _distance_for_randomaccess_iter<T, K extends RandomAccessIteratorMap<T>[keyof RandomAccessIteratorMap<T>]>(first: K, last: K) {
-  let n = first.index - last.index;
+  // let n = first.index - last.index;
+  let n = last.index - first.index;
   return n;
 }
 

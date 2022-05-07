@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:04
- * @LastEditTime: 2022-05-07 18:12:41
+ * @LastEditTime: 2022-05-07 18:24:41
  * @LastEditors: kalai
  * @Description: Sorting(doing)
  * 整个排序的逻辑是：当数据量大的时候使用快拍，分段递归排序。一旦分段后的数据量小于某个阈值时，为了避免递归调用引起的额外开销，采用插入排序。
@@ -202,7 +202,8 @@ export function partial_sort<T>(first: RandomAccessIterator<T>, middle: RandomAc
 export function sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _last = last.copy();
     if(!_first.equals(_last)) {
-        _introsort_loop(_first, _last, lg(distance(_first, _last) << 1), comp)
+        let depth_limit = lg(distance(_first, _last) << 1); 
+        _introsort_loop(_first, _last, depth_limit, comp)
         _final_insertion_sort(_first, _last, comp)
         // _unguarded_insertion_sort(_first, _last)
     }
