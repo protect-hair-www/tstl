@@ -1,13 +1,13 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:04
- * @LastEditTime: 2022-05-07 18:24:41
+ * @LastEditTime: 2022-05-08 21:54:41
  * @LastEditors: kalai
  * @Description: Sorting(doing)
  * 整个排序的逻辑是：当数据量大的时候使用快拍，分段递归排序。一旦分段后的数据量小于某个阈值时，为了避免递归调用引起的额外开销，采用插入排序。
  * 同时如果递归层次过深，还会采用堆排序。
  * Sorting operations
- * @FilePath: \tstl\src\algorithm\sorting.ts
+ * @FilePath: /tstl/src/algorithm/sorting.ts
  */
 import { RandomAccessIterator, ForwardIterator, BidirectionalIterator, distance, advance, iter_swap} from '../iterator'
 import { CompFunType, less } from '../functor/'
@@ -146,12 +146,22 @@ export function _unguarded_insertion_sort<T>(first: RandomAccessIterator<T>, las
     }
 }
 
+/**
+ * @description: heap sort
+ * 当递归深度超过限制时，使用堆排序，避免递归上的开销
+ * @param {RandomAccessIterator} first
+ * @param {RandomAccessIterator} middle
+ * @param {RandomAccessIterator} last
+ * @param {CompFunType} comp
+ * @return {*}
+ */
 export function _partial_sort<T>(first: RandomAccessIterator<T>, middle: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
-    let _first = first.copy(), _middle = middle.copy(), _last = last.copy();
+    let _first = first.copy(), _middle = middle.copy(), _last = last.copy()
     makeHeap(_first, _middle, comp)
-    for(let i = _middle.copy(); i.getIndex() < _last.getIndex(); i.next()) {
+    let i = _middle.copy();
+    for(; i.getIndex() < _last.getIndex(); i.next()) {
         if(comp(i.value, _first.value)) {
-            popHeap(_first, _middle, comp)
+            popHeap(_first.copy(), _middle.copy(), comp)
         }
     }
     sortHeap(_first, _middle, comp) 

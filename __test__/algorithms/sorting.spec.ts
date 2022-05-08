@@ -2,10 +2,11 @@
  * @Author: kalai
  * @LastEditors: kalai
  * @Description: 
- * @FilePath: \tstl\__test__\algorithms\sorting.spec.ts
+ * @FilePath: /tstl/__test__/algorithms/sorting.spec.ts
  */
 import { Vector } from '../../src';
-import { sort, _unguarded_partition, _median, _insert_sort } from '../../src/algorithm/sorting';
+import { sort, _unguarded_partition, _median, _insert_sort, _partial_sort } from '../../src/algorithm/sorting';
+import { advance } from '../../src/iterator';
 
 const orginArray = [1, 8, 3, 6, 5, 7, 2, 4, 10, 9];
 function init_test_container(arr: number[] = orginArray) {
@@ -69,8 +70,9 @@ describe('sort algorithms test', () => {
     test('test sort case size < 16', () => {
       const vec = init_test_container([6, 8, 3, 1, 5, 7, 2, 4, 10, 9]);
       let begin = vec.begin(), end = vec.end();
-      sort(begin, end);
-      const res =  vec.data.join(' ')
-      expect(res).toEqual('1 2 3 4 5 6 7 8 9 10');
+      const mid = advance(begin.copy(), 4);
+      _partial_sort(begin, mid, end);
+      const res =  vec.data.join(' ');
+      expect(res).toEqual('1 2 3 4 8 7 6 5 10');
     })
 })
