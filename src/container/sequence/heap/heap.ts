@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:28
- * @LastEditTime: 2022-03-26 18:50:03
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-05-09 14:04:50
+ * @LastEditors: kalai
  * @Description: Heap
  *
  * Heap is a algothim.
@@ -42,6 +42,7 @@ function heapify<T>(
   // console.log('heapify', first.getKey(), holeIndex, len);
   const topIndex = holeIndex
   let rightChild = (holeIndex << 1) + 2
+
   while (rightChild < len) {
     const l = first.increment(rightChild - 1, false),
       r = first.increment(rightChild, false)
@@ -131,7 +132,9 @@ export function pop_heap<T>(
   last: RandomAccessIterator<T>,
   comp: CompFunType = less
 ): T {
-  return _pop_heap(first, last, comp)
+  const _first = first.copy(), _last = last.copy(), _result = _last.copy();
+  _last.prev(), _result.prev();
+  return _pop_heap(_first, _last, _result, comp)
 }
 
 /**
@@ -141,18 +144,33 @@ export function pop_heap<T>(
  * @param {CompFunType} comp
  * @return {*}
  */
-function _pop_heap<T>(
+export function _pop_heap<T>(
   first: RandomAccessIterator<T>,
   last: RandomAccessIterator<T>,
+  result: RandomAccessIterator<T>,
   comp: CompFunType = less
 ): T {
-  const _last = last.decrement(1, false),
-    res = first.getValue()
-  const distance = random_itr_distance(first, _last),
-    value = _last.getValue()
-  _last.setValue(res)
-  heapify(first, 0, distance, value, comp)
-  return res
+  const _first = first.copy(),  _last = last.copy(), _result = result.copy()
+  // _last.prev()
+  // const res = _first.getValue()
+  _result.setValue(_first.getValue())
+  const dis = distance(_first, _last);
+  const value = _last.getValue()
+  // _last.setValue(res)
+  heapify(first, 0, dis, value, comp)
+  return result.value
+}
+
+function _pop_heap_aux<T>(
+  first: RandomAccessIterator<T>,
+  last: RandomAccessIterator<T>,
+  value: T,
+  comp: CompFunType = less
+) {
+  const _first = first.copy(), _last = last.copy(), _result = _last.copy();
+  _last.prev(), _result.prev();
+  const val = _last.getValue()
+  _pop_heap(_first, _last, _result)
 }
 
 /**
@@ -167,7 +185,8 @@ export function make_heap<T>(
   last: RandomAccessIterator<T>,
   comp: CompFunType = less
 ) {
-  const len = random_itr_distance(first, last)
+  const _first = first.copy(), _last = last.copy();
+  const len = random_itr_distance(_first, _last)
   if (len < 2) return
   const parent = (len - 2) >> 1
   // test
@@ -177,8 +196,8 @@ export function make_heap<T>(
   // heapify(first, 1, len, v, comp)
 
   for (let i = parent; i >= 0; i--) {
-    const v = first.increment(i, false).getValue()
-    heapify(first, i, len, v, comp)
+    const v = _first.increment(i, false).getValue()
+    heapify(_first, i, len, v, comp)
   }
 }
 

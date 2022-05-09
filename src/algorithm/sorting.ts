@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:04
- * @LastEditTime: 2022-05-08 21:54:41
+ * @LastEditTime: 2022-05-09 12:38:14
  * @LastEditors: kalai
  * @Description: Sorting(doing)
  * 整个排序的逻辑是：当数据量大的时候使用快拍，分段递归排序。一旦分段后的数据量小于某个阈值时，为了避免递归调用引起的额外开销，采用插入排序。
@@ -12,7 +12,7 @@
 import { RandomAccessIterator, ForwardIterator, BidirectionalIterator, distance, advance, iter_swap} from '../iterator'
 import { CompFunType, less } from '../functor/'
 import { rotate, copy_backward } from './modifying_sequence'
-import { makeHeap, popHeap, sortHeap } from '../algorithm/heap';
+import { makeHeap, popHeap, sortHeap, _pop_heap } from '../algorithm/heap';
 import { lower_bound, upper_bound } from './binary_search';
 import { lg } from '../utils/'
 
@@ -161,7 +161,7 @@ export function _partial_sort<T>(first: RandomAccessIterator<T>, middle: RandomA
     let i = _middle.copy();
     for(; i.getIndex() < _last.getIndex(); i.next()) {
         if(comp(i.value, _first.value)) {
-            popHeap(_first.copy(), _middle.copy(), comp)
+           _pop_heap(_first, _middle, i, comp)
         }
     }
     sortHeap(_first, _middle, comp) 
