@@ -1,13 +1,13 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:04
- * @LastEditTime: 2022-05-09 12:38:14
+ * @LastEditTime: 2022-05-10 17:39:31
  * @LastEditors: kalai
  * @Description: Sorting(doing)
  * 整个排序的逻辑是：当数据量大的时候使用快拍，分段递归排序。一旦分段后的数据量小于某个阈值时，为了避免递归调用引起的额外开销，采用插入排序。
  * 同时如果递归层次过深，还会采用堆排序。
  * Sorting operations
- * @FilePath: /tstl/src/algorithm/sorting.ts
+ * @FilePath: \tstl\src\algorithm\sorting.ts
  */
 import { RandomAccessIterator, ForwardIterator, BidirectionalIterator, distance, advance, iter_swap} from '../iterator'
 import { CompFunType, less } from '../functor/'
@@ -115,9 +115,9 @@ export function _unguarded_partition<T>(first: RandomAccessIterator<T>, last: Ra
 
 export function _introsort_loop<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, depth_limit: number, comp: CompFunType = less) {
     let _first = first.copy(), _last = last.copy();
-    const dis = distance(first, last)
     // 判断分区大小，如果小于阈值，则直接退出
-    while(dis > THRESHOLD) {
+    while(distance(_first, _last) > THRESHOLD) {
+        const dis = distance(_first, _last)
         // 如果递归深度大于 depth_limit，此时采用堆排序，避免递归过深
         if(depth_limit === 0) {
             partial_sort(_first, _last, _last, comp) 
@@ -129,9 +129,11 @@ export function _introsort_loop<T>(first: RandomAccessIterator<T>, last: RandomA
         const midIter = _first.copy()
         advance(midIter, dis >> 1)
         // 取 first, mid, last的中间值作为pivot的值
-        const pivotIter = _median(_first.value, midIter.value, _last.copy().prev().value)
+        const end = _last.copy();
+        end.prev();
+        const pivot = _median(_first.value, midIter.value, end.value)
         // 计算pivot位置
-        const _cut = _unguarded_partition(_first, _last, pivotIter.value, comp)
+        const _cut = _unguarded_partition(_first, _last, pivot, comp)
         // 递归处理右子序列
         _introsort_loop(_cut, _last, depth_limit, comp)
         // 下一次循环处理左子序列
@@ -141,7 +143,7 @@ export function _introsort_loop<T>(first: RandomAccessIterator<T>, last: RandomA
 
 export function _unguarded_insertion_sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _last = last.copy();
-    for(let i = _first.copy(); i.equals(_last); i.next()) {
+    for(let i = _first.copy(); !i.equals(_last); i.next()) {
         _unguarded_linear_insert(i, i.value, comp)
     }
 }
@@ -157,6 +159,13 @@ export function _unguarded_insertion_sort<T>(first: RandomAccessIterator<T>, las
  */
 export function _partial_sort<T>(first: RandomAccessIterator<T>, middle: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _middle = middle.copy(), _last = last.copy()
+    _heap_select(_first, _middle, _last, comp)
+    sortHeap(_first, _middle, comp) 
+}
+
+
+function _heap_select<T>(first: RandomAccessIterator<T>, middle: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
+    let _first = first.copy(), _middle = middle.copy(), _last = last.copy()
     makeHeap(_first, _middle, comp)
     let i = _middle.copy();
     for(; i.getIndex() < _last.getIndex(); i.next()) {
@@ -164,7 +173,6 @@ export function _partial_sort<T>(first: RandomAccessIterator<T>, middle: RandomA
            _pop_heap(_first, _middle, i, comp)
         }
     }
-    sortHeap(_first, _middle, comp) 
 }
 
 /**
@@ -174,11 +182,14 @@ export function _partial_sort<T>(first: RandomAccessIterator<T>, middle: RandomA
  * @param {CompFunType} comp
  * @return {*}
  */
-function _final_insertion_sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
+export function _final_insertion_sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(),  _last = last.copy();
     if(distance(_first, _last) > THRESHOLD) {
-        _insert_sort(_first, advance(_first, THRESHOLD), comp)
-        _unguarded_insertion_sort(_first, _last, comp)
+        const _end = _first.copy();
+        advance(_end, THRESHOLD);
+
+        _insert_sort(_first, _end, comp)
+        _unguarded_insertion_sort(_end, _last, comp)
     } else {
         _insert_sort(_first, _last, comp)
     }
@@ -212,7 +223,7 @@ export function partial_sort<T>(first: RandomAccessIterator<T>, middle: RandomAc
 export function sort<T>(first: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _last = last.copy();
     if(!_first.equals(_last)) {
-        let depth_limit = lg(distance(_first, _last) << 1); 
+        let depth_limit = lg(distance(_first, _last) << 1) 
         _introsort_loop(_first, _last, depth_limit, comp)
         _final_insertion_sort(_first, _last, comp)
         // _unguarded_insertion_sort(_first, _last)
@@ -258,6 +269,7 @@ export function is_sort_until<T>(first: ForwardIterator<T>, last: ForwardIterato
 
 /**
  * @description nth element internally implemetation
+ * 从某个序列中找到第 n 小的元素 K，并将 K 移动到序列中第 n 的位置处。
  * @param {RandomAccessIterator} first
  * @param {RandomAccessIterator} nth
  * @param {RandomAccessIterator} last
@@ -265,14 +277,19 @@ export function is_sort_until<T>(first: ForwardIterator<T>, last: ForwardIterato
  * @return {*}
  */
 function _nth_element<T>(first: RandomAccessIterator<T>, nth: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
-    let _first = first.copy(), _last = last.copy();
-    let dis = distance(_first, _last);
-    while(dis > 3) {
-        let median = _first.copy();
-        advance(median, dis / 2);
-        let _cut = _unguarded_partition(_first, median, _last.next().value, comp)
-        if(_cut <= nth) _first = _cut.copy()
-        else _last = _cut.copy()
+    let _first = first.copy(), _nth = nth.copy(), _last = last.copy();
+    while(distance(_first, _last) > 3) {
+        const dis = distance(_first, _last);
+        const midIter = _first.copy()
+        advance(midIter, dis >> 1)
+        // 取 first, mid, last的中间值作为pivot的值
+        const end = _last.copy();
+        end.prev();
+        const pivot = _median(_first.value, midIter.value, end.value)
+        const _cut = _unguarded_partition(_first, _last, pivot, comp);
+
+        if(_cut.getIndex() <= _nth.getIndex()) _first = _cut
+        else _last = _cut
     }
     _insert_sort(_first, _last, comp)
 }
@@ -289,6 +306,7 @@ function _nth_element<T>(first: RandomAccessIterator<T>, nth: RandomAccessIterat
  */
 export function nth_element<T>(first: RandomAccessIterator<T>, nth: RandomAccessIterator<T>, last: RandomAccessIterator<T>, comp: CompFunType = less) {
     let _first = first.copy(), _nth = nth.copy(), _last = last.copy();
+    if(_first.getIndex() === _last.getIndex() || nth.getIndex() === _last.getIndex()) return;
     _nth_element(_first, _nth, _last, comp)
 }
 

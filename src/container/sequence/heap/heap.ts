@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:28
- * @LastEditTime: 2022-05-09 14:04:50
+ * @LastEditTime: 2022-05-10 14:27:51
  * @LastEditors: kalai
  * @Description: Heap
  *
@@ -82,8 +82,8 @@ export function push_heap<T>(
 ) {
   // console.log(first.getKey(), last.getKey(), random_itr_distance(first, last) - 1, last.getValue())
   const value = last.decrement(1, false).getValue(),
-    distanse = random_itr_distance(first, last)
-  _push_heap(first, distanse - 1, 0, value, comp)
+    dis = distance(first, last)
+  _push_heap(first, dis - 1, 0, value, comp)
 }
 
 /**
@@ -133,8 +133,7 @@ export function pop_heap<T>(
   comp: CompFunType = less
 ): T {
   const _first = first.copy(), _last = last.copy(), _result = _last.copy();
-  _last.prev(), _result.prev();
-  return _pop_heap(_first, _last, _result, comp)
+  return _pop_heap_aux(_first, _last, _result, comp)
 }
 
 /**
@@ -151,11 +150,13 @@ export function _pop_heap<T>(
   comp: CompFunType = less
 ): T {
   const _first = first.copy(),  _last = last.copy(), _result = result.copy()
+
   // _last.prev()
   // const res = _first.getValue()
-  _result.setValue(_first.getValue())
   const dis = distance(_first, _last);
-  const value = _last.getValue()
+  const value = _result.getValue()
+  
+  _result.setValue(_first.getValue())
   // _last.setValue(res)
   heapify(first, 0, dis, value, comp)
   return result.value
@@ -164,13 +165,12 @@ export function _pop_heap<T>(
 function _pop_heap_aux<T>(
   first: RandomAccessIterator<T>,
   last: RandomAccessIterator<T>,
-  value: T,
+  result: RandomAccessIterator<T>,
   comp: CompFunType = less
 ) {
-  const _first = first.copy(), _last = last.copy(), _result = _last.copy();
-  _last.prev(), _result.prev();
-  const val = _last.getValue()
-  _pop_heap(_first, _last, _result)
+  last.prev();
+  result.prev();
+  return _pop_heap(first, last, result, comp)
 }
 
 /**
@@ -186,7 +186,7 @@ export function make_heap<T>(
   comp: CompFunType = less
 ) {
   const _first = first.copy(), _last = last.copy();
-  const len = random_itr_distance(_first, _last)
+  const len = distance(_first, _last)
   if (len < 2) return
   const parent = (len - 2) >> 1
   // test
@@ -219,9 +219,9 @@ export function sort_heap<T>(
   last: RandomAccessIterator<T>,
   comp: CompFunType = less
 ) {
-  while (random_itr_distance(first, last) > 1) {
+  while (distance(first, last) > 1) {
     pop_heap(first, last, comp)
-    last.decrement(1)
+    last.prev()
   }
 }
 
@@ -239,9 +239,9 @@ export function is_heap<T>(
 ) {
   let parent = 0,
     child = 1,
-    distance = random_itr_distance(first, last)
+    dis = distance(first, last)
 
-  for (; child < distance; ++child) {
+  for (; child < dis; ++child) {
     if(comp(first.at(parent), first.at(child))) return false;
     if((child & 1) === 0) ++parent; 
   }
@@ -253,7 +253,7 @@ function _is_heap_until<T>(first: RandomAccessIterator<T>, n: number, comp: Comp
   let _first = first.copy();
   let parent = 0;
   for(let child = 1; child < n; ++child) {
-    if(comp(advance(_first, parent).value, advance(_first, child).value)) {
+    if(comp(advance(_first.copy(), parent).value, advance(_first.copy(), child).value)) {
       return child;
     }
     if((child & 1) === 0) ++parent

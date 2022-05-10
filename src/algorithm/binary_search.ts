@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:37
- * @LastEditTime: 2022-03-29 17:03:09
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-05-10 18:24:53
+ * @LastEditors: kalai
  * @Description: binary seach (operating on partitioned/stoted ranges)
  * @FilePath: \tstl\src\algorithm\binary_search.ts
  */
@@ -19,18 +19,22 @@ import { CompFunType, less } from '../functor/'
  * @return {ForwardIterator} An iterator to the lower bound of val in the range.
  */
 export function lower_bound<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, val: T, comp: CompFunType = less): ForwardIterator<T>  {
-    let it: ForwardIterator<T>, n = distance(first, last), step = 0;
-    while(n > 0) {
-        it = first, step = n / 2;
-        advance(it, step)
-        if(comp(it.value, val)) {
-            it.next(); first = it;
-            n -= step + 1;
+    let _first = first.copy(), _last = last.copy();
+    let _middle, _half = 0;
+    let len = distance(_first, _last);
+    while(len > 0) {
+        _half = len >> 1;
+        _middle = _first.copy();
+        advance(_middle, _half)
+        if(comp(_middle.value, val)) {
+            _first = _middle;
+            _first.next(); 
+            len = len - _half + 1;
         } else {
-            n = step;
+            len = _half;
         }
     }
-    return first;
+    return _first;
 }
 
 /**
@@ -43,14 +47,24 @@ export function lower_bound<T>(first: ForwardIterator<T>, last: ForwardIterator<
  * @return {ForwardIterator} An iterator to the lower bound of val in the range.
  */
 export function upper_bound<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, val: T, comp: CompFunType = less): ForwardIterator<T>  {
-    let it: ForwardIterator<T>, n = distance(first, last), step = 0;
-    while(n > 0) {
-        it = first, step = n / 2;
-        advance(it, step);
-        if(!(comp(val, it.value))) {it.next(); first = it; n -= step + 1;}
-        else n = step;
+    let _first = first.copy(), _last = last.copy();
+    let len = distance(_first, _last);
+
+    let _middle, _half = 0;
+
+    while(len > 0) {
+        _half = len >> 1;
+        _middle = _first.copy();
+        advance(_middle, _half)
+        if(comp(val, _middle.value)) {
+            len = _half;
+        } else {
+            _first = _middle;
+            _first.next(); 
+            len = len - _half - 1;
+        }
     }
-    return first;
+    return _first;
 }
 
 /**
@@ -78,6 +92,7 @@ export function equal_range<T>(first: ForwardIterator<T>, last: ForwardIterator<
  * @return {boolean} true if an element equivalent to val is found, and false otherwise.
  */
 export function binaray_search<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, val: T): boolean  {
-    let lower = lower_bound(first, last, val);
-    return lower === last && (val < first.getValue());
+    let _first = first.copy(), _last = last.copy();
+    let _lower = lower_bound(_first, _last, val);
+    return _lower.cur !== last.cur && !(val < _lower.getValue());
 }
