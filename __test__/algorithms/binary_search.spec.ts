@@ -1,7 +1,7 @@
 /*
  * @Author: kalai
  * @LastEditors: kalai
- * @Description: 
+ * @Description: binary search part
  * @FilePath: \tstl\__test__\algorithms\binary_search.spec.ts
  */
 import { Vector } from '../../src';

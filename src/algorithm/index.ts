@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-12 10:58:55
- * @LastEditTime: 2022-03-28 22:22:33
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-05-11 11:42:25
+ * @LastEditors: kalai
  * @Description: Algorithms
  *
  * Algorithms defines a collection of functions especially designed to be used on ranges of elements.
@@ -11,7 +11,7 @@
  * through iterators directly on the values, not affecting in any way the structure of any possible
  * container (it never affects the size or storage allocation of the container).
  *
- * @FilePath: /tstl/src/algorithm/index.ts
+ * @FilePath: \tstl\src\algorithm\index.ts
  */
 import { 
   makeHeap, 
@@ -110,7 +110,7 @@ import {
 
 import {
   merge,
-  replace_merge,
+  inplace_merge,
   includes,
   set_union,
   set_difference,
@@ -206,7 +206,7 @@ export {
 
   // merge
   merge,
-  replace_merge,
+  inplace_merge,
   includes,
   set_union,
   set_difference,

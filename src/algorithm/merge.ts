@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:25:45
- * @LastEditTime: 2022-03-29 17:07:25
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-05-11 15:31:04
+ * @LastEditors: kalai
  * @Description: merge
  * Operations on sorted ranges
  * @FilePath: \tstl\src\algorithm\merge.ts
@@ -29,10 +29,10 @@ function _merge_aux<T>(first: BidirectionalIterator<T>, middle: BidirectionalIte
         if (comp(_middle.value, _first.value)) iter_swap(_first, _middle)
         return
     }
-    let _first_cut = _first, _second_cut = _middle
+    let _first_cut = _first.copy(), _second_cut = _middle.copy()
     let len11 = 0, len22 = 0
     if (len1 > len2) {
-        len11 = len1 / 2;
+        len11 = len1 >> 1;
         advance(_first_cut, len11)
         _second_cut = lower_bound(_middle, _last, _first_cut.value, comp) as BidirectionalIterator<T>;
         len22 = distance(_middle, _second_cut)
@@ -71,7 +71,7 @@ export function _inplace_merge_aux<T>(first: BidirectionalIterator<T>, middle: B
  * @param {Function} fn Binary function that accepts two arguments of the types pointed by the iterators, and returns a value convertible to bool.
  * @return {void}
  */
-export function replace_merge<T>(first: BidirectionalIterator<T>, middle: BidirectionalIterator<T>, last: BidirectionalIterator<T>) {
+export function inplace_merge<T>(first: BidirectionalIterator<T>, middle: BidirectionalIterator<T>, last: BidirectionalIterator<T>) {
     let _first = first.copy(), _middle = middle.copy(), _last = last.copy()
     if (_first.equals(_middle) || _middle.equals(_last)) return
     _inplace_merge_aux(_first, _middle, _last)
@@ -136,7 +136,7 @@ export function set_union<T>(
         if(comp(_first1.value, _first2.value)) {
             result.value = _first1.value
             _first1.next()
-        } else if(comp(_first2.value,first1.value)) {
+        } else if(comp(_first2.value, _first1.value)) {
             result.value = _first2.value
             _first2.next()
         } else {
@@ -213,7 +213,7 @@ export function set_difference<T>(
             result.value = _first1.value
             _first1.next()
             result.next()
-        } else if(comp(_first2.value, first1.value)) {
+        } else if(comp(_first2.value, _first1.value)) {
             _first2.next()
         } else {
             _first1.next()
@@ -246,7 +246,7 @@ export function set_symmetric_diffrence<T>(
     comp: CompFunType = less
 ) { 
     let _first1 = first1.copy(), _last1 = last1.copy(), _first2 = first2.copy(), _last2 = last2.copy()
-    while(!_first1.equals(_first2) && !_first2.equals(_last2)) {
+    while(!_first1.equals(_last1) && !_first2.equals(_last2)) {
         if(comp(_first1.value, _first2.value)) {
             result.value = _first1.value
             _first1.next()
@@ -277,8 +277,8 @@ export function includes<T>(first1: InputIterator<T>, last1: InputIterator<T>, f
     let _first1 = first1.copy(), _last1 = last1.copy(), _first2 = first2.copy(), _last2 = last2.copy()
     while(!_first1.equals(_last1) && !_first2.equals(_last2)) {
         if(comp(_first2.value, _first1.value)) return false
-        else if(comp(_first1.value, _first2.value)) _first1.next()
-        else {_first1.next(); _first2.next()}
+        else if(!comp(_first1.value, _first2.value)) _first2.next()
+        _first1.next();
     }
     return _first2.equals(_last2)
 }

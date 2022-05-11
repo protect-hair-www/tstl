@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2019-01-29 08:32:32
- * @LastEditTime: 2022-04-02 17:54:41
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-05-11 11:41:51
+ * @LastEditors: kalai
  * @Description: TSSTL library main entry
  * @FilePath: \tstl\src\index.ts
  */
@@ -100,7 +100,7 @@ import {
 
 import {
   merge,
-  replace_merge,
+  inplace_merge,
   includes,
   set_union,
   set_difference,
@@ -216,7 +216,7 @@ export {
 
   // merge
   merge,
-  replace_merge,
+  inplace_merge,
   includes,
   set_union,
   set_difference,

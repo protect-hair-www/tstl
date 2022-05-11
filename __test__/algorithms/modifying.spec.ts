@@ -1,14 +1,15 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-24 21:23:09
- * @LastEditTime: 2022-03-24 23:51:16
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-05-11 15:54:06
+ * @LastEditors: kalai
  * @Description: algorithms for modifying operators
- * @FilePath: /tstl/__test__/algorithms/modifying.spec.ts
+ * @FilePath: \tstl\__test__\algorithms\modifying.spec.ts
  */
 
 import { Vector } from '../../src';
-import { copy, copy_n, copy_if, copy_backward } from '../../src';
+import { copy, copy_n, copy_if, copy_backward, rotate } from '../../src/algorithm/modifying_sequence';
+import { advance } from '../../src/iterator';
 
 type Obj = { name: number; }
 const orginArray = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 6];
@@ -78,4 +79,28 @@ describe('Modifying algorithms', () => {
         let r = vec1.data;
         expect(r).toEqual(expect.arrayContaining([2, 3, 4, 5]));
     })
+
+    test('Rotate range of elements', () => {
+        let vec = new Vector<number>([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        let mid = vec.begin();
+        advance(mid, 3);
+
+        const first = rotate(vec.begin(), mid, vec.end());
+        expect(first.cur).toEqual(6);
+        const ret = vec.data.join(' ')
+        expect(ret).toEqual('4 5 6 7 8 9 1 2 3');
+    })
+
+    test('Rotate range of elements bound case', () => {
+        let vec = new Vector<number>([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        let mid = vec.begin();
+        advance(mid, 3);
+        const first = rotate(vec.begin(), mid, mid);
+        expect(first.cur).toEqual(0);
+
+        const ret = vec.data.join(' ')
+        expect(ret).toEqual('1 2 3 4 5 6 7 8 9');
+    })
+
+
 })

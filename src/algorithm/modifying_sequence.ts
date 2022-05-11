@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:40
- * @LastEditTime: 2022-03-29 17:01:31
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-05-11 15:48:39
+ * @LastEditors: kalai
  * @Description: Modifying sequence operations
  * @FilePath: \tstl\src\algorithm\modifying_sequence.ts
  */
@@ -601,18 +601,28 @@ export function rotate<T>(
   middle: ForwardIterator<T>,
   last: ForwardIterator<T>
 ): ForwardIterator<T> {
-  let _first = first.copy(), _last = last.copy()
-  let next: ForwardIterator<T> = middle.copy()
-  while (!_first.equals(next)) {
-    _first.next(); next.next();
-    iter_swap(
-      _first as unknown as BidirectionalIterator<T>,
-      next as unknown as BidirectionalIterator<T>
-    )
-    if (next.equals(_last)) next = middle.copy()
-    else if (_first.equals(middle)) middle = next.copy()
+  let _first = first.copy(), _middle = middle.copy(), _last = last.copy()
+  if(_first.equals(_middle)) return _last;
+  else if(_last.equals(_middle)) return _first;
+
+  let _first2 = _middle.copy()
+  do {
+    iter_swap(_first, _first2);
+    _first.next(); _first2.next();
+    if(_first.equals(_middle)) _middle = _first2.copy();
+  } while (!_first2.equals(_last));
+
+  let _ret = _first.copy()
+  _first2 = _middle.copy();
+
+  while (!_first2.equals(_last)) {
+    iter_swap(_first, _first2);
+    _first.next(); _first2.next();
+    if(_first.equals(_middle)) _middle = _first2.copy()
+    else if(_first2.equals(_last)) _first2 = _middle.copy()
   }
-  return _first
+
+  return _ret
 }
 
 /**
