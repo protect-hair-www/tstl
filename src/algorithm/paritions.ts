@@ -1,12 +1,13 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:58
- * @LastEditTime: 2022-04-19 18:32:48
+ * @LastEditTime: 2022-05-11 17:59:29
  * @LastEditors: kalai
  * @Description: Partition(doing)
  * Partitioning operations
  * @FilePath: \tstl\src\algorithm\paritions.ts
  */
+import { find_if_not, none_of } from './none_modifying_sequence'
 import { InputIterator, BidirectionalIterator, ForwardIterator, OutputIterator, iter_swap } from '../iterator/';
 
 /**
@@ -20,12 +21,11 @@ import { InputIterator, BidirectionalIterator, ForwardIterator, OutputIterator, 
  * @return {Boolean} true if all the elements in the range [first,last) for which fn returns true precede those for which it returns false.
  */
 export function is_partitioned<T>(first: InputIterator<T>, last: InputIterator<T>, fn: (v: T) => boolean): boolean {
-    while (first !== last && fn(first.getValue())) first.next();
-    while (first !== last) {
-        if (fn(first.getValue())) return false;
-        first.next()
-    }
-    return true;
+    let _first = first.copy(), _last = last.copy();
+    _first = find_if_not(_first, _last, fn);
+    if(_first.equals(_last)) return true;
+    _first.next()
+    return none_of(_first, _last, fn);
 }
 
 /**
@@ -39,19 +39,38 @@ export function is_partitioned<T>(first: InputIterator<T>, last: InputIterator<T
  * @param {function} fn Unary function that accepts an element in the range as argument, and returns a value convertible to bool. 
  * @return {BidirectionalIterator} An iterator that points to the first element of the second group of elements (those for which fn returns false), or last if this group is empty.
  */
+// export function partition<T>(first: BidirectionalIterator<T>, last: BidirectionalIterator<T>, fn: (v: T) => boolean): BidirectionalIterator<T> {
+//     let _first = first.copy(), _last = last.copy();
+//     while (!_first.equals(_last)) {
+//         while (fn(_first.getValue())) {
+//             _first.next();
+//             if (_first.equals(_last)) return _first;
+//         }
+//         do {
+//             _last.prev();
+//             if (_first.equals(_last)) return _first;
+//         } while (!fn(_last.getValue()));
+//         iter_swap(_first, _last)
+//     }
+//     return _first;
+// }
 export function partition<T>(first: BidirectionalIterator<T>, last: BidirectionalIterator<T>, fn: (v: T) => boolean): BidirectionalIterator<T> {
-    while (first !== last) {
-        while (fn(first.getValue())) {
-            first.next();
-            if (first === last) return first;
+    let _first = first.copy(), _last = last.copy();
+    while(true) {
+        while(true) {
+            if(_first.equals(_last)) return _first
+            else if(fn(_first.value)) _first.next()
+            else break;
         }
-        do {
-            last.prev();
-            if (first === last) return first;
-        } while (!fn(last.getValue()));
-        iter_swap(first, last)
+        _last.prev();
+        while(true) {
+            if(_first.equals(_last)) return _first
+            else if(!fn(_last.value)) _last.prev()
+            else break;
+        }
+        iter_swap(_first, _last);
+        _first.next();
     }
-    return first;
 }
 
 
@@ -83,15 +102,16 @@ export function stable_partition<T>(first: BidirectionalIterator<T>, last: Bidir
  * @return {Tuple} A tuple of iterators with the end of the generated sequences pointed by result_true and result_false, respectivelly.
  */
 export function partition_copy<T>(first: InputIterator<T>, last: InputIterator<T>, result_true: OutputIterator<T>, result_false: OutputIterator<T>, fn: (v: T) => boolean) { 
-    while(first !== last) {
-        if(fn(first.getValue())) {
-            result_true.setValue(first.getValue())
+    let _first = first.copy(), _last = last.copy();
+    while(!_first.equals(_last)) {
+        if(fn(_first.getValue())) {
+            result_true.setValue(_first.getValue())
             result_true.next()
         } else {
-            result_false.setValue(first.getValue())
+            result_false.setValue(_first.getValue())
             result_false.next()
         }
-        first.next()
+        _first.next()
     }
     return [result_true, result_false];
 }

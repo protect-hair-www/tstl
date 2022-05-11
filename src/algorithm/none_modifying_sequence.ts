@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:22
- * @LastEditTime: 2022-03-27 12:47:17
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-05-11 17:32:24
+ * @LastEditors: kalai
  * @Description: non modifying sequence operations
- * @FilePath: /tstl/src/algorithm/none_modifying_sequence.ts
+ * @FilePath: \tstl\src\algorithm\none_modifying_sequence.ts
  */
 import { InputIterator, OutputIterator, ForwardIterator, advance, distance, iter_swap } from '../iterator'
 
@@ -90,10 +90,10 @@ export function none_of<T>(
   last: InputIterator<T>,
   fn: (v: T) => boolean
 ): boolean {
-  first = first.copy();
-  while (!first.equals(last)) {
-    if (fn(first.value)) return false
-    first.next()
+  let _first = first.copy(), _last = last.copy();
+  while (!_first.equals(_last)) {
+    if (fn(_first.value)) return false
+    _first.next()
   }
   return true
 }
@@ -172,12 +172,12 @@ export function find_if_not<T>(
   last: InputIterator<T>,
   fn: (v: T) => boolean
 ): InputIterator<T> {
-  first = first.copy();
-  while (!first.equals(last)) {
-    if (!fn(first.value)) return first
-    first.next()
+  let _first = first.copy(), _last = last.copy();
+  while (!_first.equals(_last)) {
+    if (!fn(_first.value)) return _first
+    _first.next()
   }
-  return last.copy()
+  return _last.copy()
 }
 
 /**
