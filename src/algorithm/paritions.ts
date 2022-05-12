@@ -1,14 +1,15 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:58
- * @LastEditTime: 2022-05-11 17:59:29
+ * @LastEditTime: 2022-05-12 10:44:09
  * @LastEditors: kalai
  * @Description: Partition(doing)
  * Partitioning operations
  * @FilePath: \tstl\src\algorithm\paritions.ts
  */
+import { rotate, copy_backward } from './modifying_sequence'
 import { find_if_not, none_of } from './none_modifying_sequence'
-import { InputIterator, BidirectionalIterator, ForwardIterator, OutputIterator, iter_swap } from '../iterator/';
+import { InputIterator, BidirectionalIterator, ForwardIterator, OutputIterator, iter_swap, advance, distance } from '../iterator/';
 
 /**
  * @description test whether range is partitoned
@@ -83,12 +84,29 @@ export function partition<T>(first: BidirectionalIterator<T>, last: Bidirectiona
  * @return {BidirectionalIterator} An iterator that points to the first element of the second group of elements (those for which fn returns false), or last if this group is empty.
  */
 export function stable_partition<T>(first: BidirectionalIterator<T>, last: BidirectionalIterator<T>, fn: (v: T) => boolean) {
-    // let len = itr_distance(first, last);
-        // return fn(first.getValue() ? last : first;
-    // let middle = first
-    // advance(middle, len / 2)
-    // return rotate(stable_partition(first, middle, fn), middle, stable_partition(middle, last, fn));
+    let _first = first.copy(), _last = last.copy();
+    let dis = distance(_first, _last)
+    return _inplace_stable_partition(_first, _last, fn, dis)
 }
+
+export function _inplace_stable_partition<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, fn: (v: T)=>boolean, len: number): ForwardIterator<T> {
+    let _first = first.copy(), _last = last.copy();
+    if(len === 1) return fn(_first.getValue()) ? _last : _first;
+    let _middle = _first.copy();
+    advance(_middle, len >> 1);
+    let _left = _inplace_stable_partition(_first, _middle, fn, len >> 1);
+    let _right = _inplace_stable_partition(_middle, _last, fn, len - (len >> 1));
+    return rotate(_left, _middle, _right);
+}
+
+// export function _stable_parition_adaptive<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, fn: (v: T)=>boolean, len: number, inplace: boolean = false) {
+//     let _first = first.copy(), _last = last.copy();
+//     if(!inplace) {
+//         let _result = _first.copy();
+//     } else {
+
+//     }
+// }
 
 /**
  * @description partition range in two
@@ -129,12 +147,19 @@ export function partition_copy<T>(first: InputIterator<T>, last: InputIterator<T
  * @return {*} n iterator to the first element in the partitioned range [first,last) for which fn is not true, or last if it is not true for any element.
  */
 export function partition_point<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, fn: (v: T) => boolean): ForwardIterator<T> {
-    // let n = input_itr_distance(first, last);
-    // while(n > 0) {
-    //     let it = first, step = n / 2;
-    //     advance(it, step);
-    //     if(fn(it.getValue())) {first.increase(it); n -= step+1}
-    //     else n = step;
-    // }
-    return first;
+    let _first = first.copy(), _last = last.copy()
+    let len = distance(_first, _last);
+    while(len > 0) {
+        let _half = len >> 1
+        let _middle = _first.copy()
+        advance(_middle, _half)
+        if(fn(_middle.getValue())) {
+            _first = _middle.copy()
+            _first.next()
+            len = len - _half - 1
+        } else {
+            len = _half
+        }
+    }
+    return _first;
 }
