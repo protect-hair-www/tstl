@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2021-08-16 11:33:05
- * @LastEditTime: 2022-03-21 11:40:25
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-05-12 14:59:12
+ * @LastEditors: kalai
  * @Description: red_black_tree
  *
  * A red-black tree is a binary tree that satisfies the following red-black properties:
@@ -49,7 +49,7 @@ export type RBTOptions<K, V> = {
 }
 
 export class Tree<K, V> {
-  // stl实现的红黑树有一个新增的header结点(doing)
+  // stl实现的红黑树有一个新增的header结点
   // header结点不仅指向root，也指向红黑树的leftMost和rightMost，以便在O(1)时间内获取begin指针
   // 同时header指针也可以在set的union操作时实现线性时间的复杂度
   // 指向大致如下：
@@ -788,6 +788,7 @@ export class Tree<K, V> {
       }
       if (!isNil(x)) x.color = Color.BLACK
     }
+    this.size--;
     return y
   }
 
@@ -1097,7 +1098,7 @@ export class Tree<K, V> {
   inorderWalk(fn?: (node) => unknown, z?: K) {
     let x
     if (z) x = this.find(z)
-    if (isNil(x) || !x) x = this.root
+    if (!x || isNil(x)) x = this.root
     this._inorderWalk(x, fn)
   }
 }
