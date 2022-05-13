@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:57:21
- * @LastEditTime: 2022-03-26 10:31:30
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-05-13 14:36:29
+ * @LastEditors: kalai
  * @Description: sequence container vector
  * vectors are sequence containers representing arrays that can change in size.
  *
@@ -184,8 +184,9 @@ export class Vector<T> implements TSTLIterable<T> {
   assign(x: number | Iterable<T>, v?: T)
   assign(first: LinearIterator<T>, last: LinearIterator<T>)
   assign(x: unknown, y: unknown) {
-    if (typeof x === 'number' && y) {
-      this._assign_n_elements(x, y as T)
+    if (typeof x === 'number') {
+      if(y === undefined) y = 0
+      this._assign_n_elements(x, y as T )
     } else if (x instanceof LinearIterator && y instanceof LinearIterator) {
       this._assign_range(x, y)
     } else {

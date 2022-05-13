@@ -1,7 +1,7 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:40
- * @LastEditTime: 2022-05-11 15:48:39
+ * @LastEditTime: 2022-05-13 18:08:01
  * @LastEditors: kalai
  * @Description: Modifying sequence operations
  * @FilePath: \tstl\src\algorithm\modifying_sequence.ts
@@ -18,6 +18,7 @@ import {
   iter_move
 } from '../iterator'
 import { jsCopy } from '../utils/index'
+import { adjacent_find } from './none_modifying_sequence';
 
 /**
  * @description Copy range of elements
@@ -157,11 +158,30 @@ export function move<T>(
   return result
 }
 
-// swap todo
 export function swap<T>(x: T, y: T) {
-
+  let temp = x
+  x = y
+  y = temp
 }
-export function swap_range() {}
+
+/**
+ * @description Exchange values of two ranges
+ * Exchanges the values of each of the elements in the range [first, last) with those of their respective elements in the range beginning at first2.
+ * @param {ForwardIterator} first Forward iterators to the initial and final positions in one of the sequences to be swapped. The range used is [first, last), 
+ * which contains all the elements between first and last, including the element pointed by first but not the element pointed by last.
+ * @param {ForwardIterator} last Forward iterators to the initial and final positions in one of the sequences to be swapped. The range used is [first, last), 
+ * which contains all the elements between first and last, including the element pointed by first but not the element pointed by last.
+ * @param {ForwardIterator} first2 Forward iterator to the initial position in the other sequence to be swapped. 
+ * The range used includes the same number of elements as the range [first,last). The two ranges shall not overlap.
+ * @return {*} An iterator to the last element swapped in the second sequence.
+ */
+export function swap_range<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, first2: ForwardIterator<T>): ForwardIterator<T> {
+  let _first = first.copy(), _last = last.copy(), _first2 = first2.copy();  
+  for(; !_first.equals(_last) && _first2.hasNext(); _first.next(), _first2.next()) {
+    iter_swap(_first, _first2);
+  }
+  return _first2;
+}
 
 /**
  * @description transform range
@@ -179,8 +199,8 @@ export function swap_range() {}
  * @param {Function} fn Unary function or binary function that accepts element of the type pointed to by InputIterator as argument, and returns some result value convertible to the type pointed to by OutputIterator.
  * @return {OutputIterator<T>}  An iterator to the end of the destination range where elements have been copied. 
  */
-export function transform<T>(first1: InputIterator<T>, last1: InputIterator<T>, result: OutputIterator<T>, fn:(v: T)=>boolean): OutputIterator<T>
-export function transform<T>(first1: InputIterator<T>, last1: InputIterator<T>, first2: InputIterator<T>, result: OutputIterator<T>, fn:(x: T, y: T)=>boolean): OutputIterator<T>;
+export function transform<T>(first1: InputIterator<T>, last1: InputIterator<T>, result: OutputIterator<T>, fn:(v: T)=>T): OutputIterator<T>
+export function transform<T>(first1: InputIterator<T>, last1: InputIterator<T>, first2: InputIterator<T>, result: OutputIterator<T>, fn:(x: T, y: T)=>T): OutputIterator<T>;
 export function transform<T>(...args: any[]) {
   let argLen = args.length
   let _first1 = args[0].copy(), _last1 = args[1].copy()
@@ -193,7 +213,7 @@ export function transform<T>(...args: any[]) {
     _result = args[3].copy()
     pred2 = args[4]
   }
-  while (_first1.equals(_last1)) {
+  while (!_first1.equals(_last1)) {
     let val
     if(pred1) {
       val = pred1(_first1.value)
@@ -222,8 +242,9 @@ export function transform<T>(...args: any[]) {
 export function replace<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, old_val: T, new_val: T): void 
 export function replace<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, fn: (v: T)=>boolean, new_val: T): void 
 export function replace<T>(...args: any[]): void {
-  let _first = args[0].copy(), _last = args[1].copy;
+  let _first = args[0].copy(), _last = args[1].copy()
   let pred = args[2], _new_val = args[3]
+
   while (!_first.equals(_last)) {
     if(typeof pred === 'function') {
       if(pred(_first.value)) _first.value = _new_val;
@@ -251,7 +272,7 @@ export function replace_if<T>(
   new_val: T
 ): void {
   let _first = first.copy(), _last = last.copy()
-  while (_first.equals(_last)) {
+  while (!_first.equals(_last)) {
     if (fn(_first.value)) _first.value = new_val
     _first.next()
   }
@@ -268,19 +289,22 @@ export function replace_if<T>(
  * @param {T} new_val Replacement value
  * @return {T} An iterator pointing to the element that follows the last element written in the result sequence.
  */
-export function replace_copy<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, result: OutputIterator<T>, old_val: T, new_val: T): void 
-export function replace_copy<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, result: OutputIterator<T>, fn: (v: T)=>boolean, new_val: T): void 
+export function replace_copy<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, result: OutputIterator<T>, old_val: T, new_val: T, deep?: boolean): void 
+export function replace_copy<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, result: OutputIterator<T>, fn: (v: T)=>boolean, new_val: T, deep?: boolean): void 
 export function replace_copy<T>(...args: any[]): OutputIterator<T> {
-  let _first = args[0].copy(), _last = args[1].copy
+  let _first = args[0].copy(), _last = args[1].copy()
   let _result = args[2], pred = args[3], _new_val = args[4]
-  while (_first.equals(_last)) {
-    let val;
+  let _deep = args[5];
+  while (!_first.equals(_last)) {
+    let val, copyed_val;
     if(typeof pred === 'function') {
       val = pred(_first.value) ? _new_val : _first.value
+      copyed_val = _deep ? jsCopy(val) : val;
     } else {
-      val = pred === _first.value ? _new_val : _first.value;
+      val = pred === _first.value ? _new_val : _first.value
+      copyed_val = _deep ? jsCopy(val) : val;
     }
-    _result.setValue(val)
+    _result.setValue(copyed_val)
     _result.next()
     _first.next()
   }
@@ -357,10 +381,10 @@ export function fill_n<T>(first: ForwardIterator<T>, n: number, val: T) {
  * @param {function} gen Generator function that is called with no arguments and returns some value of a type convertible to those pointed by the iterators.
  * @return {*} void
  */
-export function generate<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, gen: () => T) {
+export function generate<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, gen: (index: number) => T) {
   let _first = first.copy(), _last = last.copy();
-  while (_first.equals(_last)) {
-    _first.setValue(gen())
+  while (!_first.equals(_last)) {
+    _first.setValue(gen(_first.cur))
     _first.next()
   }
 }
@@ -373,10 +397,10 @@ export function generate<T>(first: ForwardIterator<T>, last: ForwardIterator<T>,
  * @param {function} gen Generator function that is called with no arguments and returns some value of a type convertible to those pointed by the iterators.
  * @return {*} void
  */
-export function generate_n<T>(first: OutputIterator<T>, n: number, gen: () => T) {
+export function generate_n<T>(first: OutputIterator<T>, n: number, gen: (idx: number) => T) {
   let _first = first.copy();
   while (n > 0) {
-    _first.setValue(gen())
+    _first.setValue(gen(_first.cur))
     _first.next()
     --n
   }
@@ -392,8 +416,8 @@ export function generate_n<T>(first: OutputIterator<T>, n: number, gen: () => T)
  * @param {T | Function} old_val Value to be replaced or a unary function that accepts an element in the range as argument, and returns a value convertible to bool.
  * @return {ForwardIterator} An iterator to the element that follows the last element not removed.
  */
-export function remove<T>( first: ForwardIterator<T>, last: ForwardIterator<T>, val: T): ForwardIterator<T>
-export function remove<T>( first: ForwardIterator<T>, last: ForwardIterator<T>, fn: (v: T)=>boolean): ForwardIterator<T>
+export function remove<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, val: T): ForwardIterator<T>
+export function remove<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, fn: (v: T)=>boolean): ForwardIterator<T>
 export function remove<T>(...args: any[]): ForwardIterator<T> {
   let _first = args[0].copy(), _last = args[1].copy();
   let _pred = args[2]
@@ -491,6 +515,7 @@ export function remove_copy_if<T>(
   }
   return result
 }
+
 /**
  * @description remove consecutive duplicates in range
  * removes all but the first element from every consecutive group of equivalent elements in the range [first,last).
@@ -505,18 +530,8 @@ export function remove_copy_if<T>(
  */
 export function unique<T>(first: ForwardIterator<T>, last: ForwardIterator<T>, fn?: (x: T, y: T)=>boolean): ForwardIterator<T> {
   let _first = first.copy(), _last = last.copy()
-  if (_first.equals(_last)) return _last
-
-  const result: ForwardIterator<T> = _first.copy()
-  while (_first.next() && !_first.equals(_last)) {
-    let condition = fn ? fn(result.value, _first.value) : result.value === _first.value;
-    if (condition) {
-      result.next()
-      result.setValue(first.value)
-    }
-  }
-  result.next()
-  return result
+  let _ad_first = adjacent_find(_first, _last, fn)
+  return unique_copy(_ad_first, _last, _ad_first)
 }
 
 /**
@@ -537,17 +552,21 @@ export function unique_copy<T>(
   fn?: (x: T, y: T) => boolean
 ): OutputIterator<T> {
   let _first = first.copy(), _last = last.copy()
-  if (_first.equals(_last)) return _last
-  result.setValue(_first.value)
-  while (_first.next() && !_first.equals(_last)) {
-    let condition = fn ? fn(result.value, _first.value) : result.value === _first.value
-    if (!condition) {
-      result.next()
-      result.setValue(_first.value)
+  let _value = _first.getValue()
+  result.setValue(_value)
+  _first.next();
+
+  while(!_first.equals(_last)) {
+    const condition = fn ? !fn(_value, _first.getValue()) : result.getValue() !== _first.getValue();
+    if(condition) {
+      _value = _first.getValue();
+      result.next();
+      result.setValue(_value);
     }
+    _first.next()
   }
-  result.next()
-  return result
+  result.next();
+  return result;
 }
 
 /**
@@ -560,7 +579,9 @@ export function unique_copy<T>(
  */
 export function reverse<T>(first: BidirectionalIterator<T>, last: BidirectionalIterator<T>) {
   let _first = first.copy(), _last = last.copy()
-  while (!_first.equals(_last) && (_last.prev() && !first.equals(_last))) {
+  while (!_first.equals(_last)) {
+    _last.prev();
+    if(_first.equals(_last)) break;
     iter_swap(_first, _last)
     _first.next()
   }
@@ -659,12 +680,16 @@ export function rotate_copy<T>(
 export function random_shuffle<T>(
   first: RandomAccessIterator<T>,
   last: RandomAccessIterator<T>,
-  gen: (n: number) => number 
+  gen?: (n: number) => number 
 ) {
-  let _first = first.copy(), _last = last.copy(); 
-  const n = distance(_first, _last)
-  for(let i = n-1; i > 0; --i) {
-    swap(_first.at(i), _first.at(gen(i+1)))
+  let _first = first.copy(), _last = last.copy();
+  if(_first.equals(_last)) return;
+  _first.next();
+  for(; !_first.equals(_last); _first.next()) {
+    let len = distance(first, _first);
+    let idx = Math.floor(Math.random() * len);
+    let iter = _first.increment(idx, false);
+    iter_swap(_first, iter)
   }
 }
 
@@ -680,5 +705,5 @@ export function random_shuffle<T>(
 export function shuffle<T>(
   first: RandomAccessIterator<T>,
   last: RandomAccessIterator<T>,
-  gen: () => T
+  gen?: () => T
 ) {}
