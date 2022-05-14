@@ -1,10 +1,10 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-03-13 18:24:40
- * @LastEditTime: 2022-05-13 18:08:01
+ * @LastEditTime: 2022-05-14 20:55:09
  * @LastEditors: kalai
  * @Description: Modifying sequence operations
- * @FilePath: \tstl\src\algorithm\modifying_sequence.ts
+ * @FilePath: /tstl/src/algorithm/modifying_sequence.ts
  */
 import {
   InputIterator,
@@ -690,6 +690,7 @@ export function random_shuffle<T>(
     let idx = Math.floor(Math.random() * len);
     let iter = _first.increment(idx, false);
     iter_swap(_first, iter)
+
   }
 }
 
@@ -706,4 +707,14 @@ export function shuffle<T>(
   first: RandomAccessIterator<T>,
   last: RandomAccessIterator<T>,
   gen?: () => T
-) {}
+) {
+  let _first = first.copy(), _last = last.copy();
+  if(_first.equals(_last)) return;
+  _first.next();
+  for(; !_first.equals(_last); _first.next()) {
+    let len = distance(first, _first);
+    let idx = Math.floor(Math.random() * len);
+    let iter = _first.increment(idx, false);
+    iter_swap(_first, iter)
+  }
+}
