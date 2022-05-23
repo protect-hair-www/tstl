@@ -35,19 +35,19 @@ export function maxWith<T>(
 export function minWith<T>(
     array: readonly T[],
     comparator: (a: T, b: T) => number,
-  ): T | undefined {
+): T | undefined {
     let min: T | undefined = undefined;
     let isFirst = true;
-  
+
     for (const cur of array) {
-      if (isFirst || comparator(cur, <T> min) < 0) {
-        min = cur;
-        isFirst = false;
-      }
+        if (isFirst || comparator(cur, <T>min) < 0) {
+            min = cur;
+            isFirst = false;
+        }
     }
-  
+
     return min;
-  }
+}
 
 /**
  * @description applies the given selector to all elements of the given collection
@@ -123,4 +123,94 @@ export function minOf<T, S extends ((el: T) => number) | ((el: T) => bigint)>(
     }
 
     return minimumValue;
+}
+
+/**
+ * @description Returns the first element that is the largest value of the given function 
+ * or undefined if there are no elements.
+ * ref: https://github.com/denoland/deno_std/blob/main/collections/max_by.ts
+ * @return {T}
+ */
+export function maxBy<T>(
+    array: readonly T[],
+    selector: (el: T) => number,
+): T | undefined;
+export function maxBy<T>(
+    array: readonly T[],
+    selector: (el: T) => string,
+): T | undefined;
+export function maxBy<T>(
+    array: readonly T[],
+    selector: (el: T) => bigint,
+): T | undefined;
+export function maxBy<T>(
+    array: readonly T[],
+    selector: (el: T) => Date,
+): T | undefined;
+export function maxBy<T>(
+    array: readonly T[],
+    selector:
+        | ((el: T) => number)
+        | ((el: T) => string)
+        | ((el: T) => bigint)
+        | ((el: T) => Date),
+): T | undefined {
+    let max: T | undefined = undefined;
+    let maxValue: ReturnType<typeof selector> | undefined = undefined;
+
+    for (const current of array) {
+        const currentValue = selector(current);
+
+        if (maxValue === undefined || currentValue > maxValue) {
+            max = current;
+            maxValue = currentValue;
+        }
+    }
+
+    return max;
+}
+
+/**
+ * @description Returns the first element that is the smallest value of the given function 
+ * or undefined if there are no elements.
+ * ref: https://github.com/denoland/deno_std/blob/main/collections/min_by.ts
+ * @return {T}
+ */
+export function minBy<T>(
+    array: readonly T[],
+    selector: (el: T) => number,
+): T | undefined;
+export function minBy<T>(
+    array: readonly T[],
+    selector: (el: T) => string,
+): T | undefined;
+export function minBy<T>(
+    array: readonly T[],
+    selector: (el: T) => bigint,
+): T | undefined;
+export function minBy<T>(
+    array: readonly T[],
+    selector: (el: T) => Date,
+): T | undefined;
+export function minBy<T>(
+    array: readonly T[],
+    selector:
+        | ((el: T) => number)
+        | ((el: T) => string)
+        | ((el: T) => bigint)
+        | ((el: T) => Date),
+): T | undefined {
+    let min: T | undefined = undefined;
+    let minValue: ReturnType<typeof selector> | undefined = undefined;
+
+    for (const current of array) {
+        const currentValue = selector(current);
+
+        if (minValue === undefined || currentValue < minValue) {
+            min = current;
+            minValue = currentValue;
+        }
+    }
+
+    return min;
 }
