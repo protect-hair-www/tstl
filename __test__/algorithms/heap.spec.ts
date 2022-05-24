@@ -5,7 +5,7 @@
  * @FilePath: \tstl\__test__\algorithms\heap.spec.ts
  */
 import { Vector } from '../../src';
-import {  makeHeap, popHeap, pushHeap, _pop_heap, sortHeap,isHeap, isHeapUntil } from '../../src/algorithm/heap';
+import { makeHeap, popHeap, pushHeap, _pop_heap, sortHeap,isHeap, isHeapUntil } from '../../src/algorithm/heap';
 import { advance } from '../../src/iterator';
 
 const orginArray = [1, 8, 3, 6, 5, 7, 2, 4, 10, 9];
