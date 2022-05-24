@@ -9,15 +9,15 @@ Contributions are welcome!
     - [x] Map(TreeMap)
     - [x] MultiSet
     - [x] MultiMap
-    - [] HashSet
-    - [] HashMap
-    - [] HashMultiMap
-    - [] HashMultiSet
+    - [ ] HashSet
+    - [ ] HashMap
+    - [ ] HashMultiMap
+    - [ ] HashMultiSet
 - [x] Sqeuence container 
     - [x] Vector
     - [x] List
     - [x] Deque 
-    - []  Slist
+    - [ ]  Slist
 - [x] Adapter
     - [x] Stack
     - [x] Queue 
@@ -39,8 +39,8 @@ Contributions are welcome!
 - [x] Functor
     - [x] comparable
     - [x] relations
-    - [] arithmetic
-    - [] logic
+    - [ ] arithmetic
+    - [ ] logic
 
 ### Features
 1. **Container**：A container is a holder object that stores a collection of other objects (its elements). The container manages the storage space for its elements and provides member functions to access them, either directly or through iterators.
@@ -161,7 +161,7 @@ TSTL
 │___ ...
 ```
 
-### ref
+### Links 
 [STL源码剖析](https://book.douban.com/subject/1110934/)  
 [gcc stl](https://github.com/gcc-mirror/gcc/tree/master/libstdc%2B%2B-v3/include/bits)
 
