@@ -1,8 +1,8 @@
 /*
  * @Author: hzheyuan
  * @Date: 2022-02-16 11:58:00
- * @LastEditTime: 2022-03-23 19:05:26
- * @LastEditors: hzheyuan
+ * @LastEditTime: 2022-05-24 17:34:15
+ * @LastEditors: kalai
  * @Description: sequenece container list
  *
  * Lists are sequenece containers that allow constant time insert and erase
@@ -40,6 +40,7 @@ export class List<T> implements TSTLIterable<T> {
   public constructor()
   public constructor(listLength: number, v: T)
   public constructor(list: List<T>)
+  // public constructor(iterableData: Iterable<T>)
   public constructor(first: InputIterator<T>, last: InputIterator<T>)
   constructor(...args: any[]) {
     this._header = this.createNode()

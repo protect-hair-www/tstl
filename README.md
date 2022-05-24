@@ -1,9 +1,9 @@
-### About 
+# About 
 It's a project like C++ STL for Typescript. Include regular data structures (TreeSet, TreeMap, LinkedList) and algorithms (binary_search, partition, merge).
 
 Contributions are welcome!
 
-### Components
+# Components
 - [x] Associative container 
     - [x] Set(TreeSet)
     - [x] Map(TreeMap)
@@ -42,7 +42,7 @@ Contributions are welcome!
     - [ ] arithmetic
     - [ ] logic
 
-### Features
+# Features
 1. **Container**：A container is a holder object that stores a collection of other objects (its elements). The container manages the storage space for its elements and provides member functions to access them, either directly or through iterators.
 
     1. **Sequence**：vector, list, deque, slist, queue, priority_queue, stack
@@ -77,7 +77,7 @@ supported by iteators, they are calssified into five diffrent categories:
     2. Iterator adapter
     3. Function adapter
 
-### Project Structure
+# Project Structure
 ```
 TSTL
 |
@@ -85,11 +85,11 @@ TSTL
 |    |  index // main entry
 |    |  
 |    |___adapter
-|    |    |  index // entry
+|    |    |  index
 |    |    |  queue
 |    |    |  stack
 |    |___algorithm
-|    |     |  index // entry
+|    |     |  index
 |    |     |  binary_search
 |    |     |  merge
 |    |     |  heap
@@ -98,17 +98,17 @@ TSTL
 |    |     |  sort
 |    |     |  partition
 |    |___container
-|    |     |  index // entry
-|    |     |___associative // associative containers 
+|    |     |  index
+|    |     |___associative 
 |    |     |    |   set
 |    |     |    |   map
 |    |     |    |   multiset
 |    |     |    |   multimap
-|    |     |    |   hash_set(todo)
-|    |     |    |   hash_map(todo)
-|    |     |    |   hash_multiset(todo)
-|    |     |    |   hash_mulitmap(todo)
-|    |     |___sequence // sequence containers
+|    |     |    |   hash_set
+|    |     |    |   hash_map
+|    |     |    |   hash_multiset
+|    |     |    |   hash_mulitmap
+|    |     |___sequence
 |    |     |    |   vector
 |    |     |    |   deque
 |    |     |    |   list
@@ -122,7 +122,7 @@ TSTL
 |    |     |    |   tree    // red black tree implementation
 |    |     |    |   iterator 
 |    |___iterator
-|    |     |  index // 入口
+|    |     |  index
 |    |     |  base_iterator
 |    |     |  input_iterator
 |    |     |  output_iterator
@@ -131,37 +131,29 @@ TSTL
 |    |     |  random_access_iterator
 |    |     |  iterable
 |    |___functor
-|    |     |  index // entry 
+|    |     |  index 
 |    |     |  arithmitic
 |    |     |  relational
 |    |     |  logic
 |    |     |  identity
-|    |___utils // some javascript common tools
+|    |___utils
+|    |     |  ...
 |    |     |  assert
 |    |     |  copy 
 |    |     |  object
-|    |     |  jstype // type check
+|    |     |  jstype
 |    |     |  ...
-|    |___demo // test and visualization the data and algorithm with echarts
+|    |____test__ 
 |    |     |  ...
-|    |     |  red_black_tree
-|    |     |  heap
-|    |     |  list
+|    |     |  algorithms
 |    |     |  ...
-|    |___test // test 
-|    |     |  ...
-│___ some preject configs
 │___ ...
-│___ package.json
-│___ tsconfig.json
-│___ tslint.json
-│___ jest.config.js
-│___ vite.config.js
-│___ vue.config.js
+│___ project config files
 │___ ...
 ```
 
-### Links 
-[STL源码剖析](https://book.douban.com/subject/1110934/)  
-[gcc stl](https://github.com/gcc-mirror/gcc/tree/master/libstdc%2B%2B-v3/include/bits)
-
+# Links 
+1. [STL源码剖析](https://book.douban.com/subject/1110934/)  
+2. [GCC STL 源码](https://github.com/gcc-mirror/gcc/tree/master/libstdc%2B%2B-v3/include/bits)  
+3. [Standard C++ Library reference](https://www.cplusplus.com/reference/)
+4. [C++ reference](https://en.cppreference.com/w/)
